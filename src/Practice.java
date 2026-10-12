@@ -1,6 +1,4 @@
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Practice {
 
@@ -25,7 +23,29 @@ public class Practice {
    * @return the number of vertices with odd values reachable from the starting vertex
    */
   public static int oddVertices(Vertex<Integer> starting) {
-    return 0;
+    if(starting == null){
+      return 0;
+    }
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Set<Vertex<Integer>> answer = new HashSet<>();
+    Stack<Vertex<Integer>> stack = new Stack<>();
+
+    stack.push(starting);
+    
+    while (!stack.isEmpty()) { 
+      Vertex<Integer> cur = stack.pop();  
+      visited.add(cur);
+
+      if(cur.data%2 != 0){
+        answer.add(cur);
+      }
+      for (Vertex<Integer> neighbor : cur.neighbors) {
+          if(!visited.contains(neighbor)){
+            stack.push(neighbor);
+          }
+      }
+    }
+    return answer.size();
   }
 
   /**
@@ -47,7 +67,30 @@ public class Practice {
    * @return a sorted list of all reachable vertex values by 
    */
   public static List<Integer> sortedReachable(Vertex<Integer> starting) {
-    return null;
+    
+    List<Integer> answer = new ArrayList<>();
+    
+    if(starting == null){
+      return answer;
+    }
+
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Stack<Vertex<Integer>> stack = new Stack<>();
+
+    stack.push(starting);
+    
+    while (!stack.isEmpty()) { 
+      Vertex<Integer> cur = stack.pop();  
+      visited.add(cur);
+      answer.add(cur.data);
+      for (Vertex<Integer> neighbor : cur.neighbors) {
+          if(!visited.contains(neighbor)){
+            stack.push(neighbor);
+          }
+      }
+    }
+    Collections.sort(answer);
+    return answer;
   }
 
   /**
@@ -61,7 +104,30 @@ public class Practice {
    * @return a sorted list of all reachable vertex values
    */
   public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
-    return null;
+    List<Integer> answer = new ArrayList<>();
+    
+    if(!graph.containsKey(starting)){
+      return answer;
+    }
+    Set<Integer> visited = new HashSet<>();
+    Stack<Integer> stack = new Stack<>();
+
+    stack.push(starting);
+    visited.add(starting);
+    
+    while (!stack.isEmpty()) { 
+      Integer cur = stack.pop();  
+      answer.add(cur);
+
+      for (Integer neighbor : graph.get(cur)) {
+          if(visited.add(neighbor)){
+            stack.push(neighbor);
+          }
+      }
+    }
+
+    Collections.sort(answer);
+    return answer;
   }
 
   /**
@@ -79,7 +145,48 @@ public class Practice {
    * @return true if there is a two-way connection between v1 and v2, false otherwise
    */
   public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
-    return false;
+
+    if(v1 == null || v2 == null){
+      return false;
+    }
+
+    Set<Vertex<T>> visited = new HashSet<>();
+    Stack<Vertex<T>> stack = new Stack<>();
+
+    stack.push(v1);
+    
+    while (!stack.isEmpty()) { 
+      Vertex<T> cur = stack.pop();  
+      visited.add(cur);
+
+      for (Vertex<T> neighbor : cur.neighbors) {
+          if(!visited.contains(neighbor)){
+            stack.push(neighbor);
+          }
+      }
+    }
+    if(!visited.contains(v2)){
+      return false;
+    }
+    visited.clear();
+
+    stack.push(v2);
+
+    while (!stack.isEmpty()) { 
+      Vertex<T> cur = stack.pop();  
+      visited.add(cur);
+
+      for (Vertex<T> neighbor : cur.neighbors) {
+          if(!visited.contains(neighbor)){
+            stack.push(neighbor);
+          }
+      }
+    }
+    if(!visited.contains(v1)){
+      return false;
+    }
+
+    return true;
   }
 
   /**
@@ -95,8 +202,35 @@ public class Practice {
    * @return whether there exists a valid positive path from starting to ending
    */
   public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
-    return false;
+    
+    Set<Integer> visited = new HashSet<>();
+    Stack<Integer> stack = new Stack<>();
+
+    stack.push(starting);
+    visited.add(starting);
+    
+    while (!stack.isEmpty()) { 
+      Integer cur = stack.pop();  
+      if(cur < 0){
+        return false;
+      }
+      if (cur == ending) {
+        break;          
+      }
+
+      for (Integer neighbor : graph.get(cur)) {
+          if(visited.add(neighbor)){
+            stack.push(neighbor);
+          }
+      }
+    }
+
+    // if true both should be in the visited set otherwise 
+    // there is a disconnection or non-exsistent key for starting or ending
+    return visited.contains(ending);
+
   }
+
 
   /**
    * Returns true if a professional has anyone in their extended network (reachable through any number of links)
@@ -108,6 +242,32 @@ public class Practice {
    * @return true if a person in the extended network works at the specified company, false otherwise
    */
   public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+    if(person == null){ 
+      return false;
+    }
+
+    Set<Professional> visited = new HashSet<>();
+    Stack<Professional> stack = new Stack<>();
+    Set<String> visitedCompany = new HashSet<>();
+
+    stack.push(person);
+    visited.add(person);
+
+    while (!stack.isEmpty()) { 
+      Professional cur = stack.pop();  
+
+      visitedCompany.add(cur.getCompany());
+      if(visitedCompany.contains(companyName)){
+        return true;
+      }
+
+      for (Professional neighbor : cur.getConnections()) {
+          if(visited.add(neighbor)){
+            stack.push(neighbor);
+          }
+      }
+    }
+
     return false;
   }
 
@@ -179,6 +339,24 @@ public class Practice {
    * @return an unsorted list of next moves
    */
   public static List<int[]> nextMoves(char[][] board, int[] current, int[][] directions) {
-    return null;
+    
+    List<int[]> answer = new ArrayList<>();
+    int curX = current[0];
+    int curY = current[1];
+    
+    for(int[] dirs : directions){
+      
+      int possibleX = curX + dirs[0];
+      int possibleY = curY + dirs[1];
+
+      if (possibleX >= 0 && possibleX < board.length
+          && possibleY >= 0 && possibleY < board[0].length
+          && board[possibleX][possibleY] != 'X' ) {
+          answer.add(new int[]{possibleX, possibleY});
+      }
+    
+    }
+    
+    return answer;
   }
 }
