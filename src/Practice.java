@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,7 +28,32 @@ public class Practice {
    * @return the number of vertices with odd values reachable from the starting vertex
    */
   public static int oddVertices(Vertex<Integer> starting) {
-    return 0;
+    if(starting == null){
+      return 0;
+    }
+    Set<Vertex<Integer>> visited = new HashSet<>();
+
+    return oddHelper(starting, visited);
+  }
+
+    private static int oddHelper(
+      Vertex<Integer> current, 
+      Set<Vertex<Integer>> visited
+    ){
+        if(current == null || visited.contains(current)){
+          return 0;
+        }
+        visited.add(current);
+        int count =0;
+        
+        if(current.data % 2 != 0){
+         count++;
+      }
+      for( Vertex<Integer> neighbor : current.neighbors){
+        count += oddHelper(neighbor,visited);
+
+      }
+      return count;
   }
 
   /**
@@ -46,9 +74,33 @@ public class Practice {
    * @param starting the starting vertex (may be null)
    * @return a sorted list of all reachable vertex values by 
    */
-  public static List<Integer> sortedReachable(Vertex<Integer> starting) {
-    return null;
+  public static List<Integer> sortedReachable(Vertex<Integer> starting) {List<Integer> result = new ArrayList<>();
+
+    if(starting == null){
+      return result;
+    }
+
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    sortedHelper(starting, visited, result);
+
+    Collections.sort(result);
+    return result;
   }
+    private static void sortedHelper(
+      Vertex<Integer> current,
+      Set<Vertex<Integer>> visited,
+      List<Integer> result)
+    {
+      if (current == null || visited.contains(current)) {
+          return;
+      }
+      visited.add(current);
+      result.add(current.data);
+
+      for( Vertex<Integer> neighbor :current.neighbors){
+        sortedHelper(neighbor, visited, result);
+      }
+}
 
   /**
    * Returns a sorted list of all values reachable from the given starting vertex in the provided graph.
@@ -61,7 +113,32 @@ public class Practice {
    * @return a sorted list of all reachable vertex values
    */
   public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
-    return null;
+     List<Integer> result = new ArrayList<>();
+
+     if(!graph.containsKey(starting)){
+      return result;
+     }
+
+     Set<Integer> visited = new HashSet<>();
+     sortedMapHelper(graph, starting, visited, result);
+     Collections.sort(result);
+
+     return result;
+    }
+    private static void sortedMapHelper(
+      Map<Integer, Set<Integer>> graph,
+      int current,
+      Set<Integer> visited,
+      List<Integer> result)  {
+       if (!graph.containsKey(current) || visited.contains(current)) {
+      return;
+      }
+      visited.add(current);
+      result.add(current);
+
+    for (int neighbor : graph.get(current)) {
+        sortedMapHelper(graph, neighbor, visited, result);
+    }
   }
 
   /**
@@ -79,7 +156,36 @@ public class Practice {
    * @return true if there is a two-way connection between v1 and v2, false otherwise
    */
   public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
+  if( v1 == null || v2 == null){
     return false;
+  }
+   Set<Vertex<T>> visited1 = new HashSet<>();
+   Set<Vertex<T>> visited2 = new HashSet<>();
+       return canReach(v1, v2, visited1)
+        && canReach(v2, v1, visited2);
+}
+  private static <T> boolean canReach(
+      Vertex<T> current,
+      Vertex<T> target,
+      Set<Vertex<T>> visited
+  ) {
+      if (current == target) {
+          return true;
+      }
+
+      if (current == null || visited.contains(current)) {
+          return false;
+      }
+
+      visited.add(current);
+
+      for (Vertex<T> neighbor : current.neighbors) {
+          if (canReach(neighbor, target, visited)) {
+              return true;
+          }
+      }
+
+      return false;
   }
 
   /**
@@ -95,7 +201,13 @@ public class Practice {
    * @return whether there exists a valid positive path from starting to ending
    */
   public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
-    return false;
+     if (starting <= 0 || ending <= 0) {
+        return false;
+    }
+       if (!graph.containsKey(starting) ||
+        !graph.containsKey(ending)) {
+        return false;
+    }
   }
 
   /**
