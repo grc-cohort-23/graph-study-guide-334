@@ -1,3 +1,8 @@
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,8 +30,28 @@ public class Practice {
    * @return the number of vertices with odd values reachable from the starting vertex
    */
   public static int oddVertices(Vertex<Integer> starting) {
+       if (starting == null) {
     return 0;
   }
+  int count = 0;
+  Set<Vertex<Integer>> visited = new HashSet<>();
+  Deque<Vertex<Integer>> stack = new ArrayDeque<>();
+  stack.push(starting);
+  visited.add(starting);
+  while (!stack.isEmpty()) {
+    Vertex<Integer> current = stack.pop();
+    if (current.data % 2 != 0) {
+      count++;
+    }
+    for (Vertex<Integer> neighbor : current.neighbors) {
+      if (visited.add(neighbor)) {
+        stack.push(neighbor);
+      }
+    }
+  }
+  return count;
+}
+
 
   /**
    * Returns a *sorted* list of all values reachable from the starting vertex (including the starting vertex itself).
@@ -47,8 +72,27 @@ public class Practice {
    * @return a sorted list of all reachable vertex values by 
    */
   public static List<Integer> sortedReachable(Vertex<Integer> starting) {
-    return null;
+      List<Integer> result = new ArrayList<>();
+    if (starting == null) {
+      return result;
+    }
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Deque<Vertex<Integer>> stack = new ArrayDeque<>();
+    stack.push(starting);
+    visited.add(starting);
+    while (!stack.isEmpty()) {
+      Vertex<Integer> current = stack.pop();
+      result.add(current.data);
+      for (Vertex<Integer> neighbor : current.neighbors) {
+        if (neighbor != null && visited.add(neighbor)) {
+          stack.push(neighbor);
+        }
+      }
+    }
+    Collections.sort(result);
+    return result;
   }
+  
 
   /**
    * Returns a sorted list of all values reachable from the given starting vertex in the provided graph.
@@ -61,8 +105,31 @@ public class Practice {
    * @return a sorted list of all reachable vertex values
    */
   public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
-    return null;
+    List<Integer> result = new ArrayList<>();
+    if (!graph.containsKey(starting)) {
+      return result;
+    }
+    Set<Integer> visited = new HashSet<>();
+    Deque<Integer> stack = new ArrayDeque<>();
+    stack.push(starting);
+    visited.add(starting);
+    while (!stack.isEmpty()) {
+      int current = stack.pop();
+      result.add(current);
+      Set<Integer> neighbors = graph.get(current);
+      if (neighbors == null) {
+        continue;
+      }
+      for (Integer neighbor : neighbors) {
+        if (visited.add(neighbor)) {
+          stack.push(neighbor);
+        }
+      }
+    }
+    Collections.sort(result);
+    return result;
   }
+
 
   /**
    * Returns true if and only if it is possible both to reach v2 from v1 and to reach v1 from v2.
@@ -79,6 +146,43 @@ public class Practice {
    * @return true if there is a two-way connection between v1 and v2, false otherwise
    */
   public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
+   if (v1 == null || v2 == null) {
+      return false;
+    }
+    boolean forward = false;
+    Set<Vertex<T>> visited = new HashSet<>();
+    Deque<Vertex<T>> stack = new ArrayDeque<>();
+    stack.push(v1);
+    visited.add(v1);
+    while (!stack.isEmpty() && !forward) {
+      Vertex<T> current = stack.pop();
+      if (current == v2) {
+        forward = true;
+      }
+      for (Vertex<T> neighbor : current.neighbors) {
+        if (neighbor != null && visited.add(neighbor)) {
+          stack.push(neighbor);
+        }
+      }
+    }
+    if (!forward) {
+      return false;
+    }
+    visited = new HashSet<>();
+    stack = new ArrayDeque<>();
+    stack.push(v2);
+    visited.add(v2);
+    while (!stack.isEmpty()) {
+      Vertex<T> current = stack.pop();
+      if (current == v1) {
+        return true;
+      }
+      for (Vertex<T> neighbor : current.neighbors) {
+        if (neighbor != null && visited.add(neighbor)) {
+          stack.push(neighbor);
+        }
+      }
+    }
     return false;
   }
 
@@ -95,6 +199,34 @@ public class Practice {
    * @return whether there exists a valid positive path from starting to ending
    */
   public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
+    if (starting <= 0 || ending <= 0  || !graph.containsKey(starting) || !graph.containsKey(ending)) {
+      return false;
+    }
+    Set<Integer> visited = new HashSet<>();
+    Deque<Integer> stack = new ArrayDeque<>();
+
+    //stack push start
+    //visited add starting
+
+    //while stack isnt empty -> int current = stack.pop
+    // if current == ending -> return true
+    stack.push(starting); 
+    visited.add(starting);
+    while (!stack.isEmpty()) {
+      int current = stack.pop();
+      if (current == ending) {
+        return true;
+      }
+      Set<Integer> neighbors = graph.get(current);
+      if (neighbors == null) {
+        continue;
+      }
+      for (Integer neighbor : neighbors) {
+        if (neighbor > 0 && visited.add(neighbor)) {
+          stack.push(neighbor);
+        }
+      }
+    }
     return false;
   }
 
@@ -108,6 +240,27 @@ public class Practice {
    * @return true if a person in the extended network works at the specified company, false otherwise
    */
   public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+     if (person == null) {
+      return false;
+    }
+    Set<Professional> visited = new HashSet<>();
+    Deque<Professional> stack = new ArrayDeque<>();
+    stack.push(person);
+    visited.add(person);
+    while (!stack.isEmpty()) {
+      Professional current = stack.pop();
+      if (companyName != null && companyName.equals(current.getCompany())) {
+        return true;
+      }
+      if (current.getConnections() == null) {
+        continue;
+      }
+      for (Professional next : current.getConnections()) {
+        if (next != null && visited.add(next)) {
+          stack.push(next);
+        }
+      }
+    }
     return false;
   }
 
@@ -179,6 +332,16 @@ public class Practice {
    * @return an unsorted list of next moves
    */
   public static List<int[]> nextMoves(char[][] board, int[] current, int[][] directions) {
-    return null;
+     List<int[]> moves = new ArrayList<>();
+    for (int[] d : directions) {
+      int row = current[0] + d[0];
+      int col = current[1] + d[1];
+      if (row >= 0 && row < board.length
+          && col >= 0 && col < board[row].length
+          && board[row][col] != 'X') {
+        moves.add(new int[] {row, col});
+      }
+    }
+    return moves;
   }
 }
