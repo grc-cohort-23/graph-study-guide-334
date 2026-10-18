@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,7 +29,27 @@ public class Practice {
    * @return the number of vertices with odd values reachable from the starting vertex
    */
   public static int oddVertices(Vertex<Integer> starting) {
-    return 0;
+    HashSet<Vertex<Integer>> visited = new HashSet<>();
+    return oddHelper(starting, visited);
+
+  }
+
+  private static int oddHelper(Vertex<Integer> current, HashSet<Vertex<Integer>> visited) {
+    if(current == null) return 0;
+    if(visited.contains(current)) return 0;
+
+    visited.add(current);
+    int count = 0;
+
+    if(current.data % 2 != 0) {
+      count++;
+    }
+
+    for(Vertex<Integer> neighbor : current.neighbors) {
+      count += oddHelper(neighbor, visited);
+      }
+
+      return count;
   }
 
   /**
@@ -47,8 +71,25 @@ public class Practice {
    * @return a sorted list of all reachable vertex values by 
    */
   public static List<Integer> sortedReachable(Vertex<Integer> starting) {
-    return null;
+    HashSet<Vertex<Integer>> visited = new HashSet<>();
+    List<Integer> result = new ArrayList<>();
+    sortedHelper(starting, visited, result);
+    Collections.sort(result);
+    return result;
   }
+
+  private static void sortedHelper(Vertex<Integer> current, HashSet<Vertex<Integer>> visited, List<Integer> result) {
+    if(current == null) return ;
+    if(visited.contains(current)) return;
+
+     visited.add(current);
+    result.add(current.data);
+
+     for(Vertex<Integer> neighbor : current.neighbors) {
+        sortedHelper(neighbor, visited, result);
+      }
+  }
+
 
   /**
    * Returns a sorted list of all values reachable from the given starting vertex in the provided graph.
@@ -61,8 +102,29 @@ public class Practice {
    * @return a sorted list of all reachable vertex values
    */
   public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
-    return null;
+    HashSet<Integer> visited = new HashSet<>();
+    List<Integer> result = new ArrayList<>();
+    if(!graph.containsKey(starting)) return result;
+
+    sortedHelper(graph, starting, result, visited);
+
+    Collections.sort(result);
+    return result;
   }
+
+  private static void sortedHelper (Map<Integer, Set<Integer>> graph, int current, List<Integer> result, HashSet<Integer>visited) {
+    if(visited.contains(current)) return;
+
+    visited.add(current);
+    result.add(current);
+
+    if(graph.containsKey(current)) {
+    for(Integer neighbor : graph.get(current)) {
+        sortedHelper(graph, neighbor, result, visited);
+      }
+    } 
+  }
+
 
   /**
    * Returns true if and only if it is possible both to reach v2 from v1 and to reach v1 from v2.
@@ -79,7 +141,25 @@ public class Practice {
    * @return true if there is a two-way connection between v1 and v2, false otherwise
    */
   public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
-    return false;
+    if(v1 == null || v2 == null) return false;
+    HashSet<Vertex<T>> visited1 = new HashSet<>();
+    HashSet<Vertex<T>> visited2 = new HashSet<>();
+    return twoWayHelper(visited1, v1, v2) && twoWayHelper(visited2, v2, v1);
+  }
+
+  private static <T> boolean twoWayHelper(HashSet<Vertex<T>> visited, Vertex<T> current, Vertex<T> target) {
+      if(current == null) return false;
+      if(current == target) return true;
+      if(visited.contains(current)) return false;
+
+      visited.add(current);
+
+      for(Vertex<T> neighbor : current.neighbors) {
+        if(twoWayHelper(visited, neighbor, target)) {
+          return true;
+        }
+      }
+      return false;
   }
 
   /**
@@ -95,8 +175,30 @@ public class Practice {
    * @return whether there exists a valid positive path from starting to ending
    */
   public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
+
+    if(starting <= 0 || ending <= 0 || !graph.containsKey(starting) || !graph.containsKey(ending)) return false;
+
+    HashSet<Integer> visited = new HashSet<>();
+    return pathHelper(graph, visited, starting, ending);
+  }
+
+  private static boolean pathHelper(Map<Integer, Set<Integer>> graph, HashSet<Integer> visited, int current, int target) {
+    if(current <= 0) return false;
+    if(current == target) return true;
+    if(visited.contains(current)) return false;
+
+    visited.add(current);
+
+    if(graph.containsKey(current)) {
+    for(Integer neighbor : graph.get(current)) {
+       if( pathHelper(graph, visited, neighbor,target)) return true;
+      }
+    }
+    
     return false;
   }
+
+
 
   /**
    * Returns true if a professional has anyone in their extended network (reachable through any number of links)
@@ -108,7 +210,25 @@ public class Practice {
    * @return true if a person in the extended network works at the specified company, false otherwise
    */
   public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
-    return false;
+
+    if(person == null) return false;
+    HashSet<Professional> visited = new HashSet<>();
+    return extendedHelper(companyName, person, visited);
+    
+  }
+
+  private static boolean extendedHelper(String companyName, Professional current, HashSet<Professional> visited) {
+    if(current == null) return false;
+    if(current.getCompany().equals(companyName)) return true;
+    if(visited.contains(current))return false;
+    visited.add(current);
+
+     for(Professional neighbor : current.getConnections()) {
+        if(extendedHelper(companyName, neighbor, visited)) {
+          return true;
+        }
+      }
+      return false;
   }
 
   /**
@@ -179,6 +299,16 @@ public class Practice {
    * @return an unsorted list of next moves
    */
   public static List<int[]> nextMoves(char[][] board, int[] current, int[][] directions) {
-    return null;
+    List<int[]> result = new ArrayList<>();
+
+    for(int[] dir : directions) {
+      int newRow = current[0] + dir[0];
+      int newCol = current[1] + dir[1];
+
+      if(newRow >= 0 && newRow <= board.length - 1 && newCol >= 0 && newCol <= board[0].length -1 && board[newRow][newCol] != 'X') {
+        result.add(new int[]{newRow, newCol});
+      }
+    }
+    return result;
   }
 }
