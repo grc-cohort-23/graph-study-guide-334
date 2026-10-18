@@ -208,7 +208,36 @@ public class Practice {
         !graph.containsKey(ending)) {
         return false;
     }
-  }
+    Set<Integer> visited = new HashSet<>();
+
+    return positiveHelper(graph, starting, ending, visited);
+}
+
+  private static boolean positiveHelper(
+      Map<Integer, Set<Integer>> graph,
+      int current,
+      int ending,
+      Set<Integer> visited
+  ) {
+      if (current <= 0 ||
+          !graph.containsKey(current) ||
+          visited.contains(current)) {
+          return false;
+      }
+      if (current == ending) {
+          return true;
+      }
+      visited.add(current);
+
+      for (int neighbor : graph.get(current)) {
+          if (positiveHelper(graph, neighbor, ending, visited)) {
+              return true;
+          }
+      }
+
+      return false;
+
+    }
 
   /**
    * Returns true if a professional has anyone in their extended network (reachable through any number of links)
@@ -220,8 +249,35 @@ public class Practice {
    * @return true if a person in the extended network works at the specified company, false otherwise
    */
   public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+    if (person == null) {
+        return false;
+    }
+
+    Set<Professional> visited = new HashSet<>();
+
+    return companyHelper(person, companyName, visited);
+    }
+
+  private static boolean companyHelper(
+      Professional current,
+      String companyName,
+      Set<Professional> visited) {
+    if (current == null || visited.contains(current)) {
+        return false;
+    }
+    visited.add(current);
+
+    if (java.util.Objects.equals(current.getCompany(), companyName)) {
+        return true;
+    }
+    for (Professional neighbor : current.getConnections()) {
+        if (companyHelper(neighbor, companyName, visited)) {
+            return true;
+        }
+    }
     return false;
-  }
+    }
+  
 
   /**
    * Returns a list of possible next moves starting from a given position.
@@ -291,6 +347,21 @@ public class Practice {
    * @return an unsorted list of next moves
    */
   public static List<int[]> nextMoves(char[][] board, int[] current, int[][] directions) {
-    return null;
-  }
+  List<int[]> result = new ArrayList<>();
+
+    for (int[] direction : directions) {
+        int newRow = current[0] + direction[0];
+        int newCol = current[1] + direction[1];
+
+        if (newRow >= 0 && newRow < board.length &&
+            newCol >= 0 && newCol < board[0].length) {
+
+            if (board[newRow][newCol] != 'X') {
+                result.add(new int[]{newRow, newCol});
+            }
+        }
+    }
+
+    return result;
+}
 }
