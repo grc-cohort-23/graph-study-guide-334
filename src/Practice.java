@@ -1,6 +1,9 @@
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 public class Practice {
 
@@ -25,7 +28,22 @@ public class Practice {
    * @return the number of vertices with odd values reachable from the starting vertex
    */
   public static int oddVertices(Vertex<Integer> starting) {
-    return 0;
+    if (starting == null) return 0;
+    int oddCount = 0;
+
+    Stack<Vertex<Integer>> stack = new Stack<>();
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    stack.add(starting);
+
+    while (!stack.isEmpty()) {
+      Vertex<Integer> current = stack.pop();
+      visited.add(current);
+      if (current.data % 2 != 0) oddCount++;
+      for (var neighbor : current.neighbors) if (!visited.contains(neighbor)) stack.add(neighbor);
+    }
+
+
+    return oddCount;
   }
 
   /**
@@ -47,7 +65,24 @@ public class Practice {
    * @return a sorted list of all reachable vertex values by 
    */
   public static List<Integer> sortedReachable(Vertex<Integer> starting) {
-    return null;
+    List<Integer> reachable = new ArrayList<>();
+    if (starting == null) return reachable;
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Stack<Vertex<Integer>> stack = new Stack<>();
+
+    stack.add(starting);
+    while (!stack.isEmpty()) {
+      Vertex<Integer> current = stack.pop();
+      visited.add(current);
+      reachable.add(current.data);
+      for (var neighbor : current.neighbors) if (!visited.contains(neighbor)) stack.add(neighbor);
+    }
+
+    reachable.sort((a,b) -> {
+      return a-b;
+    });
+
+    return reachable;
   }
 
   /**
@@ -61,7 +96,24 @@ public class Practice {
    * @return a sorted list of all reachable vertex values
    */
   public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
-    return null;
+    List<Integer> reachable = new ArrayList<>();
+    if (graph.get(starting) == null) return reachable;
+    Set<Integer> visited = new HashSet<>();
+    Stack<Integer> stack = new Stack<>();
+
+    stack.add(starting);
+    while (!stack.isEmpty()) {
+      Integer current = stack.pop();
+      visited.add(current);
+      reachable.add(current);
+      for (var neighbor : graph.get(current)) if (!visited.contains(neighbor)) stack.add(neighbor);
+    }
+
+    reachable.sort((a, b) -> {
+      return a - b;
+    });
+
+    return reachable;
   }
 
   /**
@@ -79,6 +131,52 @@ public class Practice {
    * @return true if there is a two-way connection between v1 and v2, false otherwise
    */
   public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
+    if (v1 == null || v2 == null) return false;
+    // Check if they're the same spot in memory
+    if (v1 == v2) return true;
+    Stack<Vertex<T>> stack = new Stack<>();
+    Set<Vertex<T>> visited = new HashSet<>();
+    boolean possible = false;
+
+    // Check if v2 can be reached from v1
+    stack.add(v1);
+
+    while (!stack.isEmpty()) {
+      Vertex<T> current = stack.pop();
+      
+      if (current == v2) {
+        // It can be reached!
+        possible = true;
+        break;
+      }
+      visited.add(current);
+      for (var neighbor : current.neighbors) if (!visited.contains(neighbor)) stack.add(neighbor);
+    }
+
+    // If v1 cannot reach v2, return a failure
+    if (!possible) return false;
+
+    // Reset stack and visited
+    stack.clear();
+    visited.clear();
+
+    // Check if v1 can be reached from v2
+    stack.add(v2);
+
+    while (!stack.isEmpty()) {
+      Vertex<T> current = stack.pop();
+
+      if (current == v1) {
+        // It can be reached!
+        return true;
+      }
+      visited.add(current);
+      for (var neighbor : current.neighbors)
+        if (!visited.contains(neighbor))
+          stack.add(neighbor);
+    }
+
+    // v2 cannot reach v1
     return false;
   }
 
@@ -95,6 +193,22 @@ public class Practice {
    * @return whether there exists a valid positive path from starting to ending
    */
   public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
+    if (graph.get(starting) == null || graph.get(ending) == null) return false;
+    Set<Integer> visited = new HashSet<>();
+    Stack<Integer> stack = new Stack<>();
+    
+    stack.add(starting);
+
+    while (!stack.isEmpty()) {
+      Integer current = stack.pop();
+      visited.add(current);
+
+      if (current < 0) continue;
+      if (current == ending) return true;
+
+      for (var neighbor : graph.get(current)) if (!visited.contains(neighbor)) stack.add(neighbor);
+    }
+
     return false;
   }
 
@@ -108,6 +222,19 @@ public class Practice {
    * @return true if a person in the extended network works at the specified company, false otherwise
    */
   public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+    if (person == null) return false;
+    Set<Professional> visited = new HashSet<>();
+    Stack<Professional> stack = new Stack<>();
+
+    stack.add(person);
+
+    while (!stack.isEmpty()) {
+      Professional current = stack.pop();
+      if (current.getCompany() == companyName) return true;
+      visited.add(current);
+      for (var connection : current.getConnections()) if (!visited.contains(connection)) stack.add(connection);
+    }
+
     return false;
   }
 
@@ -179,6 +306,25 @@ public class Practice {
    * @return an unsorted list of next moves
    */
   public static List<int[]> nextMoves(char[][] board, int[] current, int[][] directions) {
-    return null;
+    List<int[]> nextMoveList = new ArrayList<>();
+
+    for (var direction : directions) {
+      int newX = current[0] + direction[0];
+      int newY = current[1] + direction[1];
+      // Out of bounds check
+      if (!isInBounds(newX,newY, board)) continue;
+      // Invalid spot check
+      if (board[newX][newY] == 'X') continue;
+      nextMoveList.add(new int[] {newX, newY});
+    }
+
+    return nextMoveList;
+  }
+
+  private static boolean isInBounds(int x, int y, char[][] board) {
+    if (x >= board.length || x < 0) return false;
+    if (y >= board[0].length || y < 0) return false;
+
+    return true;
   }
 }
