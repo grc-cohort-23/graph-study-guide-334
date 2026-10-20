@@ -1,6 +1,9 @@
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 public class Practice {
 
@@ -25,7 +28,27 @@ public class Practice {
    * @return the number of vertices with odd values reachable from the starting vertex
    */
   public static int oddVertices(Vertex<Integer> starting) {
-    return 0;
+    Set<Vertex<Integer>> visited = new HashSet<>();
+
+    Stack<Vertex<Integer>> stack = new Stack<>();
+    stack.add(starting);
+  
+    int numOfOdds = 0;
+
+    while(!stack.isEmpty()){
+      Vertex<Integer> current = stack.pop();
+      if(current == null || visited.contains(current))continue;
+      visited.add(current);
+
+      if(current.data % 2 == 1) numOfOdds++;
+
+      // if(current.neighbors == null)
+      for(var neighbor : current.neighbors){
+        stack.add(neighbor);
+      }
+    }
+
+    return numOfOdds;
   }
 
   /**
@@ -47,7 +70,27 @@ public class Practice {
    * @return a sorted list of all reachable vertex values by 
    */
   public static List<Integer> sortedReachable(Vertex<Integer> starting) {
-    return null;
+
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Stack<Vertex<Integer>> stack = new Stack<>();
+
+    List<Integer> list = new ArrayList<>();
+
+    stack.add(starting);
+
+    while(!stack.isEmpty()){
+      Vertex<Integer> current = stack.pop();
+      if(current == null || visited.contains(current)) continue;
+      visited.add(current);
+      list.add(current.data);
+      
+      for(var neighbor : current.neighbors){
+        stack.add(neighbor);
+      }
+
+    }
+    list.sort(null);
+    return list;
   }
 
   /**
@@ -61,7 +104,30 @@ public class Practice {
    * @return a sorted list of all reachable vertex values
    */
   public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
-    return null;
+    
+    List<Integer> list = new ArrayList<>();
+
+    Set<Integer> visited = new HashSet<>();
+    
+    Stack<Integer> stack = new Stack<>();
+    stack.add(starting);
+
+
+    while(!stack.isEmpty()){
+      Integer current = stack.pop();
+      if(visited.contains(current) || !graph.containsKey(current)) continue;
+      visited.add(current);
+
+      list.add(current);
+
+      for(var neighbor : graph.get(current)){
+        stack.add(neighbor);
+      }
+    }
+
+    list.sort(null);
+
+    return list;
   }
 
   /**
@@ -79,7 +145,29 @@ public class Practice {
    * @return true if there is a two-way connection between v1 and v2, false otherwise
    */
   public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
-    return false;
+
+    Set<Vertex<T>> visited = new HashSet<>();
+    
+    if(!isPath(v1, v2, visited)) return false;
+
+    visited.clear();
+
+    return isPath(v2,v1,visited);
+  }
+
+  private static <T> boolean isPath(Vertex<T> current, Vertex<T> end, Set<Vertex<T>> visited){
+    if(visited.contains(current) || current == null || end == null) return false;
+      visited.add(current);
+
+      if(current == end) return true;
+
+      boolean isPath = false;
+
+      for(var neighbor : current.neighbors){
+        isPath = isPath || isPath(neighbor,end,visited);
+      }
+
+      return isPath;
   }
 
   /**
@@ -95,6 +183,24 @@ public class Practice {
    * @return whether there exists a valid positive path from starting to ending
    */
   public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
+    
+    Set<Integer> visited = new HashSet<>();
+
+    Stack<Integer> stack = new Stack<>();
+    stack.add(starting);
+
+    while(!stack.isEmpty()){
+      Integer current = stack.pop();
+      if(visited.contains(current) || current <= 0)continue;
+      visited.add(current);
+
+      if(current == ending)return true;
+
+      for(var neighbor : graph.get(current)){
+        stack.add(neighbor);
+      }
+    }
+    
     return false;
   }
 
@@ -108,7 +214,24 @@ public class Practice {
    * @return true if a person in the extended network works at the specified company, false otherwise
    */
   public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
-    return false;
+    if(person == null) return false;
+
+    Set<Professional> checked = new HashSet<>();
+    return hasExtendedConnectionAtCompany(person, companyName, checked);
+  }
+
+  private static boolean hasExtendedConnectionAtCompany(Professional person, String companyName, Set<Professional> checked){
+    if(checked.contains(person)) return false;
+    checked.add(person);
+
+    if(person.getCompany() == companyName)return true;
+
+    boolean hasConnection = false;
+    for(var connection : person.getConnections()){
+      hasConnection = hasConnection || hasExtendedConnectionAtCompany(connection, companyName, checked);
+    }
+    return hasConnection;
+
   }
 
   /**
@@ -179,6 +302,17 @@ public class Practice {
    * @return an unsorted list of next moves
    */
   public static List<int[]> nextMoves(char[][] board, int[] current, int[][] directions) {
-    return null;
+    List<int[]> nextMoves = new ArrayList<>();
+
+    for(int[] direction : directions){
+      int[] nextStep = new int[]{current[0] + direction[0], current[1] + direction[1]};
+      if(nextStep[0] >= 0 && nextStep[0] < board.length
+        && nextStep[1] >= 0 && nextStep[1] < board[0].length 
+        && board[nextStep[0]][nextStep[1]] != 'X'
+      ){
+        nextMoves.add(nextStep);
+      }
+    }
+    return nextMoves;
   }
 }
