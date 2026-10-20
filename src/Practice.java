@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,7 +28,29 @@ public class Practice {
    * @return the number of vertices with odd values reachable from the starting vertex
    */
   public static int oddVertices(Vertex<Integer> starting) {
-    return 0;
+    int oddCount = 0;
+
+    if (starting == null) {
+      return oddCount;
+    }
+
+    Vertex<Integer> current = starting;
+
+    return oddVertices(current, new HashSet<>());
+  }
+
+  private static int oddVertices(Vertex<Integer> current, Set<Vertex<Integer>> visited) {
+    if (visited.contains(current)) return 0;
+
+    visited.add(current);
+    int oddCount = 0;
+    if (current.data % 2 == 1) oddCount++;
+
+    for (Vertex<Integer> neighbor : current.neighbors) {
+      oddCount += oddVertices(neighbor, visited);
+    }
+
+    return oddCount;
   }
 
   /**
@@ -47,7 +72,25 @@ public class Practice {
    * @return a sorted list of all reachable vertex values by 
    */
   public static List<Integer> sortedReachable(Vertex<Integer> starting) {
-    return null;
+    if (starting == null) return new ArrayList<Integer>();
+
+    List<Integer> result = new ArrayList<>();
+    Set<Vertex<Integer>> visited = new HashSet<>();
+
+    sortedReachable(starting, result, visited);
+    Collections.sort(result);
+
+    return result;
+  }
+
+  private static void sortedReachable(Vertex<Integer> current, List<Integer> result, Set<Vertex<Integer>> visited) {
+    if (visited.contains(current)) return;
+    visited.add(current);
+    result.add(current.data);
+
+    for (Vertex<Integer> neighbor : current.neighbors) {
+      sortedReachable(neighbor, result, visited);
+    }
   }
 
   /**
@@ -61,7 +104,29 @@ public class Practice {
    * @return a sorted list of all reachable vertex values
    */
   public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
-    return null;
+    return sortedReachable(graph, starting, new HashSet<Integer>());
+  }
+
+  private static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int current, Set<Integer> visited) {
+    List<Integer> result = new ArrayList<>();
+    if (!graph.containsKey(current)) {
+      return result;
+    }
+
+    if (visited.contains(current)) {
+      return result;
+    }
+
+    visited.add(current);
+    result.add(current);
+
+    for (int neighbor : graph.get(current)) {
+      result.addAll(sortedReachable(graph, neighbor, visited));
+    }
+
+    Collections.sort(result);
+
+    return result;
   }
 
   /**
@@ -79,6 +144,21 @@ public class Practice {
    * @return true if there is a two-way connection between v1 and v2, false otherwise
    */
   public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
+    if (v1 == null || v2 == null) return false;
+    
+    return canReach(v1, v2, new HashSet<>()) && canReach(v2, v1, new HashSet<>());
+  }
+
+  private static <T> boolean canReach(Vertex<T> current, Vertex<T> target, Set<Vertex<T>> visited) {
+    if (current.equals(target)) return true;
+    if (visited.contains(current)) return false;
+
+    visited.add(current);
+
+    for (Vertex<T> neighbor : current.neighbors) {
+      if (canReach(neighbor, target, visited)) return true;
+    }
+
     return false;
   }
 
