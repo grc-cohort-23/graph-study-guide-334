@@ -1,6 +1,4 @@
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Practice {
 
@@ -25,7 +23,33 @@ public class Practice {
    * @return the number of vertices with odd values reachable from the starting vertex
    */
   public static int oddVertices(Vertex<Integer> starting) {
-    return 0;
+    if (starting == null) {
+      return 0;
+    }
+
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Queue<Vertex<Integer>> queue = new LinkedList<>();
+
+    visited.add(starting);
+    queue.add(starting);
+
+    int count = 0;
+
+    while(!queue.isEmpty()) {
+      Vertex<Integer> current = queue.poll();
+      if (current.data % 2 != 0) {
+        count++;
+      }
+
+      for (Vertex<Integer> neighbor : current.neighbors) {
+        if (!visited.contains(neighbor)) {
+          visited.add(neighbor);
+          queue.add(neighbor);
+        }
+      }
+    }
+
+    return count;
   }
 
   /**
@@ -47,7 +71,26 @@ public class Practice {
    * @return a sorted list of all reachable vertex values by 
    */
   public static List<Integer> sortedReachable(Vertex<Integer> starting) {
-    return null;
+    List<Integer> result = new ArrayList<>();
+    if (starting == null) {
+      return result;
+    }
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Queue<Vertex<Integer>> queue = new LinkedList<>();
+    visited.add(starting);
+    queue.add(starting);
+    while(!queue.isEmpty()) {
+      Vertex<Integer> current = queue.poll();
+      result.add(current.data);
+      for(Vertex<Integer> neighbor : current.neighbors) {
+        if(!visited.contains(neighbor)) {
+          visited.add(neighbor);
+          queue.add(neighbor);
+        }
+      }
+    }
+    Collections.sort(result);
+    return result;
   }
 
   /**
@@ -61,7 +104,33 @@ public class Practice {
    * @return a sorted list of all reachable vertex values
    */
   public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
-    return null;
+    List<Integer> result = new ArrayList<>();
+    if (graph == null || !graph.containsKey(starting)) {
+      return result;
+    }
+
+    Set<Integer> visited = new HashSet<>();
+    List<Integer> queue = new ArrayList<>();
+
+    queue.add(starting);
+    visited.add(starting);
+
+    while (!queue.isEmpty()) {
+      int current = queue.remove(0);
+      result.add(current);
+
+      Set<Integer> neighbors = graph.get(current);
+      if (neighbors != null) {
+        for (int neighbor : neighbors) {
+          if (!visited.contains(neighbor)) {
+            visited.add(neighbor);
+            queue.add(neighbor);
+          }
+        }
+      }
+    }
+    Collections.sort(result);
+    return result;
   }
 
   /**
@@ -79,7 +148,39 @@ public class Practice {
    * @return true if there is a two-way connection between v1 and v2, false otherwise
    */
   public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
-    return false;
+    if (v1 == null || v2 == null) {
+      return false;
+    }
+
+    return canReach(v1, v2) && canReach(v2, v1);
+  }
+
+    private static <T> boolean canReach(Vertex<T> start, Vertex<T> target) {
+      if (start == target) {
+        return true;
+      }
+
+      Set<Vertex<T>> visited = new HashSet<>();
+      List<Vertex<T>> queue = new ArrayList<>();
+
+      queue.add(start);
+      visited.add(start);
+
+      while (!queue.isEmpty()) {
+        Vertex<T> current = queue.remove(0);
+
+        if (current == target) {
+          return true;
+        }
+
+        for (Vertex<T> neighbor : current.neighbors) {
+          if (!visited.contains(neighbor)) {
+            visited.add(neighbor);
+            queue.add(neighbor);
+          }
+        }
+      }
+      return false;
   }
 
   /**
@@ -95,6 +196,42 @@ public class Practice {
    * @return whether there exists a valid positive path from starting to ending
    */
   public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
+    if (graph == null || starting <= 0 || ending <= 0) {
+      return false;
+    }
+
+    if (!graph.containsKey(starting) || !graph.containsKey(ending)) {
+      return false;
+    }
+
+    if (starting == ending) {
+      return true;
+    }
+
+    Set<Integer> visited = new HashSet<>();
+    List<Integer> queue = new ArrayList<>();
+
+    queue.add(starting);
+    visited.add(starting);
+
+    while (!queue.isEmpty()) {
+      int current = queue.remove(0);
+
+      if (current == ending) {
+        return true;
+      }
+
+      Set<Integer> neighbors = graph.get(current);
+      if (neighbors != null) {
+        for (int neighbor : neighbors) {
+          if (neighbor > 0 && !visited.contains(neighbor)) {
+            visited.add(neighbor);
+            queue.add(neighbor);
+          }
+        }
+      }
+    }
+
     return false;
   }
 
@@ -108,6 +245,30 @@ public class Practice {
    * @return true if a person in the extended network works at the specified company, false otherwise
    */
   public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+    if (person == null) {
+      return false;
+    }
+
+    Set<Professional> visited = new HashSet<>();
+    List<Professional> queue = new ArrayList<>();
+
+    queue.add(person);
+    visited.add(person);
+
+    while (!queue.isEmpty()) {
+      Professional current = queue.remove(0);
+
+      if (current.getCompany() != null && current.getCompany().equals(companyName)) {
+        return true;
+      }
+
+      for (Professional connection : current.getConnections()) {
+        if (connection != null && !visited.contains(connection)) {
+          visited.add(connection);
+          queue.add(connection);
+        }
+      }
+    }
     return false;
   }
 
@@ -179,6 +340,151 @@ public class Practice {
    * @return an unsorted list of next moves
    */
   public static List<int[]> nextMoves(char[][] board, int[] current, int[][] directions) {
-    return null;
+    List<int[]> validMoves = new ArrayList<>();
+    if (board == null || board.length == 0 || current == null || directions == null) {
+      return validMoves;
+    }
+
+    int rows = board.length;
+    int cols = board[0].length;
+
+    for (int[] direction : directions) {
+      int newRow = current[0] + direction[0];
+      int newCol = current[1] + direction[1];
+
+      if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols && board[newRow][newCol] != 'X') {
+        validMoves.add(new int[]{newRow, newCol});
+      }
+    }
+    
+    return validMoves;
+  }
+
+  public static int largestReachable(Vertex<Integer> starting) {
+    if (starting == null) {
+      return Integer.MIN_VALUE;
+    }
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Queue<Vertex<Integer>> queue = new LinkedList<>();
+    visited.add(starting);
+    queue.add(starting);
+
+    int max = starting.data;
+
+    while(!queue.isEmpty()) {
+      Vertex<Integer> current = queue.poll();
+      if (current.data > max) {
+        max = current.data;
+      }
+      for(Vertex<Integer> neighbor : current.neighbors) {
+        if(!visited.contains(neighbor)) {
+          visited.add(neighbor);
+          queue.add(neighbor);
+        }
+      }
+    }    
+    return max;
+  }
+
+  public static int minReachable(Vertex<Integer> starting) {
+    if (starting == null) {
+      return Integer.MAX_VALUE;
+    }
+
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Queue<Vertex<Integer>> queue = new LinkedList<>();
+
+    visited.add(starting);
+    queue.add(starting);
+
+    int min = starting.data;
+    while (!queue.isEmpty()) {
+      Vertex<Integer> current = queue.poll();
+      if (current.data < min) {
+        min = current.data;
+      }
+      for(Vertex<Integer> neighbor : current.neighbors) {
+        if (!visited.contains(neighbor)) {
+          visited.add(neighbor);
+          queue.add(neighbor);
+        }
+      }
+    }
+    return min;
+  }
+
+  public static int sumReachable(Vertex<Integer> starting) {
+    if (starting == null) {
+      return 0;
+    }
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Queue<Vertex<Integer>> queue = new LinkedList<>();
+    visited.add(starting);
+    queue.add(starting);
+    int sum = 0;
+    while (!queue.isEmpty()) {
+      Vertex<Integer> current = queue.poll();
+      sum += current.data;
+      for(Vertex<Integer> neighbor : current.neighbors) {
+        if(!visited.contains(neighbor)) {
+          visited.add(neighbor);
+          queue.add(neighbor);
+        }
+      }
+    }
+    return sum;
+  }
+
+  public static int countReachable(Vertex<Integer> starting) {
+    if (starting == null) {
+      return 0;
+    }
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Queue<Vertex<Integer>> queue = new LinkedList<>();
+    visited.add(starting);
+    queue.add(starting);
+    int count = 0;
+    while (!queue.isEmpty()) {
+      Vertex<Integer> current = queue.poll();
+      count++;
+      for (Vertex<Integer> neighbor : current.neighbors) {
+        if (!visited.contains(neighbor)) {
+          visited.add(neighbor);
+          queue.add(neighbor);
+        }
+      }
+    }
+    return count;
+  }
+  
+  public static <T> boolean dfsCanReach(Vertex<T> start, Vertex<T> target) {
+    if (start == null || target == null) {
+      return false;
+    }
+    if (start == target) {
+      return true;
+    }
+
+    Set<Vertex<T>> visited = new HashSet<>();
+    Stack<Vertex<T>> stack = new Stack<>();
+
+    visited.add(start);
+    stack.push(start);
+
+    while(!stack.isEmpty()) {
+      Vertex<T> current = stack.pop();
+
+      if (current == target) {
+        return true;
+      }
+
+      for (Vertex<T> neighbor : current.neighbors) {
+        if (!visited.contains(neighbor)) {
+          visited.add(neighbor);
+          stack.push(neighbor);
+        }
+      }
+    }
+    return false;
   }
 }
