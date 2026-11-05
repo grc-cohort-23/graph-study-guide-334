@@ -156,7 +156,16 @@ public class Practice {
    *         otherwise
    */
   public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
-    return false;
+    if (v1 == null || v2 == null) {
+      return false;
+    }
+
+    if (v1 == v2) {
+      return true;
+    }
+
+    return reachableVertices(v1).contains(v2)
+        && reachableVertices(v2).contains(v1);
   }
 
   /**
