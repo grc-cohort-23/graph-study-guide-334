@@ -5,6 +5,7 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class Practice {
@@ -225,6 +226,30 @@ public class Practice {
    *         company, false otherwise
    */
   public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+
+    if (person == null) {
+      return false;
+    }
+
+    Set<Professional> visited = new HashSet<>();
+    Deque<Professional> stack = new ArrayDeque<>();
+    visited.add(person);
+    stack.push(person);
+
+    while (!stack.isEmpty()) {
+      Professional current = stack.pop();
+
+      if (Objects.equals(current.getCompany(), companyName)) {
+        return true;
+      }
+
+      for (Professional connection : current.getConnections()) {
+        if (visited.add(connection)) {
+          stack.push(connection);
+        }
+      }
+    }
+
     return false;
   }
 
