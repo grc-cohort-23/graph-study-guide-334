@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 public class Practice {
 
@@ -56,6 +57,19 @@ public class Practice {
       return count;
   }
 
+  // iterative dfs
+  public static int oddVerticesIterative(Vertex<Integer> starting){
+    if (starting == null){
+      return 0;
+    }
+
+    Set<Vertex<Integer>> visited = new HashSet<>();
+
+    Stack<Vertex<Integer>> stack = new Stack<>();
+
+
+  }
+
   /**
    * Returns a *sorted* list of all values reachable from the starting vertex (including the starting vertex itself).
    * If duplicate vertex data exists, duplicates should appear in the output.
@@ -74,7 +88,8 @@ public class Practice {
    * @param starting the starting vertex (may be null)
    * @return a sorted list of all reachable vertex values by 
    */
-  public static List<Integer> sortedReachable(Vertex<Integer> starting) {List<Integer> result = new ArrayList<>();
+  public static List<Integer> sortedReachable(Vertex<Integer> starting) {
+    List<Integer> result = new ArrayList<>();
 
     if(starting == null){
       return result;
