@@ -1,7 +1,10 @@
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
+import java.util.Stack;
 import java.util.ArrayList;
 import java.util.Collections;
 public class Practice {
@@ -26,26 +29,84 @@ public class Practice {
    * @param starting the starting vertex (may be null)
    * @return the number of vertices with odd values reachable from the starting vertex
    */
+  // public static int oddVertices(Vertex<Integer> starting) {
+  //   // start with empty visited set
+  //   return oddVertices(starting, new HashSet<>());
+  // }
+
+  // // counts odd that can reach from current
+  // private static int oddVertices(Vertex<Integer> current, Set<Vertex<Integer>> visited) {
+  //   if (current == null || visited.contains(current)) return 0;
+  //   visited.add(current);
+
+  //   // count this if it odd
+  //   int count = 0;
+  //   if (current.data % 2 != 0) count++;
+
+  //   // then add odd count from every neighbor
+  //   for (Vertex<Integer> neighbor : current.neighbors) {
+  //     count += oddVertices(neighbor, visited);
+  //   }
+  //   return count;
+  // }
+  
+  // iterative DFS
+  //   public static int oddVertices(Vertex<Integer> starting) {
+  //   if (starting == null) return 0;
+
+  //   Set<Vertex<Integer>> visited = new HashSet<>();
+  //   Stack<Vertex<Integer>> stack = new Stack<>();
+  //   stack.push(starting);
+  //   int count = 0;
+
+  //   while (!stack.isEmpty()) {
+  //     Vertex<Integer> current = stack.pop();
+
+  //     // same vertex can be pushed twice, skip if already done
+  //     if (visited.contains(current)) continue;
+  //     visited.add(current);
+
+  //     // count this if it odd
+  //     if (current.data % 2 != 0) count++;
+
+  //     // push every neighbor to check later
+  //     for (Vertex<Integer> neighbor : current.neighbors) {
+  //       stack.push(neighbor);
+  //     }
+  //   }
+  //   return count;
+  // }
+
+  //Iterative BFS
+
   public static int oddVertices(Vertex<Integer> starting) {
-    // start with empty visited set
-    return oddVertices(starting, new HashSet<>());
-  }
+    if (starting == null) return 0;
 
-  // counts odd that can reach from current
-  private static int oddVertices(Vertex<Integer> current, Set<Vertex<Integer>> visited) {
-    if (current == null || visited.contains(current)) return 0;
-    visited.add(current);
-
-    // count this if it odd
+    // mark visited when added to queue so nothing gets added twice
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Queue<Vertex<Integer>> queue = new LinkedList<>();
+    queue.add(starting);
+    visited.add(starting);
     int count = 0;
-    if (current.data % 2 != 0) count++;
 
-    // then add odd count from every neighbor
-    for (Vertex<Integer> neighbor : current.neighbors) {
-      count += oddVertices(neighbor, visited);
+    while (!queue.isEmpty()) {
+      Vertex<Integer> current = queue.poll();
+
+      // count this if it odd
+      if (current.data % 2 != 0) count++;
+
+      // add every new neighbor to the back of the line
+      for (Vertex<Integer> neighbor : current.neighbors) {
+        if (!visited.contains(neighbor)) {
+          visited.add(neighbor);
+          queue.add(neighbor);
+        }
+      }
     }
     return count;
   }
+
+  
 
   /**
    * Returns a *sorted* list of all values reachable from the starting vertex (including the starting vertex itself).
