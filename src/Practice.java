@@ -29,88 +29,46 @@ public class Practice {
    * @param starting the starting vertex (may be null)
    * @return the number of vertices with odd values reachable from the starting vertex
    */
-    public static int oddVertices(Vertex<Integer> starting) {
-      if(starting == null) return 0;
-      Set<Vertex<Integer>> visited = new HashSet();
-
-      //call dfs to solve odd reachable
-      return dfs(visited, starting);
-    }
-    private static int dfs(Set<Vertex<Integer>> visited, Vertex<Integer> current){
-      if(!visited.add(current)) return 0;
-      int count = 0;
-
-      for(Vertex<Integer> neighbor : current.neighbors){
-        if(current.data % 2 != 0){ 
-          count = 1;
-        }else{
-          count = 0;
-        }
-       
-      }
-      return count;
-    }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-      //     //null case
+  // //recursive DFS
+  //   public static int oddVertices(Vertex<Integer> starting) {
   //     if(starting == null) return 0;
+  //     Set<Vertex<Integer>> visited = new HashSet();
 
-  //     Set<Vertex<Integer>> seen = new HashSet<>();
-  //     //call recursive helper method below with params
-  //     return reachableOdds(starting, seen);
-
+  //     //call dfs to solve odd reachable
+  //     return dfs(visited, starting);
   //   }
-  //   private static int reachableOdds(Vertex<Integer> current, Set<Vertex<Integer>> seen){
-  //     if(!seen.add(current)) return 0;
-  //     //hold results in a count variable
-  //     //using the ternary operator for my if else
-  //     int count = (current.data % 2 != 0) ? 1 : 0;
-  //     //recurse neighbors
+  //   private static int dfs(Set<Vertex<Integer>> visited, Vertex<Integer> current){
+  //     if(!visited.add(current)) return 0;
+  //     int count = 0;
+
   //     for(Vertex<Integer> neighbor : current.neighbors){
-  //       count += reachableOdds(neighbor, seen);
+  //       if(current.data % 2 != 0){ 
+  //         count = 1;
+  //       }else{
+  //         count = 0;
+  //       }
+       
   //     }
   //     return count;
+  //   }
 
-  // }
-  //   if(starting == null){
-  //   return 0;
-  //   }
-  //   //visited set to track
-  //   Set<Vertex<Integer>> visited = new HashSet<>();
+  public static int oddVertices(Vertex<Integer> starting) {
+    if(starting == null) return 0; 
 
-  //   //return the helper method passing in the two parameters
-  //   return oddVerticesDfs(starting, visited);
-  // }
-  // private static int oddVerticesDfs(Vertex<Integer> current, Set<Vertex<Integer>> visited) {
-  // // base case 
-  //   if (!visited.add(current)) {
-  //   return 0;
-  //   }
-  //   // count current vertex if its value is odd
-  //   int count = (current.data % 2 != 0) ? 1 : 0;
-  //   // recurse into all neighbors and add up what they find
-  //   for (Vertex<Integer> neighbor : current.neighbors) {
-  //   count += oddVerticesDfs(neighbor, visited);
-  //   }
-  //   return count;
-  //   }
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Queue<Vertex<Integer>> queue = new ArrayDeque();
+    
+    visited.add(starting);
+    queue.add(starting);
+
+    int count = 0;
+
+    while(!queue.isEmpty()){
+      
+    }
+  }
+  
+  
 
 
   /**
