@@ -395,19 +395,38 @@ public class Practice {
    * @param companyName the name of the company to check for employment
    * @return true if a person in the extended network works at the specified company, false otherwise
    */
-  public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
-    if(person == null) return false;
-    //return the recursive dfs method
-    return dfs(person,  new HashSet<>(), companyName);
-  }
-  private static boolean dfs(Professional current, Set<Professional> visited, String companyName){
-    if(!visited.add(current)) return false;
-    if (Objects.equals(current.getCompany(), companyName)) return true;
-    for(Professional connection : current.getConnections()){
-      if(dfs(connection, visited, companyName )) return true;
+    public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+      if (person == null) return false;
+
+      Set<Professional> visited = new HashSet<>();
+      Queue<Professional> queue = new ArrayDeque<>();
+      visited.add(person);
+      queue.add(person);
+
+      while (!queue.isEmpty()) {
+        Professional current = queue.poll();
+        if (Objects.equals(current.getCompany(), companyName)) return true;
+
+        for (Professional connection : current.getConnections()) {
+          if (visited.add(connection)) queue.add(connection);
+        }
+      }
+      return false;
     }
-    return false;
-  }
+    
+  // public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+  //   if(person == null) return false;
+  //   //return the recursive dfs method
+  //   return dfs(person,  new HashSet<>(), companyName);
+  // }
+  // private static boolean dfs(Professional current, Set<Professional> visited, String companyName){
+  //   if(!visited.add(current)) return false;
+  //   if (Objects.equals(current.getCompany(), companyName)) return true;
+  //   for(Professional connection : current.getConnections()){
+  //     if(dfs(connection, visited, companyName )) return true;
+  //   }
+  //   return false;
+  // }
 
 
   
