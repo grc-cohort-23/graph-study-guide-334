@@ -178,26 +178,66 @@ public class Practice {
    * @param starting the starting vertex (may be null)
    * @return a sorted list of all reachable vertex values by
    */
+  // public static List<Integer> sortedReachable(Vertex<Integer> starting) {
+  //   HashSet<Vertex<Integer>> visited = new HashSet<>();
+  //   List<Integer> result = new ArrayList<>();
+  //   sortedHelper(starting, visited, result);
+  //   Collections.sort(result);
+  //   return result;
+  // }
+
+  // private static void sortedHelper(Vertex<Integer> current, HashSet<Vertex<Integer>> visited, List<Integer> result) {
+  //   if (current == null)
+  //     return;
+  //   if (visited.contains(current))
+  //     return;
+
+  //   visited.add(current);
+  //   result.add(current.data);
+
+  //   for (Vertex<Integer> neighbor : current.neighbors) {
+  //     sortedHelper(neighbor, visited, result);
+  //   }
+  // }
+
+  /** Iterative DFS **
+   * Returns a *sorted* list of all values reachable from the starting vertex
+   * (including the starting vertex itself).
+   * If duplicate vertex data exists, duplicates should appear in the output.
+   * If the starting vertex is null, returns an empty list.
+   * They should be sorted in ascending numerical order.
+   *
+   * Example:
+   * Consider a graph where:
+   * 5 --> 8
+   * | |
+   * v v
+   * 8 --> 2 <-- 4
+   * When starting from the vertex with value 5, the output should be:
+   * [2, 5, 8, 8]
+   *
+   * @param starting the starting vertex (may be null)
+   * @return a sorted list of all reachable vertex values by
+   */
   public static List<Integer> sortedReachable(Vertex<Integer> starting) {
+    if(starting == null ) return new ArrayList<>();
+    Stack<Vertex<Integer>> stack = new Stack<>();
     HashSet<Vertex<Integer>> visited = new HashSet<>();
     List<Integer> result = new ArrayList<>();
-    sortedHelper(starting, visited, result);
+    stack.push(starting);
+    
+    while(!stack.isEmpty()) {
+      Vertex<Integer> current = stack.pop();
+      if(current == null || visited.contains(current)) continue; // skip
+       visited.add(current);
+       result.add(current.data);
+       for(Vertex<Integer> neighbor : current.neighbors) {
+        stack.push(neighbor);
+       }
+
+    }
     Collections.sort(result);
     return result;
-  }
-
-  private static void sortedHelper(Vertex<Integer> current, HashSet<Vertex<Integer>> visited, List<Integer> result) {
-    if (current == null)
-      return;
-    if (visited.contains(current))
-      return;
-
-    visited.add(current);
-    result.add(current.data);
-
-    for (Vertex<Integer> neighbor : current.neighbors) {
-      sortedHelper(neighbor, visited, result);
-    }
   }
 
   /**
