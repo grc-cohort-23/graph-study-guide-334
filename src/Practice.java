@@ -1,9 +1,11 @@
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
@@ -83,30 +85,30 @@ public class Practice {
    * @return the number of vertices with odd values reachable from the starting
    *         vertex
    */
-  public static int oddVertices(Vertex<Integer> starting) {
-    Stack<Vertex<Integer>> stack = new Stack<>();
-    HashSet<Vertex<Integer>> visited = new HashSet<>();
-    stack.push(starting);
+  // public static int oddVertices(Vertex<Integer> starting) {
+  //   Stack<Vertex<Integer>> stack = new Stack<>();
+  //   HashSet<Vertex<Integer>> visited = new HashSet<>();
+  //   stack.push(starting);
 
 
-    int count = 0;
+  //   int count = 0;
 
-    while(!stack.isEmpty()) {
-      Vertex<Integer> current = stack.pop();
-      if(current == null || visited.contains(current)) continue; // skip too next neighbor
-      visited.add(current);
-      if(current.data % 2 != 0) {
-        count++;
-      }
-      for(Vertex<Integer> neighbor : current.neighbors) {
-          stack.push(neighbor);
-      }
-    }
-    return count;
+  //   while(!stack.isEmpty()) {
+  //     Vertex<Integer> current = stack.pop();
+  //     if(current == null || visited.contains(current)) continue; // skip too next neighbor
+  //     visited.add(current);
+  //     if(current.data % 2 != 0) {
+  //       count++;
+  //     }
+  //     for(Vertex<Integer> neighbor : current.neighbors) {
+  //         stack.push(neighbor);
+  //     }
+  //   }
+  //   return count;
 
-  }
+  // }
 
-    /** Iterative DFS Version  **?
+    /** Iterative BFS Version  **?
    * Returns the count of vertices with odd values that can be reached from the
    * given starting vertex.
    * The starting vertex is included in the count if its value is odd.
@@ -130,22 +132,24 @@ public class Practice {
    *         vertex
    */
   public static int oddVertices(Vertex<Integer> starting) {
-    Stack<Vertex<Integer>> stack = new Stack<>();
+    if(starting == null) return 0;
+    Queue<Vertex<Integer>> queue = new ArrayDeque<>();
     HashSet<Vertex<Integer>> visited = new HashSet<>();
-    stack.push(starting);
-
+    visited.add(starting);
+    queue.offer(starting);
 
     int count = 0;
 
-    while(!stack.isEmpty()) {
-      Vertex<Integer> current = stack.pop();
-      if(current == null || visited.contains(current)) continue; // skip too next neighbor
-      visited.add(current);
+    while(!queue.isEmpty()) {
+      Vertex<Integer> current = queue.poll();
       if(current.data % 2 != 0) {
         count++;
       }
       for(Vertex<Integer> neighbor : current.neighbors) {
-          stack.push(neighbor);
+          if(neighbor == null || visited.contains(neighbor)) continue;
+          visited.add(neighbor);
+          queue.offer(neighbor);
+
       }
     }
     return count;
