@@ -197,24 +197,44 @@ public class Practice {
    * @param starting the starting vertex value
    * @return a sorted list of all reachable vertex values
    */
-  public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
-    if(!graph.containsKey(starting)) return new ArrayList<>();
+     public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
+      if (!graph.containsKey(starting)) return new ArrayList<>();
 
-    Set<Integer> visited = new HashSet<>();
-    //sorted reach dfs recursive helper
-    sortedMap(graph, starting, visited);
+      Set<Integer> visited = new HashSet<>();
+      Queue<Integer> queue = new ArrayDeque<>();
+      visited.add(starting);
+      queue.add(starting);
 
-    List<Integer> results = new ArrayList<>(visited);
-    Collections.sort(results);
-    return results;
-  }
-  private static void sortedMap(Map<Integer, Set<Integer>> graph, int current, Set<Integer> visited){
-    if(!visited.add(current)) return;
+      while (!queue.isEmpty()) {
+        int current = queue.poll();
 
-    for(int neighbor : graph.getOrDefault(current, Collections.emptySet())){
-      sortedMap(graph, neighbor, visited);
+        for (int neighbor : graph.getOrDefault(current, Collections.emptySet())) {
+          if (visited.add(neighbor)) queue.add(neighbor);
+        }
+      }
+      List<Integer> results = new ArrayList<>(visited);
+      Collections.sort(results);
+      return results;
     }
-  }
+  
+  // public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
+  //   if(!graph.containsKey(starting)) return new ArrayList<>();
+
+  //   Set<Integer> visited = new HashSet<>();
+  //   //sorted reach dfs recursive helper
+  //   sortedMap(graph, starting, visited);
+
+  //   List<Integer> results = new ArrayList<>(visited);
+  //   Collections.sort(results);
+  //   return results;
+  // }
+  // private static void sortedMap(Map<Integer, Set<Integer>> graph, int current, Set<Integer> visited){
+  //   if(!visited.add(current)) return;
+
+  //   for(int neighbor : graph.getOrDefault(current, Collections.emptySet())){
+  //     sortedMap(graph, neighbor, visited);
+  //   }
+  // }
   
   
   
