@@ -1,3 +1,4 @@
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -6,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Objects;
+import java.util.Queue;
 
 public class Practice {
 
@@ -98,50 +100,51 @@ public class Practice {
    * @param starting the starting vertex (may be null)
    * @return a sorted list of all reachable vertex values by 
    */
-  public static List<Integer> sortedReachable(Vertex<Integer> starting) {
-    List<Integer> values = new ArrayList<>();
+  public static List<Integer> sortedReachable(Vertex<Integer> starting){
+      List<Integer> values = new ArrayList<>();
+      if (starting == null) return values;
 
-    if(starting == null) return values;
+      Set<Vertex<Integer>> visited = new HashSet<>();
+      Queue<Vertex<Integer>> queue = new ArrayDeque<>();
+      visited.add(starting);
+      queue.add(starting);
 
-    //call dfs method here
-    dfs(values, starting, new HashSet<>());
-    //sort using collections here
-    Collections.sort(values);
-    return values;
-  } 
-  private static void dfs(List<Integer> values, Vertex<Integer> current, Set<Vertex<Integer>> visited){
-    if(!visited.add(current)) return;
-    //add to list of visited 
-    values.add(current.data);
+      while (!queue.isEmpty()) {
+        Vertex<Integer> current = queue.poll();
+        values.add(current.data);
+        
+        for (Vertex<Integer> n : current.neighbors) {
+            if (visited.add(n)) queue.add(n);
+          }
+        }
+        Collections.sort(values);
+        return values;
+      }
 
-    for(Vertex<Integer> neighbor : current.neighbors){
-      dfs(values, neighbor, visited);
-    }
-  }
+
+
+  // public static List<Integer> sortedReachable(Vertex<Integer> starting) {
+  //   List<Integer> values = new ArrayList<>();
+
+  //   if(starting == null) return values;
+
+  //   //call dfs method here
+  //   dfs(values, starting, new HashSet<>());
+  //   //sort using collections here
+  //   Collections.sort(values);
+  //   return values;
+  // } 
+  // private static void dfs(List<Integer> values, Vertex<Integer> current, Set<Vertex<Integer>> visited){
+  //   if(!visited.add(current)) return;
+  //   //add to list of visited 
+  //   values.add(current.data);
+
+  //   for(Vertex<Integer> neighbor : current.neighbors){
+  //     dfs(values, neighbor, visited);
+  //   }
+  // }
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
   
     //   List<Integer> values = new ArrayList<>();
   //     if(starting == null) return values;
