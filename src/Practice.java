@@ -200,7 +200,48 @@ public class Practice {
   //   }
   // }
 
-  /** Iterative DFS **
+  // /** Iterative DFS **
+  //  * Returns a *sorted* list of all values reachable from the starting vertex
+  //  * (including the starting vertex itself).
+  //  * If duplicate vertex data exists, duplicates should appear in the output.
+  //  * If the starting vertex is null, returns an empty list.
+  //  * They should be sorted in ascending numerical order.
+  //  *
+  //  * Example:
+  //  * Consider a graph where:
+  //  * 5 --> 8
+  //  * | |
+  //  * v v
+  //  * 8 --> 2 <-- 4
+  //  * When starting from the vertex with value 5, the output should be:
+  //  * [2, 5, 8, 8]
+  //  *
+  //  * @param starting the starting vertex (may be null)
+  //  * @return a sorted list of all reachable vertex values by
+  //  */
+  // public static List<Integer> sortedReachable(Vertex<Integer> starting) {
+  //   if(starting == null ) return new ArrayList<>();
+  //   Stack<Vertex<Integer>> stack = new Stack<>();
+  //   HashSet<Vertex<Integer>> visited = new HashSet<>();
+  //   List<Integer> result = new ArrayList<>();
+  //   stack.push(starting);
+    
+  //   while(!stack.isEmpty()) {
+  //     Vertex<Integer> current = stack.pop();
+  //     if(current == null || visited.contains(current)) continue; // skip
+  //      visited.add(current);
+  //      result.add(current.data);
+  //      for(Vertex<Integer> neighbor : current.neighbors) {
+  //       stack.push(neighbor);
+  //      }
+
+  //   }
+  //   Collections.sort(result);
+  //   return result;
+  // }
+
+
+  /** Iterative BFS **
    * Returns a *sorted* list of all values reachable from the starting vertex
    * (including the starting vertex itself).
    * If duplicate vertex data exists, duplicates should appear in the output.
@@ -221,20 +262,20 @@ public class Practice {
    */
   public static List<Integer> sortedReachable(Vertex<Integer> starting) {
     if(starting == null ) return new ArrayList<>();
-    Stack<Vertex<Integer>> stack = new Stack<>();
+    Queue<Vertex<Integer>> queue = new ArrayDeque<>();
     HashSet<Vertex<Integer>> visited = new HashSet<>();
     List<Integer> result = new ArrayList<>();
-    stack.push(starting);
+    visited.add(starting);
+    queue.offer(starting);
     
-    while(!stack.isEmpty()) {
-      Vertex<Integer> current = stack.pop();
-      if(current == null || visited.contains(current)) continue; // skip
-       visited.add(current);
+    while(!queue.isEmpty()) {
+      Vertex<Integer> current = queue.poll();
        result.add(current.data);
        for(Vertex<Integer> neighbor : current.neighbors) {
-        stack.push(neighbor);
+        if(neighbor == null || visited.contains(neighbor)) continue; // skip
+        visited.add(neighbor);
+        queue.offer(neighbor);
        }
-
     }
     Collections.sort(result);
     return result;
