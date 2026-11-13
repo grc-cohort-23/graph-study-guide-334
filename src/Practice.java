@@ -330,34 +330,44 @@ public class Practice {
    * @param ending the ending vertex value
    * @return whether there exists a valid positive path from starting to ending
    */
-  public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
-    if(!graph.containsKey(starting) || !graph.containsKey(ending) || starting <= 0 || ending <= 0){
+    public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
+      if (!graph.containsKey(starting) || !graph.containsKey(ending) || starting <= 0 || ending <= 0) {
+        return false;
+      }
+      Set<Integer> visited = new HashSet<>();
+      Queue<Integer> queue = new ArrayDeque<>();
+      visited.add(starting);
+      queue.add(starting);
+
+      while (!queue.isEmpty()) {
+        int current = queue.poll();
+        if (current == ending) return true;
+
+        for (int neighbor : graph.getOrDefault(current, Collections.emptySet())) {
+          if (neighbor > 0 && visited.add(neighbor)) queue.add(neighbor);
+        }
+      }
       return false;
     }
-    //return dfs recursive helper
-    return dfsPath(graph, starting, ending, new HashSet<>());
-  }
-  private static boolean dfsPath(Map<Integer, Set<Integer>> graph, int current, int ending, Set<Integer> visited){
-    if (current == ending) return true;
-    visited.add(current);
 
-    for(int neighbor : graph.getOrDefault(current, Collections.emptySet())){
-      if(neighbor >= 0 && !visited.contains(neighbor) && dfsPath(graph, neighbor, ending, visited)){
-        return true;
-      }
-    }
-    return false;
-  }
+  // public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
+  //   if(!graph.containsKey(starting) || !graph.containsKey(ending) || starting <= 0 || ending <= 0){
+  //     return false;
+  //   }
+  //   //return dfs recursive helper
+  //   return dfsPath(graph, starting, ending, new HashSet<>());
+  // }
+  // private static boolean dfsPath(Map<Integer, Set<Integer>> graph, int current, int ending, Set<Integer> visited){
+  //   if (current == ending) return true;
+  //   visited.add(current);
 
-
-
-
-
-
-  
-  
-  
-  
+  //   for(int neighbor : graph.getOrDefault(current, Collections.emptySet())){
+  //     if(neighbor >= 0 && !visited.contains(neighbor) && dfsPath(graph, neighbor, ending, visited)){
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
     //   if(starting <= 0 || ending <= 0 || !graph.containsKey(starting) || !graph.containsKey(ending)) {
   //     return false;
   //   }
