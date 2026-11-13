@@ -64,8 +64,17 @@ public class Practice {
     int count = 0;
 
     while(!queue.isEmpty()){
-      
+      Vertex<Integer> current = queue.poll();
+
+      if(current.data % 2 != 0) count++;
+
+      for(Vertex<Integer> n : current.neighbors){
+        if(visited.add(n)) {
+          queue.add(n);
+        }
+      }
     }
+    return count; 
   }
   
   
