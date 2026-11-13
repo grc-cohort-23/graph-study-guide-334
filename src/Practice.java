@@ -235,11 +235,6 @@ public class Practice {
   //     sortedMap(graph, neighbor, visited);
   //   }
   // }
-  
-  
-  
-  
-  
     //   if (!graph.containsKey(starting)) {
   //       return new ArrayList<>(); 
   //     }
@@ -275,31 +270,53 @@ public class Practice {
    * @param v2 the target vertex
    * @return true if there is a two-way connection between v1 and v2, false otherwise
    */
-  public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
-    if (v1 == null || v2 == null) {
-      return false;
+    public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
+      if (v1 == null || v2 == null) return false;
+      return canReach(v1, v2) && canReach(v2, v1);
     }
-   //call recursive method and check both directions
-    return canReach(v1, v2, new HashSet<>()) && canReach(v2, v1, new HashSet<>());
-  }
 
-  // recursive dfs for reachable from current to target 
-  private static <T> boolean canReach(Vertex<T> current, Vertex<T> target, Set<Vertex<T>> visited) {
-    // target found 
-    if (current == target) {
-      return true;
-    }
-    //add current and return true if not in visited set already
-    if (!visited.add(current)) {
-      return false;
+    private static <T> boolean canReach(Vertex<T> start, Vertex<T> target) {
+      Set<Vertex<T>> visited = new HashSet<>();
+      Queue<Vertex<T>> queue = new ArrayDeque<>();
+      visited.add(start);
+      queue.add(start);
+
+      while (!queue.isEmpty()) {
+        Vertex<T> current = queue.poll();
+        if (current == target) return true;
+
+        for (Vertex<T> neighbor : current.neighbors) {
+          if (visited.add(neighbor)) queue.add(neighbor);
         }
-    for (Vertex<T> neighbor : current.neighbors) {
-      if (canReach(neighbor, target, visited)) {
-        return true;
       }
+      return false;
     }
-    return false;
-  }
+  
+  // public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
+  //   if (v1 == null || v2 == null) {
+  //     return false;
+  //   }
+  //  //call recursive method and check both directions
+  //   return canReach(v1, v2, new HashSet<>()) && canReach(v2, v1, new HashSet<>());
+  // }
+
+  // // recursive dfs for reachable from current to target 
+  // private static <T> boolean canReach(Vertex<T> current, Vertex<T> target, Set<Vertex<T>> visited) {
+  //   // target found 
+  //   if (current == target) {
+  //     return true;
+  //   }
+  //   //add current and return true if not in visited set already
+  //   if (!visited.add(current)) {
+  //     return false;
+  //       }
+  //   for (Vertex<T> neighbor : current.neighbors) {
+  //     if (canReach(neighbor, target, visited)) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 
   /**
    * Returns whether there exists a path from the starting to ending vertex that includes only positive values.
