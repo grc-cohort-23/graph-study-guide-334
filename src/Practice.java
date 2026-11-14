@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,7 +29,38 @@ public class Practice {
    * @return the number of vertices with odd values reachable from the starting vertex
    */
   public static int oddVertices(Vertex<Integer> starting) {
-    return 0;
+    /*
+    Set<Vertex<Integer>> visited = new HashSet<>(); // initialize visited set
+    return oddVertices(starting, visited); // helper method
+    */
+    throw new UnsupportedOperationException("Not implemented");
+  }
+
+  public static int oddVertices(Vertex<Integer> current, Set<Vertex<Integer>> visited){
+    /*
+    // step 1: base cases
+
+    int count = 0;
+    if(current == null) return 0;
+    
+    // step 2: visited marks
+    if(visited.contains(current)) return 0;
+
+    visited.add(current);
+
+    // step 3: target case
+    if(current.data % 2 != 0) count++;
+
+    // step 4: loop, recurse call
+    for(Vertex<Integer> neighbor : current.neighbors){
+      count += oddVertices(neighbor, visited);
+    }
+
+    
+    // step 5: default return
+    return count;
+    */
+    throw new UnsupportedOperationException("Not implemented");
   }
 
   /**
@@ -47,7 +82,32 @@ public class Practice {
    * @return a sorted list of all reachable vertex values by 
    */
   public static List<Integer> sortedReachable(Vertex<Integer> starting) {
-    return null;
+    /*
+    List<Integer> result = new ArrayList<>();
+    Set<Vertex<Integer>> visited = new HashSet<>();
+
+    //call helper
+    listOfVertices(starting, visited, result);
+    Collections.sort(result);
+    return result;
+    */
+    throw new UnsupportedOperationException("Not implemented");
+  }
+
+  private static void listOfVertices(Vertex<Integer> current, Set<Vertex<Integer>> visited, List<Integer> result){
+    /*
+    if(current == null) return;
+
+    if(visited.contains(current)) return;
+
+    visited.add(current);
+    result.add(current.data);
+
+    for(Vertex<Integer> neighbor : current.neighbors){
+      listOfVertices(neighbor,visited,result);
+    }
+    */
+    throw new UnsupportedOperationException("Not implemented");
   }
 
   /**
@@ -61,7 +121,40 @@ public class Practice {
    * @return a sorted list of all reachable vertex values
    */
   public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
-    return null;
+    /*
+    // result List and visited Set
+    List<Integer> result = new ArrayList<>();
+    Set<Integer> visited = new HashSet<>();
+
+    // base case for starting node
+    if(!graph.containsKey(starting)) return result;
+
+    //call helper
+    dfs(graph, starting, visited, result);
+
+    // sort result and return
+    Collections.sort(result);
+    return result;
+    */
+    throw new UnsupportedOperationException("Not implemented");
+  }
+
+  private static void dfs(Map<Integer, Set<Integer>> graph, int current, Set<Integer> visited, List<Integer> result) {
+    /*
+    if(visited.contains(current)) return;
+
+    visited.add(current);
+    result.add(current);
+
+    Set<Integer> neighbors = graph.get(current);
+    if(neighbors == null) return; // //value but not a key, skip
+
+    for(int neighbor : neighbors){
+
+      dfs(graph,neighbor,visited,result);
+    }
+    */
+    throw new UnsupportedOperationException("Not implemented");
   }
 
   /**
@@ -79,7 +172,34 @@ public class Practice {
    * @return true if there is a two-way connection between v1 and v2, false otherwise
    */
   public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
+    /*
+    if(v1 == null || v2 == null) {
+      return false;
+    }
+
+    return reachable(v1, v2, new HashSet<>()) && reachable(v2, v1, new HashSet<>());
+    */
+    throw new UnsupportedOperationException("Not implemented");
+  }
+
+  private static <T> boolean reachable(Vertex<T> current, Vertex<T> target, Set<Vertex<T>> visited) {
+    /*
+    if(current == target){ // if current == target the target is considered reachable
+      return true;
+    }
+    if(!visited.add(current)) { // set returns true or false if it contains current value, false if it was explored (for single nodes)
+      return false; // already explored
+    }
+
+    for(Vertex<T> neighbor : current.neighbors){
+      if(reachable(neighbor,target,visited)){
+        return true;
+      }
+    }
+
     return false;
+    */
+    throw new UnsupportedOperationException("Not implemented");
   }
 
   /**
@@ -95,7 +215,33 @@ public class Practice {
    * @return whether there exists a valid positive path from starting to ending
    */
   public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
+    /*
+    if(starting <= 0 || ending <= 0) return false;
+    if(!graph.containsKey(starting) || !graph.containsKey(ending)) return false;
+    return positivePath(graph, starting, ending, new HashSet<>());
+    */
+    throw new UnsupportedOperationException("Not implemented");
+  }
+
+  private static boolean positivePath(Map<Integer, Set<Integer>> graph, int current, int ending, Set<Integer> visited){
+    /*
+    if(current <= 0) return false;
+
+    if(current == ending) return true;
+
+    if(!visited.add(current)) return false;
+
+    Set<Integer> neighbors = graph.get(current);
+    if(neighbors == null) return false;
+
+    for(int neighbor : neighbors){
+      if(positivePath(graph, neighbor, ending, visited)) {
+        return true;
+      }
+    }
     return false;
+    */
+    throw new UnsupportedOperationException("Not implemented");
   }
 
   /**
@@ -108,7 +254,35 @@ public class Practice {
    * @return true if a person in the extended network works at the specified company, false otherwise
    */
   public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+    /*
+    if(person == null) return false;
+
+    return connectionsAtCompany(person, companyName, new HashSet<>());
+    */
+    throw new UnsupportedOperationException("Not implemented");
+  }
+  
+  private static boolean connectionsAtCompany(Professional current, String companyName, Set<Professional> visited){
+    /*
+    // check if the current is null/visited contains current
+    if(current == null) return false;
+    
+    if(!visited.add(current)) return false; // this instance has been visited already
+
+    if(current.getCompany().equals(companyName)) return true;
+
+
+
+
+    for(Professional neighbor : current.getConnections()) {
+      if(connectionsAtCompany(neighbor,companyName,visited)){
+        return true;
+      }
+    }
+
     return false;
+    */
+    throw new UnsupportedOperationException("Not implemented");
   }
 
   /**
@@ -179,6 +353,22 @@ public class Practice {
    * @return an unsorted list of next moves
    */
   public static List<int[]> nextMoves(char[][] board, int[] current, int[][] directions) {
-    return null;
+    /*
+    List<int[]> result = new ArrayList<>(); // moves list
+
+    for(int[] dir : directions){
+      int newRow = current[0] + dir[0];
+      int newCol = current[1] + dir[1];
+
+      boolean inBounds = newRow >= 0 && newRow < board.length && newCol >= 0 && newCol < board[0].length;
+
+      if(inBounds && board[newRow][newCol] != 'X'){
+        result.add(new int[]{newRow, newCol});
+      }
+    }
+
+      return result;
+    */
+    throw new UnsupportedOperationException("Not implemented");
   }
 }
