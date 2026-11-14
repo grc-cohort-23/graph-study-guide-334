@@ -1,6 +1,8 @@
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -31,24 +33,55 @@ public class Practice {
    * @return the number of vertices with odd values reachable from the starting
    *         vertex
    */
-  public static int oddVertices(Vertex<Integer> starting) {
-    return oddHelper(starting, new HashSet<>());
-  }
+  // public static int oddVertices(Vertex<Integer> starting) {
+  // return oddHelper(starting, new HashSet<>());
+  // }
 
-  private static int oddHelper(Vertex<Integer> current, Set<Vertex<Integer>> visited) {
-    int oddVertices = 0;
-    // Edge Case/Guard
-    if (current == null || visited.contains(current))
+  // private static int oddHelper(Vertex<Integer> current, Set<Vertex<Integer>>
+  // visited) {
+  // int oddVertices = 0;
+  // // Edge Case/Guard
+  // if (current == null || visited.contains(current))
+  // return 0;
+  // /// add current vertex into the set
+  // visited.add(current);
+  // if (current.data % 2 != 0) {
+  // oddVertices++;
+  // }
+  // // recursivly add + 1 to oddVertices if condition is meet
+  // // Explore each neighbor
+  // for (Vertex<Integer> neighbor : current.neighbors) {
+  // oddVertices += oddHelper(neighbor, visited);
+  // }
+  // return oddVertices;
+  // }
+
+  public static int oddVertices(Vertex<Integer> starting) {
+    if (starting == null) {
       return 0;
-    /// add current vertex into the set
-    visited.add(current);
-    if (current.data % 2 != 0) {
-      oddVertices++;
     }
-    // recursivly add + 1 to oddVertices if condition is meet
-    // Explore each neighbor
-    for (Vertex<Integer> neighbor : current.neighbors) {
-      oddVertices += oddHelper(neighbor, visited);
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Deque<Vertex<Integer>> stack = new ArrayDeque<>();
+    int oddVertices = 0;
+
+    stack.push(starting);
+
+    while (!stack.isEmpty()) {
+      Vertex<Integer> current = stack.pop();
+
+      if (!visited.contains(current)) {
+        visited.add(current);
+      }
+
+      if (current.data % 2 != 0) {
+        oddVertices++;
+      }
+      for (Vertex<Integer> neighbor : current.neighbors) {
+        if (!visited.contains(neighbor)) {
+          stack.push(neighbor);
+        }
+      }
+
     }
     return oddVertices;
   }
@@ -80,6 +113,7 @@ public class Practice {
     if (current == null || visited.contains(current))
       return new ArrayList<>();
     List<Integer> list = new ArrayList<>();
+
     visited.add(current);
     list.add(current.data);
 
