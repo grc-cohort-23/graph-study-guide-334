@@ -565,6 +565,42 @@ public class Practice {
     return false;
     }
 
+    //stack
+    public static boolean positivePathExistsBFS(
+    Map<Integer, Set<Integer>> graph, int starting, int ending) {
+
+    if (starting <= 0 || ending <= 0 ||
+        !graph.containsKey(starting) ||
+        !graph.containsKey(ending)) {
+        return false;
+    }
+
+    Set<Integer> visited = new HashSet<>();
+    Queue<Integer> queue = new LinkedList<>();
+
+    queue.add(starting);
+    visited.add(starting);
+
+    while (!queue.isEmpty()) {
+        int current = queue.remove();
+
+        if (current == ending) {
+            return true;
+        }
+
+        for (int neighbor : graph.get(current)) {
+            if (neighbor > 0 &&
+                graph.containsKey(neighbor) &&
+                !visited.contains(neighbor)) {
+
+                visited.add(neighbor);
+                queue.add(neighbor);
+            }
+        }
+    }
+
+    return false;
+}
 
 
       
