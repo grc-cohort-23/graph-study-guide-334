@@ -568,24 +568,44 @@ Set<Integer> visited = new HashSet<>();
    * @param directions an array of [row, column] possible directions
    * @return an unsorted list of next moves
    */
-  public static List<int[]> nextMoves(char[][] board, int[] current, int[][] directions) {
-     List<int[]> moves = new ArrayList<>();
-    for (int[] d : directions) {
-      int row = current[0] + d[0];
-      int col = current[1] + d[1];
-      if (row >= 0 && row < board.length
-          && col >= 0 && col < board[row].length
-          && board[row][col] != 'X') {
-        moves.add(new int[] {row, col});
-      }
-    }
-    return moves;
-  }
-}
+//   public static List<int[]> nextMoves(char[][] board, int[] current, int[][] directions) {
+//      List<int[]> moves = new ArrayList<>();
+//     for (int[] d : directions) {
+//       int row = current[0] + d[0];
+//       int col = current[1] + d[1];
+//       if (row >= 0 && row < board.length
+//           && col >= 0 && col < board[row].length
+//           && board[row][col] != 'X') {
+//         moves.add(new int[] {row, col});
+//       }
+//     }
+//     return moves;
+//   }
+// }
 
 
 
 // recursive DFS
-//Iterative DFS
-//Interative BFS
-
+Set<Integer> visited = new HashSet<>();
+    Queue<Integer> queue = new ArrayDeque<>();
+    queue.add(starting);
+    visited.add(starting);
+    while (!queue.isEmpty()) {
+      int current = queue.remove();
+      if (current == ending) {
+        return true;
+      }
+      Set<Integer> neighbors = graph.get(current);
+      if (neighbors == null) {
+        continue;
+      }
+      for (Integer neighbor : neighbors) {
+        if (neighbor > 0 && visited.add(neighbor)) {
+          queue.add(neighbor);
+        }
+      }
+    }
+    return false;
+  }
+//Interative BFS - i dont think i can? it only cheks four neighbors and has 
+// no traversal 
