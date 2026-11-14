@@ -6,6 +6,7 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 public class Practice {
@@ -56,18 +57,48 @@ public class Practice {
   // return oddVertices;
   // }
 
+  // public static int oddVertices(Vertex<Integer> starting) {
+  // if (starting == null) {
+  // return 0;
+  // }
+  // Set<Vertex<Integer>> visited = new HashSet<>();
+  // Stack<Vertex<Integer>> stack = new ArrayDeque<>();
+  // int oddVertices = 0;
+
+  // stack.push(starting);
+
+  // while (!stack.isEmpty()) {
+  // Vertex<Integer> current = stack.pop();
+
+  // if (!visited.contains(current)) {
+  // visited.add(current);
+  // }
+
+  // if (current.data % 2 != 0) {
+  // oddVertices++;
+  // }
+  // for (Vertex<Integer> neighbor : current.neighbors) {
+  // if (!visited.contains(neighbor)) {
+  // stack.push(neighbor);
+  // }
+  // }
+
+  // }
+  // return oddVertices;
+  // }
   public static int oddVertices(Vertex<Integer> starting) {
     if (starting == null) {
       return 0;
     }
     Set<Vertex<Integer>> visited = new HashSet<>();
-    Deque<Vertex<Integer>> stack = new ArrayDeque<>();
+    Queue<Vertex<Integer>> queue = new ArrayDeque<>();
     int oddVertices = 0;
 
-    stack.push(starting);
+    queue.offer(starting);
+    visited.add(starting);
 
-    while (!stack.isEmpty()) {
-      Vertex<Integer> current = stack.pop();
+    while (!queue.isEmpty()) {
+      Vertex<Integer> current = queue.poll();
 
       if (!visited.contains(current)) {
         visited.add(current);
@@ -78,7 +109,8 @@ public class Practice {
       }
       for (Vertex<Integer> neighbor : current.neighbors) {
         if (!visited.contains(neighbor)) {
-          stack.push(neighbor);
+          visited.add(neighbor);
+          queue.offer(neighbor);
         }
       }
 
