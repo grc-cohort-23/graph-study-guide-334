@@ -653,24 +653,32 @@ public class Practice {
     if (person == null) {
         return false;
     }
-
     Set<Professional> visited = new HashSet<>();
     Stack<Professional> stack = new Stack<>();
 
     stack.push(person);
 
     while (!stack.isEmpty()) {
-        Professional current = stack.pop();
+      Professional current = stack.pop();
 
-        if (visited.contains(current)) {
-            continue;
-        }
-
-        visited.add(current);
-
+      if (visited.contains(current)) {
+          continue;
       }
+
+      visited.add(current);
+        if (java.util.Objects.equals(current.getCompany(), companyName)) {
+          return true;
+      }
+      
+        for (Professional neighbor : current.getConnections()) {
+          if (neighbor != null && !visited.contains(neighbor)) {
+              stack.push(neighbor);
+
+          }
+        }
+      }
+      return false;
     }
-  }
 
 
       
