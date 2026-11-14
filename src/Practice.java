@@ -264,19 +264,42 @@ public class Practice {
    * @param ending the ending vertex value
    * @return whether there exists a valid positive path from starting to ending
    */
-  public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) { //key is the vertex, values are the neighbors
-    return positivePathExists(graph, starting, ending, new HashSet<>());
-  }
+  // public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) { //key is the vertex, values are the neighbors
+  //   return positivePathExists(graph, starting, ending, new HashSet<>());
+  // }
 
-  private static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int current, int target, Set<Integer> visited){
-    if(!graph.containsKey(current) || !graph.containsKey(target) || visited.contains(current)) return false;
-    visited.add(current);
+  // private static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int current, int target, Set<Integer> visited){
+  //   if(!graph.containsKey(current) || !graph.containsKey(target) || visited.contains(current)) return false;
+  //   visited.add(current);
 
-    if(current <= 0 || target <= 0) return false;
-    if(current==target) return true; 
+  //   if(current <= 0 || target <= 0) return false;
+  //   if(current==target) return true; 
     
-    for(int neighbor : graph.get(current)){
-      if(positivePathExists(graph, neighbor, target, visited)) return true;
+  //   for(int neighbor : graph.get(current)){
+  //     if(positivePathExists(graph, neighbor, target, visited)) return true;
+  //   }
+
+  //   return false;
+  // }
+
+  public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int target){
+    if(!graph.containsKey(starting)) return false;
+
+    Set<Integer> visited = new HashSet<>();
+    Deque<Integer> stack = new ArrayDeque<>();
+    stack.push(starting);
+
+    while(!stack.isEmpty()){
+      int current = stack.pop();
+
+      if(!graph.containsKey(current) || !visited.add(current)) continue;
+
+      if(current <=0 || target <=0) return false;
+      if(current==target) return true;
+
+      for(int neighbor : graph.get(current)){
+        stack.push(neighbor);
+      }
     }
 
     return false;
