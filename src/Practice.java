@@ -311,6 +311,41 @@ public class Practice {
     return result;
   }
 
+  // bfs queue
+  public static List<Integer> sortedReachableBFS(
+    Map<Integer, Set<Integer>> graph, int starting) {
+
+    List<Integer> result = new ArrayList<>();
+
+    if (!graph.containsKey(starting)) {
+        return result;
+    }
+
+    Set<Integer> visited = new HashSet<>();
+    Queue<Integer> queue = new LinkedList<>();
+
+    queue.add(starting);
+    visited.add(starting);
+
+    while (!queue.isEmpty()) {
+        int current = queue.remove();
+
+        result.add(current);
+
+        for (int neighbor : graph.get(current)) {
+            if (graph.containsKey(neighbor) && !visited.contains(neighbor)) {
+                visited.add(neighbor);
+                queue.add(neighbor);
+            }
+        }
+    }
+
+    Collections.sort(result);
+    return result;
+}
+
+  
+
   /**
    * Returns true if and only if it is possible both to reach v2 from v1 and to reach v1 from v2.
    * A vertex is always considered reachable from itself.
@@ -358,7 +393,7 @@ public class Practice {
       return false;
   }
 
-  //dfs stack 
+
   
   
 
