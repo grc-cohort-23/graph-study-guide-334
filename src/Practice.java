@@ -116,26 +116,42 @@ public class Practice {
     if (starting == null) {
       return result;
     }
-    Set<Vertex<Integer>> visited = new HashSet<>();
-    Deque<Vertex<Integer>> stack = new ArrayDeque<>();
-    stack.push(starting);
-    visited.add(starting);
-    while (!stack.isEmpty()) {
-      Vertex<Integer> current = stack.pop();
-      result.add(current.data);
-      for (Vertex<Integer> neighbor : current.neighbors) {
-        if (neighbor != null && visited.add(neighbor)) {
-          stack.push(neighbor);
-        }
-      }
-    }
-    Collections.sort(result);
-    return result;
-  }
+  //   Set<Vertex<Integer>> visited = new HashSet<>();
+  //   Deque<Vertex<Integer>> stack = new ArrayDeque<>();
+  //   stack.push(starting);
+  //   visited.add(starting);
+  //   while (!stack.isEmpty()) {
+  //     Vertex<Integer> current = stack.pop();
+  //     result.add(current.data);
+  //     for (Vertex<Integer> neighbor : current.neighbors) {
+  //       if (neighbor != null && visited.add(neighbor)) {
+  //         stack.push(neighbor);
+  //       }
+  //     }
+  //   }
+  //   Collections.sort(result);
+  //   return result;
+  // }
   
 
 // recursive DFS
-//Iterative DFS
+
+ Set<Vertex<Integer>> visited = new HashSet<>();
+    visited.add(starting);
+    sortedReachableHelper(starting, visited, result);
+    Collections.sort(result);
+    return result;
+  }
+
+  private static void sortedReachableHelper(Vertex<Integer> current, Set<Vertex<Integer>> visited,
+      List<Integer> result) {
+    result.add(current.data);
+    for (Vertex<Integer> neighbor : current.neighbors) {
+      if (neighbor != null && visited.add(neighbor)) {
+        sortedReachableHelper(neighbor, visited, result);
+      }
+    }
+  }
 //Interative BFS
 
   /**
