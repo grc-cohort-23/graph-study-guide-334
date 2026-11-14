@@ -149,22 +149,48 @@ public class Practice {
    * @param starting the starting vertex value
    * @return a sorted list of all reachable vertex values
    */
-  public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
-    return sortedReachable(graph, starting, new HashSet<>(), new ArrayList<>());
-  }
+  // public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
+  //   return sortedReachable(graph, starting, new HashSet<>(), new ArrayList<>());
+  // }
 
-  private static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int current, Set<Integer> visited, List<Integer> nums){
-    if(visited.contains(current) || !graph.containsKey(current)) return new ArrayList<>();
-    visited.add(current);
+  // private static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int current, Set<Integer> visited, List<Integer> nums){
+  //   if(visited.contains(current) || !graph.containsKey(current)) return new ArrayList<>();
+  //   visited.add(current);
 
-    nums.add(current);
+  //   nums.add(current);
 
-    for(int neighbor : graph.get(current)){
-      sortedReachable(graph, neighbor, visited, nums);
+  //   for(int neighbor : graph.get(current)){
+  //     sortedReachable(graph, neighbor, visited, nums);
+  //   }
+
+  //   Collections.sort(nums);
+
+  //   return nums;
+  // }
+
+  public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting){
+    if(!graph.containsKey(starting)) return new ArrayList<>();
+    
+    Set<Integer> visited = new HashSet<>();
+    Deque<Integer> stack = new ArrayDeque<>();
+    stack.push(starting);
+
+    List<Integer> nums = new ArrayList<>();
+
+    while(!stack.isEmpty()){
+      int current = stack.pop();
+
+      if(!graph.containsKey(current)) continue;
+      if(!visited.add(current)) continue;
+
+      nums.add(current);
+
+      for(int neighbor : graph.get(current)){
+        stack.push(neighbor);
+      }
     }
 
     Collections.sort(nums);
-
     return nums;
   }
 
