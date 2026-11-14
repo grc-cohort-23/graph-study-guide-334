@@ -250,47 +250,62 @@ public class Practice {
    if (v1 == null || v2 == null) {
       return false;
     }
-    boolean forward = false;
-    Set<Vertex<T>> visited = new HashSet<>();
-    Deque<Vertex<T>> stack = new ArrayDeque<>();
-    stack.push(v1);
-    visited.add(v1);
-    while (!stack.isEmpty() && !forward) {
-      Vertex<T> current = stack.pop();
-      if (current == v2) {
-        forward = true;
-      }
-      for (Vertex<T> neighbor : current.neighbors) {
-        if (neighbor != null && visited.add(neighbor)) {
-          stack.push(neighbor);
-        }
-      }
+//     boolean forward = false;
+//     Set<Vertex<T>> visited = new HashSet<>();
+//     Deque<Vertex<T>> stack = new ArrayDeque<>();
+//     stack.push(v1);
+//     visited.add(v1);
+//     while (!stack.isEmpty() && !forward) {
+//       Vertex<T> current = stack.pop();
+//       if (current == v2) {
+//         forward = true;
+//       }
+//       for (Vertex<T> neighbor : current.neighbors) {
+//         if (neighbor != null && visited.add(neighbor)) {
+//           stack.push(neighbor);
+//         }
+//       }
+//     }
+//     if (!forward) {
+//       return false;
+//     }
+//     visited = new HashSet<>();
+//     stack = new ArrayDeque<>();
+//     stack.push(v2);
+//     visited.add(v2);
+//     while (!stack.isEmpty()) {
+//       Vertex<T> current = stack.pop();
+//       if (current == v1) {
+//         return true;
+//       }
+//       for (Vertex<T> neighbor : current.neighbors) {
+//         if (neighbor != null && visited.add(neighbor)) {
+//           stack.push(neighbor);
+//         }
+//       }
+//     }
+//     return false;
+//   }
+
+
+
+// // recursive DFS
+   return canReachDfs(v1, v2, new HashSet<>()) && canReachDfs(v2, v1, new HashSet<>());
+  }
+
+  private static <T> boolean canReachDfs(Vertex<T> current, Vertex<T> target, Set<Vertex<T>> visited) {
+    if (current == target) {
+      return true;
     }
-    if (!forward) {
-      return false;
-    }
-    visited = new HashSet<>();
-    stack = new ArrayDeque<>();
-    stack.push(v2);
-    visited.add(v2);
-    while (!stack.isEmpty()) {
-      Vertex<T> current = stack.pop();
-      if (current == v1) {
+    visited.add(current);
+    for (Vertex<T> neighbor : current.neighbors) {
+      if (neighbor != null && !visited.contains(neighbor)
+          && canReachDfs(neighbor, target, visited)) {
         return true;
-      }
-      for (Vertex<T> neighbor : current.neighbors) {
-        if (neighbor != null && visited.add(neighbor)) {
-          stack.push(neighbor);
-        }
       }
     }
     return false;
   }
-
-
-
-// recursive DFS
-//Iterative DFS
 //Interative BFS
 
   /**
