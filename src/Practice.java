@@ -484,21 +484,71 @@ public class Practice {
    * @param companyName the name of the company to check for employment
    * @return true if a person in the extended network works at the specified company, false otherwise
    */
+  // public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+  //   return hasConnection(person, companyName, new HashSet<>());
+  // }
+
+  // // true if current or anyone in their network works at companyName
+  // private static boolean hasConnection(Professional current, String companyName, Set<Professional> visited) {
+  //   // nobody or if alr check the person -> return false
+  //   if (current == null || visited.contains(current)) return false;
+  //   visited.add(current);
+
+  //   if (current.getCompany().equals(companyName)) return true;
+
+  //   for (Professional connection : current.getConnections()) {
+
+  //     if (hasConnection(connection, companyName, visited)) return true;
+  //   }
+  //   return false;
+  // }
+
+
+    // iterative DFS
+  // public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+  //   if (person == null) return false;
+
+  //   Set<Professional> visited = new HashSet<>();
+  //   Stack<Professional> stack = new Stack<>();
+  //   stack.push(person);
+
+  //   while (!stack.isEmpty()) {
+  //     Professional current = stack.pop();
+
+  //     // alr check this person -> skip
+  //     if (visited.contains(current)) continue;
+  //     visited.add(current);
+
+  //     if (current.getCompany().equals(companyName)) return true;
+
+  //     for (Professional connection : current.getConnections()) {
+  //       stack.push(connection);
+  //     }
+  //   }
+  //   return false;
+  // }
+
+  // iterative BFS
   public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
-    return hasConnection(person, companyName, new HashSet<>());
-  }
+    if (person == null) return false;
 
-  // true if current or anyone in their network works at companyName
-  private static boolean hasConnection(Professional current, String companyName, Set<Professional> visited) {
-    // nobody or if alr check the person -> return false
-    if (current == null || visited.contains(current)) return false;
-    visited.add(current);
+    Set<Professional> visited = new HashSet<>();
+    Queue<Professional> queue = new LinkedList<>();
+    queue.add(person);
+    visited.add(person);
 
-    if (current.getCompany().equals(companyName)) return true;
+    while (!queue.isEmpty()) {
+      Professional current = queue.poll();
 
-    for (Professional connection : current.getConnections()) {
+      if (current.getCompany().equals(companyName)) return true;
 
-      if (hasConnection(connection, companyName, visited)) return true;
+      // closest connections get checked first
+      for (Professional connection : current.getConnections()) {
+        if (!visited.contains(connection)) {
+          visited.add(connection);
+          queue.add(connection);
+        }
+      }
     }
     return false;
   }
