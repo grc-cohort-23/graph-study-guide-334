@@ -646,6 +646,20 @@ public class Practice {
     }
 
 
+    //dfs stack 
+    public static boolean hasExtendedConnectionAtCompanyDFS(
+    Professional person, String companyName) {
+
+    if (person == null) {
+        return false;
+    }
+
+    Set<Professional> visited = new HashSet<>();
+    Stack<Professional> stack = new Stack<>();
+
+   
+
+
       
   
 
