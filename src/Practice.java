@@ -62,11 +62,28 @@ public class Practice {
     if (starting == null){
       return 0;
     }
-
     Set<Vertex<Integer>> visited = new HashSet<>();
-
     Stack<Vertex<Integer>> stack = new Stack<>();
 
+    stack.push(starting);
+    while (stack.isEmpty()){
+      Vertex<Integer> current = stack.pop();
+
+      if(visted.contains(current)){
+        continue;
+      }
+      visited.add(current);
+
+      if(current.data %2 !=0){
+        count++;
+      }
+      for(Vertex<Integer> neighbor : current.neighbors){
+        if(neighbor != null && !visited.contains(neighbor)){
+          stack.push(neighbor);
+        }
+      }
+    }
+    return count;
 
   }
 
