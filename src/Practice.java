@@ -221,25 +221,51 @@ public class Practice {
   //   return nums;
   // }
 
+  // public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting){
+  //   if(!graph.containsKey(starting)) return new ArrayList<>();
+    
+  //   Set<Integer> visited = new HashSet<>();
+  //   Deque<Integer> stack = new ArrayDeque<>();
+  //   stack.push(starting);
+
+  //   List<Integer> nums = new ArrayList<>();
+
+  //   while(!stack.isEmpty()){
+  //     int current = stack.pop();
+
+  //     if(!graph.containsKey(current)) continue;
+  //     if(!visited.add(current)) continue;
+
+  //     nums.add(current);
+
+  //     for(int neighbor : graph.get(current)){
+  //       stack.push(neighbor);
+  //     }
+  //   }
+
+  //   Collections.sort(nums);
+  //   return nums;
+  // }
+
   public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting){
     if(!graph.containsKey(starting)) return new ArrayList<>();
     
     Set<Integer> visited = new HashSet<>();
-    Deque<Integer> stack = new ArrayDeque<>();
-    stack.push(starting);
+    Queue<Integer> queue = new ArrayDeque<>();
+    queue.add(starting);
+    visited.add(starting);
 
     List<Integer> nums = new ArrayList<>();
 
-    while(!stack.isEmpty()){
-      int current = stack.pop();
-
-      if(!graph.containsKey(current)) continue;
-      if(!visited.add(current)) continue;
+    while(!queue.isEmpty()){
+      int current = queue.remove();
 
       nums.add(current);
 
       for(int neighbor : graph.get(current)){
-        stack.push(neighbor);
+        if(graph.containsKey(neighbor) && visited.add(neighbor)){
+          queue.add(neighbor);
+        }
       }
     }
 
