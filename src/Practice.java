@@ -290,24 +290,44 @@ public class Practice {
 
 
 // // recursive DFS
-   return canReachDfs(v1, v2, new HashSet<>()) && canReachDfs(v2, v1, new HashSet<>());
+  //  return canReachDfs(v1, v2, new HashSet<>()) && canReachDfs(v2, v1, new HashSet<>());
+  // }
+
+  // private static <T> boolean canReachDfs(Vertex<T> current, Vertex<T> target, Set<Vertex<T>> visited) {
+  //   if (current == target) {
+  //     return true;
+  //   }
+  //   visited.add(current);
+  //   for (Vertex<T> neighbor : current.neighbors) {
+  //     if (neighbor != null && !visited.contains(neighbor)
+  //         && canReachDfs(neighbor, target, visited)) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
+//Interative BFS
+  return canReachBfs(v1, v2) && canReachBfs(v2, v1);
   }
 
-  private static <T> boolean canReachDfs(Vertex<T> current, Vertex<T> target, Set<Vertex<T>> visited) {
-    if (current == target) {
-      return true;
-    }
-    visited.add(current);
-    for (Vertex<T> neighbor : current.neighbors) {
-      if (neighbor != null && !visited.contains(neighbor)
-          && canReachDfs(neighbor, target, visited)) {
+  private static <T> boolean canReachBfs(Vertex<T> from, Vertex<T> target) {
+    Set<Vertex<T>> visited = new HashSet<>();
+    Queue<Vertex<T>> queue = new ArrayDeque<>();
+    queue.add(from);
+    visited.add(from);
+    while (!queue.isEmpty()) {
+      Vertex<T> current = queue.remove();
+      if (current == target) {
         return true;
+      }
+      for (Vertex<T> neighbor : current.neighbors) {
+        if (neighbor != null && visited.add(neighbor)) {
+          queue.add(neighbor);
+        }
       }
     }
     return false;
   }
-//Interative BFS
-
   /**
    * Returns whether there exists a path from the starting to ending vertex that includes only positive values.
    * 
