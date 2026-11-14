@@ -32,28 +32,46 @@ public class Practice {
   public static int oddVertices(Vertex<Integer> starting) {
        if (starting == null) {
     return 0;
-  }
-  int count = 0;
-  Set<Vertex<Integer>> visited = new HashSet<>();
-  Deque<Vertex<Integer>> stack = new ArrayDeque<>();
-  stack.push(starting);
-  visited.add(starting);
-  while (!stack.isEmpty()) {
-    Vertex<Integer> current = stack.pop();
-    if (current.data % 2 != 0) {
-      count++;
-    }
-    for (Vertex<Integer> neighbor : current.neighbors) {
-      if (visited.add(neighbor)) {
-        stack.push(neighbor);
-      }
-    }
-  }
-  return count;
-}
+//   }
+//   int count = 0;
+//   Set<Vertex<Integer>> visited = new HashSet<>();
+//   Deque<Vertex<Integer>> stack = new ArrayDeque<>();
+//   stack.push(starting);
+//   visited.add(starting);
+//   while (!stack.isEmpty()) {
+//     Vertex<Integer> current = stack.pop();
+//     if (current.data % 2 != 0) {
+//       count++;
+//     }
+//     for (Vertex<Integer> neighbor : current.neighbors) {
+//       if (visited.add(neighbor)) {
+//         stack.push(neighbor);
+//       }
+//     }
+//   }
+//   return count;
+// }
 
 // recursive DFS
-//Iterative DFS
+  Set<Vertex<Integer>> visited = new HashSet<>(); 
+  visited.add(starting);
+  return oddVerticesHelp(starting, visited); 
+       }
+         private static int oddVerticesHelp(Vertex<Integer> current, Set<Vertex<Integer>> visited) {
+    int count = current.data % 2 != 0 ? 1 : 0;
+    for (Vertex<Integer> neighbor : current.neighbors) {
+      if (visited.add(neighbor)) {
+        count += oddVerticesHelp(neighbor, visited);
+      }
+    }
+    return count;
+  }
+
+
+  // Deque<Vertex<Integer>> stack = new ArrayDeque<>();
+  // stack.push(starting);
+  // visited.add(starting);
+
 //Interative BFS
 
 
