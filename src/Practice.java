@@ -1,5 +1,11 @@
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 public class Practice {
@@ -25,7 +31,66 @@ public class Practice {
    * @return the number of vertices with odd values reachable from the starting vertex
    */
   public static int oddVertices(Vertex<Integer> starting) {
+       if (starting == null) {
     return 0;
+   }
+//   int count = 0;
+//   Set<Vertex<Integer>> visited = new HashSet<>();
+//   Deque<Vertex<Integer>> stack = new ArrayDeque<>();
+//   stack.push(starting);
+//   visited.add(starting);
+//   while (!stack.isEmpty()) {
+//     Vertex<Integer> current = stack.pop();
+//     if (current.data % 2 != 0) {
+//       count++;
+//     }
+//     for (Vertex<Integer> neighbor : current.neighbors) {
+//       if (visited.add(neighbor)) {
+//         stack.push(neighbor);
+//       }
+//     }
+//   }
+//   return count;
+// }
+
+// recursive DFS
+  // Set<Vertex<Integer>> visited = new HashSet<>(); 
+  // visited.add(starting);
+  // return oddVerticesHelp(starting, visited); 
+  //      }
+  //        private static int oddVerticesHelp(Vertex<Integer> current, Set<Vertex<Integer>> visited) {
+  //   int count = current.data % 2 != 0 ? 1 : 0;
+  //   for (Vertex<Integer> neighbor : current.neighbors) {
+  //     if (visited.add(neighbor)) {
+  //       count += oddVerticesHelp(neighbor, visited);
+  //     }
+  //   }
+  //   return count;
+  // }
+
+
+  // Deque<Vertex<Integer>> stack = new ArrayDeque<>();
+  // stack.push(starting);
+  // visited.add(starting);
+
+//Interative BFS
+ int count = 0;
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Queue<Vertex<Integer>> queue = new ArrayDeque<>();
+    queue.add(starting);
+    visited.add(starting);
+    while (!queue.isEmpty()) {
+      Vertex<Integer> current = queue.remove();
+      if (current.data % 2 != 0) {
+        count++;
+      }
+      for (Vertex<Integer> neighbor : current.neighbors) {
+        if (visited.add(neighbor)) {
+          queue.add(neighbor);
+        }
+      }
+    }
+    return count;
   }
 
   /**
@@ -47,7 +112,63 @@ public class Practice {
    * @return a sorted list of all reachable vertex values by 
    */
   public static List<Integer> sortedReachable(Vertex<Integer> starting) {
-    return null;
+      List<Integer> result = new ArrayList<>();
+    if (starting == null) {
+      return result;
+    }
+  //   Set<Vertex<Integer>> visited = new HashSet<>();
+  //   Deque<Vertex<Integer>> stack = new ArrayDeque<>();
+  //   stack.push(starting);
+  //   visited.add(starting);
+  //   while (!stack.isEmpty()) {
+  //     Vertex<Integer> current = stack.pop();
+  //     result.add(current.data);
+  //     for (Vertex<Integer> neighbor : current.neighbors) {
+  //       if (neighbor != null && visited.add(neighbor)) {
+  //         stack.push(neighbor);
+  //       }
+  //     }
+  //   }
+  //   Collections.sort(result);
+  //   return result;
+  // }
+  
+
+// recursive DFS
+
+//  Set<Vertex<Integer>> visited = new HashSet<>();
+//     visited.add(starting);
+//     sortedReachableHelper(starting, visited, result);
+//     Collections.sort(result);
+//     return result;
+//   }
+
+//   private static void sortedReachableHelper(Vertex<Integer> current, Set<Vertex<Integer>> visited,
+//       List<Integer> result) {
+//     result.add(current.data);
+//     for (Vertex<Integer> neighbor : current.neighbors) {
+//       if (neighbor != null && visited.add(neighbor)) {
+//         sortedReachableHelper(neighbor, visited, result);
+//       }
+//     }
+//   }
+//Interative BFS
+
+ Set<Vertex<Integer>> visited = new HashSet<>();
+    Queue<Vertex<Integer>> queue = new ArrayDeque<>();
+    queue.add(starting);
+    visited.add(starting);
+    while (!queue.isEmpty()) {
+      Vertex<Integer> current = queue.remove();
+      result.add(current.data);
+      for (Vertex<Integer> neighbor : current.neighbors) {
+        if (neighbor != null && visited.add(neighbor)) {
+          queue.add(neighbor);
+        }
+      }
+    }
+    Collections.sort(result);
+    return result;
   }
 
   /**
@@ -61,8 +182,55 @@ public class Practice {
    * @return a sorted list of all reachable vertex values
    */
   public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
-    return null;
+    List<Integer> result = new ArrayList<>();
+    if (!graph.containsKey(starting)) {
+      return result;
+    }
+  //   Set<Integer> visited = new HashSet<>();
+  //   Deque<Integer> stack = new ArrayDeque<>();
+  //   stack.push(starting);
+  //   visited.add(starting);
+  //   while (!stack.isEmpty()) {
+  //     int current = stack.pop();
+  //     result.add(current);
+  //     Set<Integer> neighbors = graph.get(current);
+  //     if (neighbors == null) {
+  //       continue;
+  //     }
+  //     for (Integer neighbor : neighbors) {
+  //       if (visited.add(neighbor)) {
+  //         stack.push(neighbor);
+  //       }
+  //     }
+  //   }
+  //   Collections.sort(result);
+  //   return result;
+  // }
+
+
+// recursive DFS
+ Set<Integer> visited = new HashSet<>();
+    visited.add(starting);
+    sortedReachableHelper(graph, starting, visited, result);
+    Collections.sort(result);
+    return result;
   }
+
+  private static void sortedReachableHelper(Map<Integer, Set<Integer>> graph, int current,
+      Set<Integer> visited, List<Integer> result) {
+    result.add(current);
+    Set<Integer> neighbors = graph.get(current);
+    if (neighbors == null) {
+      return;
+    }
+    for (Integer neighbor : neighbors) {
+      if (visited.add(neighbor)) {
+        sortedReachableHelper(graph, neighbor, visited, result);
+      }
+    }
+  }
+
+//Interative BFS
 
   /**
    * Returns true if and only if it is possible both to reach v2 from v1 and to reach v1 from v2.
@@ -79,9 +247,87 @@ public class Practice {
    * @return true if there is a two-way connection between v1 and v2, false otherwise
    */
   public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
-    return false;
+   if (v1 == null || v2 == null) {
+      return false;
+    }
+//     boolean forward = false;
+//     Set<Vertex<T>> visited = new HashSet<>();
+//     Deque<Vertex<T>> stack = new ArrayDeque<>();
+//     stack.push(v1);
+//     visited.add(v1);
+//     while (!stack.isEmpty() && !forward) {
+//       Vertex<T> current = stack.pop();
+//       if (current == v2) {
+//         forward = true;
+//       }
+//       for (Vertex<T> neighbor : current.neighbors) {
+//         if (neighbor != null && visited.add(neighbor)) {
+//           stack.push(neighbor);
+//         }
+//       }
+//     }
+//     if (!forward) {
+//       return false;
+//     }
+//     visited = new HashSet<>();
+//     stack = new ArrayDeque<>();
+//     stack.push(v2);
+//     visited.add(v2);
+//     while (!stack.isEmpty()) {
+//       Vertex<T> current = stack.pop();
+//       if (current == v1) {
+//         return true;
+//       }
+//       for (Vertex<T> neighbor : current.neighbors) {
+//         if (neighbor != null && visited.add(neighbor)) {
+//           stack.push(neighbor);
+//         }
+//       }
+//     }
+//     return false;
+//   }
+
+
+
+// // recursive DFS
+  //  return canReachDfs(v1, v2, new HashSet<>()) && canReachDfs(v2, v1, new HashSet<>());
+  // }
+
+  // private static <T> boolean canReachDfs(Vertex<T> current, Vertex<T> target, Set<Vertex<T>> visited) {
+  //   if (current == target) {
+  //     return true;
+  //   }
+  //   visited.add(current);
+  //   for (Vertex<T> neighbor : current.neighbors) {
+  //     if (neighbor != null && !visited.contains(neighbor)
+  //         && canReachDfs(neighbor, target, visited)) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
+//Interative BFS
+  return canReachBfs(v1, v2) && canReachBfs(v2, v1);
   }
 
+  private static <T> boolean canReachBfs(Vertex<T> from, Vertex<T> target) {
+    Set<Vertex<T>> visited = new HashSet<>();
+    Queue<Vertex<T>> queue = new ArrayDeque<>();
+    queue.add(from);
+    visited.add(from);
+    while (!queue.isEmpty()) {
+      Vertex<T> current = queue.remove();
+      if (current == target) {
+        return true;
+      }
+      for (Vertex<T> neighbor : current.neighbors) {
+        if (neighbor != null && visited.add(neighbor)) {
+          queue.add(neighbor);
+        }
+      }
+    }
+    return false;
+  }
   /**
    * Returns whether there exists a path from the starting to ending vertex that includes only positive values.
    * 
@@ -95,9 +341,82 @@ public class Practice {
    * @return whether there exists a valid positive path from starting to ending
    */
   public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
+    if (starting <= 0 || ending <= 0  || !graph.containsKey(starting) || !graph.containsKey(ending)) {
+      return false;
+    }
+    // Set<Integer> visited = new HashSet<>();
+    // Deque<Integer> stack = new ArrayDeque<>();
+
+    //stack push start
+    //visited add starting
+
+    //while stack isnt empty -> int current = stack.pop
+    // if current == ending -> return true
+  //   stack.push(starting); 
+  //   visited.add(starting);
+  //   while (!stack.isEmpty()) {
+  //     int current = stack.pop();
+  //     if (current == ending) {
+  //       return true;
+  //     }
+  //     Set<Integer> neighbors = graph.get(current);
+  //     if (neighbors == null) {
+  //       continue;
+  //     }
+  //     for (Integer neighbor : neighbors) {
+  //       if (neighbor > 0 && visited.add(neighbor)) {
+  //         stack.push(neighbor);
+  //       }
+  //     }
+  //   }
+  //   return false;
+  // }
+
+
+//Iterative DFS
+  //     Set<Integer> visited = new HashSet<>();
+  //   Queue<Integer> queue = new ArrayDeque<>();
+  //   queue.add(starting);
+  //   visited.add(starting);
+  //   while (!queue.isEmpty()) {
+  //     int current = queue.remove();
+  //     if (current == ending) {
+  //       return true;
+  //     }
+  //     Set<Integer> neighbors = graph.get(current);
+  //     if (neighbors == null) {
+  //       continue;
+  //     }
+  //     for (Integer neighbor : neighbors) {
+  //       if (neighbor > 0 && visited.add(neighbor)) {
+  //         queue.add(neighbor);
+  //       }
+  //     }
+  //   }
+  //   return false;
+  // }
+//Interative BFS
+Set<Integer> visited = new HashSet<>();
+    Queue<Integer> queue = new ArrayDeque<>();
+    queue.add(starting);
+    visited.add(starting);
+    while (!queue.isEmpty()) {
+      int current = queue.remove();
+      if (current == ending) {
+        return true;
+      }
+      Set<Integer> neighbors = graph.get(current);
+      if (neighbors == null) {
+        continue;
+      }
+      for (Integer neighbor : neighbors) {
+        if (neighbor > 0 && visited.add(neighbor)) {
+          queue.add(neighbor);
+        }
+      }
+    }
     return false;
   }
-
   /**
    * Returns true if a professional has anyone in their extended network (reachable through any number of links)
    * that works for the given company. The search includes the professional themself.
@@ -108,6 +427,77 @@ public class Practice {
    * @return true if a person in the extended network works at the specified company, false otherwise
    */
   public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+     if (person == null) {
+      return false;
+    }
+  //   Set<Professional> visited = new HashSet<>();
+  //   Deque<Professional> stack = new ArrayDeque<>();
+  //   stack.push(person);
+  //   visited.add(person);
+  //   while (!stack.isEmpty()) {
+  //     Professional current = stack.pop();
+  //     if (companyName != null && companyName.equals(current.getCompany())) {
+  //       return true;
+  //     }
+  //     if (current.getConnections() == null) {
+  //       continue;
+  //     }
+  //     for (Professional next : current.getConnections()) {
+  //       if (next != null && visited.add(next)) {
+  //         stack.push(next);
+  //       }
+  //     }
+  //   }
+  //   return false;
+  // }
+
+
+
+// recursive DFS
+
+// Set<Integer> visited = new HashSet<>();
+//     Queue<Integer> queue = new ArrayDeque<>();
+//     queue.add(starting);
+//     visited.add(starting);
+//     while (!queue.isEmpty()) {
+//       int current = queue.remove();
+//       if (current == ending) {
+//         return true;
+//       }
+//       Set<Integer> neighbors = graph.get(current);
+//       if (neighbors == null) {
+//         continue;
+//       }
+//       for (Integer neighbor : neighbors) {
+//         if (neighbor > 0 && visited.add(neighbor)) {
+//           queue.add(neighbor);
+//         }
+//       }
+//     }
+//     return false;
+//   }
+
+//Interative BFS
+
+Set<Integer> visited = new HashSet<>();
+    Queue<Integer> queue = new ArrayDeque<>();
+    queue.add(starting);
+    visited.add(starting);
+    while (!queue.isEmpty()) {
+      int current = queue.remove();
+      if (current == ending) {
+        return true;
+      }
+      Set<Integer> neighbors = graph.get(current);
+      if (neighbors == null) {
+        continue;
+      }
+      for (Integer neighbor : neighbors) {
+        if (neighbor > 0 && visited.add(neighbor)) {
+          queue.add(neighbor);
+        }
+      }
+    }
     return false;
   }
 
@@ -178,7 +568,44 @@ public class Practice {
    * @param directions an array of [row, column] possible directions
    * @return an unsorted list of next moves
    */
-  public static List<int[]> nextMoves(char[][] board, int[] current, int[][] directions) {
-    return null;
+//   public static List<int[]> nextMoves(char[][] board, int[] current, int[][] directions) {
+//      List<int[]> moves = new ArrayList<>();
+//     for (int[] d : directions) {
+//       int row = current[0] + d[0];
+//       int col = current[1] + d[1];
+//       if (row >= 0 && row < board.length
+//           && col >= 0 && col < board[row].length
+//           && board[row][col] != 'X') {
+//         moves.add(new int[] {row, col});
+//       }
+//     }
+//     return moves;
+//   }
+// }
+
+
+
+// recursive DFS
+Set<Integer> visited = new HashSet<>();
+    Queue<Integer> queue = new ArrayDeque<>();
+    queue.add(starting);
+    visited.add(starting);
+    while (!queue.isEmpty()) {
+      int current = queue.remove();
+      if (current == ending) {
+        return true;
+      }
+      Set<Integer> neighbors = graph.get(current);
+      if (neighbors == null) {
+        continue;
+      }
+      for (Integer neighbor : neighbors) {
+        if (neighbor > 0 && visited.add(neighbor)) {
+          queue.add(neighbor);
+        }
+      }
+    }
+    return false;
   }
-}
+//Interative BFS - i dont think i can? it only cheks four neighbors and has 
+// no traversal 
