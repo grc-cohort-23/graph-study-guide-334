@@ -337,6 +337,7 @@ public class Practice {
    * @param v2 the target vertex
    * @return true if there is a two-way connection between v1 and v2, false otherwise
    */
+    // Iterative DFS
     public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
       if (v1 == null || v2 == null) return false;
       return canReach(v1, v2) && canReach(v2, v1);
@@ -344,20 +345,46 @@ public class Practice {
 
     private static <T> boolean canReach(Vertex<T> start, Vertex<T> target) {
       Set<Vertex<T>> visited = new HashSet<>();
-      Queue<Vertex<T>> queue = new ArrayDeque<>();
-      visited.add(start);
-      queue.add(start);
+      Deque<Vertex<T>> stack = new ArrayDeque<>();
+      stack.push(start);
 
-      while (!queue.isEmpty()) {
-        Vertex<T> current = queue.poll();
+      while (!stack.isEmpty()) {
+        Vertex<T> current = stack.pop();
         if (current == target) return true;
+        if (!visited.add(current)) continue;
 
         for (Vertex<T> neighbor : current.neighbors) {
-          if (visited.add(neighbor)) queue.add(neighbor);
+          if (!visited.contains(neighbor)) stack.push(neighbor);
         }
       }
       return false;
     }
+
+
+
+
+    //Iterative BFS
+    // public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
+    //   if (v1 == null || v2 == null) return false;
+    //   return canReach(v1, v2) && canReach(v2, v1);
+    // }
+
+    // private static <T> boolean canReach(Vertex<T> start, Vertex<T> target) {
+    //   Set<Vertex<T>> visited = new HashSet<>();
+    //   Queue<Vertex<T>> queue = new ArrayDeque<>();
+    //   visited.add(start);
+    //   queue.add(start);
+
+    //   while (!queue.isEmpty()) {
+    //     Vertex<T> current = queue.poll();
+    //     if (current == target) return true;
+
+    //     for (Vertex<T> neighbor : current.neighbors) {
+    //       if (visited.add(neighbor)) queue.add(neighbor);
+    //     }
+    //   }
+    //   return false;
+    // }
   
   // public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
   //   if (v1 == null || v2 == null) {
