@@ -117,6 +117,7 @@ public class Practice {
    * @param starting the starting vertex (may be null)
    * @return a sorted list of all reachable vertex values by 
    */
+  //Iterative DFS
     public static List<Integer> sortedReachable(Vertex<Integer> starting) {
       List<Integer> values = new ArrayList<>();
       if (starting == null) return values;
@@ -137,7 +138,7 @@ public class Practice {
       Collections.sort(values);
       return values;
     }
-    
+
   // Iterative BFS
   // public static List<Integer> sortedReachable(Vertex<Integer> starting){
   //     List<Integer> values = new ArrayList<>();
@@ -236,25 +237,52 @@ public class Practice {
    * @param starting the starting vertex value
    * @return a sorted list of all reachable vertex values
    */
-     public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
-      if (!graph.containsKey(starting)) return new ArrayList<>();
+    //Iterative DFS
+    public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
+      if(!graph.containsKey(starting)) return new ArrayList<>();
 
       Set<Integer> visited = new HashSet<>();
-      Queue<Integer> queue = new ArrayDeque<>();
-      visited.add(starting);
-      queue.add(starting);
+      Deque<Integer> stack = new ArrayDeque<>(); 
 
-      while (!queue.isEmpty()) {
-        int current = queue.poll();
+      stack.push(starting);
 
-        for (int neighbor : graph.getOrDefault(current, Collections.emptySet())) {
-          if (visited.add(neighbor)) queue.add(neighbor);
+      while(!stack.isEmpty()) {
+        int current = stack.pop();
+        if(!visited.add(current)) continue;
+
+        for(int n : graph.getOrDefault(current, Collections.emptySet())) {
+          if(!visited.contains(n)){
+            stack.push(n);
+          }
         }
       }
-      List<Integer> results = new ArrayList<>(visited);
-      Collections.sort(results);
-      return results;
-    }
+        List<Integer> results = new ArrayList<>(visited);
+        Collections.sort(results);
+        return results;
+      }
+
+      
+
+    //Iterative BFS
+    //  public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
+    //   if (!graph.containsKey(starting)) return new ArrayList<>();
+
+    //   Set<Integer> visited = new HashSet<>();
+    //   Queue<Integer> queue = new ArrayDeque<>();
+    //   visited.add(starting);
+    //   queue.add(starting);
+
+    //   while (!queue.isEmpty()) {
+    //     int current = queue.poll();
+
+    //     for (int neighbor : graph.getOrDefault(current, Collections.emptySet())) {
+    //       if (visited.add(neighbor)) queue.add(neighbor);
+    //     }
+    //   }
+    //   List<Integer> results = new ArrayList<>(visited);
+    //   Collections.sort(results);
+    //   return results;
+    // }
   
   // public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
   //   if(!graph.containsKey(starting)) return new ArrayList<>();
