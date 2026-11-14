@@ -526,6 +526,86 @@ public class Practice {
 
     }
 
+
+    //stack
+    public static boolean positivePathExistsDFS(
+    Map<Integer, Set<Integer>> graph, int starting, int ending) {
+
+    if (starting <= 0 || ending <= 0 ||
+        !graph.containsKey(starting) ||
+        !graph.containsKey(ending)) {
+        return false;
+    }
+
+    Set<Integer> visited = new HashSet<>();
+    Stack<Integer> stack = new Stack<>();
+
+    stack.push(starting);
+
+    while (!stack.isEmpty()) {
+        int current = stack.pop();
+
+        if (current <= 0 ||
+            !graph.containsKey(current) ||
+            visited.contains(current)) {
+            continue;
+        }
+
+        if (current == ending) {
+            return true;
+        }
+
+        visited.add(current);
+
+        for (int neighbor : graph.get(current)) {
+            if (neighbor > 0 && !visited.contains(neighbor)) {
+                stack.push(neighbor);
+            }
+        }
+    }
+
+    return false;
+  }
+
+
+ //bfs
+ public static boolean positivePathExistsBFS(
+    Map<Integer, Set<Integer>> graph, int starting, int ending) {
+
+    if (starting <= 0 || ending <= 0 ||
+        !graph.containsKey(starting) ||
+        !graph.containsKey(ending)) {
+        return false;
+    }
+
+    Set<Integer> visited = new HashSet<>();
+    Queue<Integer> queue = new LinkedList<>();
+
+    queue.add(starting);
+    visited.add(starting);
+
+    while (!queue.isEmpty()) {
+      int current = queue.remove();
+
+      if (current == ending) {
+          return true;
+      }
+
+      for (int neighbor : graph.get(current)) {
+        if (neighbor > 0 &&
+          graph.containsKey(neighbor) &&
+          !visited.contains(neighbor)) {
+
+          visited.add(neighbor);
+          queue.add(neighbor);
+        }
+      }
+    }
+
+    return false;
+  }
+
+
   /**
    * Returns true if a professional has anyone in their extended network (reachable through any number of links)
    * that works for the given company. The search includes the professional themself.
@@ -564,43 +644,6 @@ public class Practice {
     }
     return false;
     }
-
-    //stack
-    public static boolean positivePathExistsBFS(
-    Map<Integer, Set<Integer>> graph, int starting, int ending) {
-
-    if (starting <= 0 || ending <= 0 ||
-        !graph.containsKey(starting) ||
-        !graph.containsKey(ending)) {
-        return false;
-    }
-
-    Set<Integer> visited = new HashSet<>();
-    Queue<Integer> queue = new LinkedList<>();
-
-    queue.add(starting);
-    visited.add(starting);
-
-    while (!queue.isEmpty()) {
-        int current = queue.remove();
-
-        if (current == ending) {
-            return true;
-        }
-
-        for (int neighbor : graph.get(current)) {
-            if (neighbor > 0 &&
-                graph.containsKey(neighbor) &&
-                !visited.contains(neighbor)) {
-
-                visited.add(neighbor);
-                queue.add(neighbor);
-            }
-        }
-    }
-
-    return false;
-}
 
 
       
