@@ -277,7 +277,7 @@ public class Practice {
     }
 
     Collections.sort(result);
-    
+
     return result;
   }
 
@@ -297,25 +297,85 @@ public class Practice {
    * @param v2 the target vertex
    * @return true if there is a two-way connection between v1 and v2, false otherwise
    */
+  // public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
+  //   if (v1 == null || v2 == null) return false;
+
+  //   // must work both ways, each with its own fresh notebook
+  //   return canReach(v1, v2, new HashSet<>()) && canReach(v2, v1, new HashSet<>());
+  // }
+
+  // // true if target can be reach from current
+  // private static <T> boolean canReach(Vertex<T> current, Vertex<T> target, Set<Vertex<T>> visited) {
+  //   if (current == target) return true;
+
+  //   // already checked this vertex
+  //   if (visited.contains(current)) return false;
+  //   visited.add(current);
+
+  //   // try every neighbor here
+  //   for (Vertex<T> neighbor : current.neighbors) {
+  //     // one of them found it -> stop and say true
+  //     if (canReach(neighbor, target, visited)) return true;
+  //   }
+  //   return false;
+  // }
+
+   // iterative BFS
+  // public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
+  //   if (v1 == null || v2 == null) return false;
+
+  //   return canReach(v1, v2) && canReach(v2, v1);
+  // }
+
+
+  // private static <T> boolean canReach(Vertex<T> start, Vertex<T> target) {
+  //   Set<Vertex<T>> visited = new HashSet<>();
+  //   Queue<Vertex<T>> queue = new LinkedList<>();
+  //   queue.add(start);
+  //   visited.add(start);
+
+  //   while (!queue.isEmpty()) {
+  //     Vertex<T> current = queue.poll();
+
+  //     // found it -> stop early
+  //     if (current == target) return true;
+
+  //     for (Vertex<T> neighbor : current.neighbors) {
+  //       if (!visited.contains(neighbor)) {
+  //         visited.add(neighbor);
+  //         queue.add(neighbor);
+  //       }
+  //     }
+  //   }
+  //   return false;
+  // }
+
+  //iterative DFS
   public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
     if (v1 == null || v2 == null) return false;
 
-    // must work both ways, each with its own fresh notebook
-    return canReach(v1, v2, new HashSet<>()) && canReach(v2, v1, new HashSet<>());
+    // must work both ways here
+    return canReach(v1, v2) && canReach(v2, v1);
   }
 
-  // true if target can be reach from current
-  private static <T> boolean canReach(Vertex<T> current, Vertex<T> target, Set<Vertex<T>> visited) {
-    if (current == target) return true;
+  // turn true if target can reach from the start
+  private static <T> boolean canReach(Vertex<T> start, Vertex<T> target) {
+    Set<Vertex<T>> visited = new HashSet<>();
+    Stack<Vertex<T>> stack = new Stack<>();
+    stack.push(start);
 
-    // already checked this vertex
-    if (visited.contains(current)) return false;
-    visited.add(current);
+    while (!stack.isEmpty()) {
+      Vertex<T> current = stack.pop();
 
-    // try every neighbor here
-    for (Vertex<T> neighbor : current.neighbors) {
-      // one of them found it -> stop and say true
-      if (canReach(neighbor, target, visited)) return true;
+      // found it -> stop early here
+      if (current == target) return true;
+
+      if (visited.contains(current)) continue;
+      visited.add(current);
+
+      for (Vertex<T> neighbor : current.neighbors) {
+        stack.push(neighbor);
+      }
     }
     return false;
   }
@@ -332,28 +392,85 @@ public class Practice {
    * @param ending the ending vertex value
    * @return whether there exists a valid positive path from starting to ending
    */
+  // public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
+  //   if (starting <= 0 || ending <= 0) return false;
+
+  //   // start and end must both be in the graph
+  //   if (!graph.containsKey(starting) || !graph.containsKey(ending)) return false;
+
+  //   return positivePath(graph, starting, ending, new HashSet<>());
+  // }
+
+  // // true if ending can reach from current positive
+  // private static boolean positivePath(Map<Integer, Set<Integer>> graph, int current, int ending, Set<Integer> visited) {
+  //   if (current <= 0 || visited.contains(current)) return false;
+
+  //   // found it here
+  //   if (current == ending) return true;
+
+  //   visited.add(current);
+
+  //   // try every neighbor
+  //   for (int neighbor : graph.getOrDefault(current, Set.of())) {
+  //     // one of them found a path -> stop and say true
+  //     if (positivePath(graph, neighbor, ending, visited)) return true;
+  //   }
+  //   return false;
+  // }
+
+    // iterative DFS
+  // public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
+  //   if (starting <= 0 || ending <= 0) return false;
+
+  //   // start and end must both be in the graph
+  //   if (!graph.containsKey(starting) || !graph.containsKey(ending)) return false;
+
+  //   Set<Integer> visited = new HashSet<>();
+  //   Stack<Integer> stack = new Stack<>();
+  //   stack.push(starting);
+
+  //   while (!stack.isEmpty()) {
+  //     int current = stack.pop();
+
+  //     // found it -> stop early
+  //     if (current == ending) return true;
+
+  //     if (visited.contains(current)) continue;
+  //     visited.add(current);
+
+  //     for (int neighbor : graph.getOrDefault(current, Set.of())) {
+  //       // only walk through positive vertices
+  //       if (neighbor > 0) stack.push(neighbor);
+  //     }
+  //   }
+  //   return false;
+  // }
+
+  //  iterative BFS
   public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
     if (starting <= 0 || ending <= 0) return false;
 
     // start and end must both be in the graph
     if (!graph.containsKey(starting) || !graph.containsKey(ending)) return false;
 
-    return positivePath(graph, starting, ending, new HashSet<>());
-  }
+    Set<Integer> visited = new HashSet<>();
+    Queue<Integer> queue = new LinkedList<>();
+    queue.add(starting);
+    visited.add(starting);
 
-  // true if ending can reach from current positive
-  private static boolean positivePath(Map<Integer, Set<Integer>> graph, int current, int ending, Set<Integer> visited) {
-    if (current <= 0 || visited.contains(current)) return false;
+    while (!queue.isEmpty()) {
+      int current = queue.poll();
 
-    // found it here
-    if (current == ending) return true;
+      // found it -> stop early
+      if (current == ending) return true;
 
-    visited.add(current);
-
-    // try every neighbor
-    for (int neighbor : graph.getOrDefault(current, Set.of())) {
-      // one of them found a path -> stop and say true
-      if (positivePath(graph, neighbor, ending, visited)) return true;
+      for (int neighbor : graph.getOrDefault(current, Set.of())) {
+        // only walk through positive vertices we haven't seen yet
+        if (neighbor > 0 && !visited.contains(neighbor)) {
+          visited.add(neighbor);
+          queue.add(neighbor);
+        }
+      }
     }
     return false;
   }
