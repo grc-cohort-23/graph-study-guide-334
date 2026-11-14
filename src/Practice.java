@@ -1,6 +1,12 @@
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.Queue;
 
 public class Practice {
 
@@ -24,9 +30,76 @@ public class Practice {
    * @param starting the starting vertex (may be null)
    * @return the number of vertices with odd values reachable from the starting vertex
    */
-  public static int oddVertices(Vertex<Integer> starting) {
-    return 0;
+  // public static int oddVertices(Vertex<Integer> starting) {
+  //   Set<Vertex<Integer>> visited = new HashSet<>();
+  //   return oddVertices(starting, visited);
+  // }
+
+  // private static int oddVertices(Vertex<Integer> current, Set<Vertex<Integer>> visited){
+  //   if(current==null) return 0;
+  //   if(visited.contains(current)) return 0;
+  //   visited.add(current);
+
+  //   int totalOdd = 0;
+  //   if(current.data %2 != 0) totalOdd++;
+    
+  //   for(Vertex<Integer> neighbor : current.neighbors){
+  //     totalOdd += oddVertices(neighbor, visited);
+  //   }
+
+  //   return totalOdd;
+  // }
+
+  // public static int oddVertices(Vertex<Integer> starting){
+  //   if (starting==null) return 0;
+
+  //   Set<Vertex<Integer>> visited = new HashSet<>();
+  //   Deque<Vertex<Integer>> stack = new ArrayDeque<>();
+  //   stack.push(starting);
+
+  //   int totalOdd = 0;
+
+  //   while (!stack.isEmpty()) {
+  //     Vertex<Integer> current = stack.pop();
+
+  //     if (current == null) continue;
+  //     if (!visited.add(current)) continue;
+
+  //     if (current.data % 2 != 0) totalOdd++;       
+
+  //     for (Vertex<Integer> neighbor : current.neighbors) {
+  //       stack.push(neighbor);           
+  //     }
+  //   }
+
+  //   return totalOdd;
+  // }
+
+    public static int oddVertices(Vertex<Integer> starting){
+    if (starting==null) return 0;
+
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Queue<Vertex<Integer>> queue = new ArrayDeque<>();
+    visited.add(starting);
+    queue.add(starting);
+
+    int totalOdd = 0;
+
+    while (!queue.isEmpty()) {
+      Vertex<Integer> current = queue.remove();
+
+      if (current.data % 2 != 0) totalOdd++;       
+
+      for (Vertex<Integer> neighbor : current.neighbors){
+        if(neighbor != null && visited.add(neighbor)){
+          queue.add(neighbor); 
+        }          
+      }
+    }
+
+    return totalOdd;
   }
+  
 
   /**
    * Returns a *sorted* list of all values reachable from the starting vertex (including the starting vertex itself).
@@ -46,9 +119,78 @@ public class Practice {
    * @param starting the starting vertex (may be null)
    * @return a sorted list of all reachable vertex values by 
    */
-  public static List<Integer> sortedReachable(Vertex<Integer> starting) {
-    return null;
-  }
+  // public static List<Integer> sortedReachable(Vertex<Integer> starting) {
+  //   return sortedReachable(starting, new HashSet<>(), new ArrayList<>());
+  // }
+
+  // private static List<Integer> sortedReachable(Vertex<Integer> current, Set<Vertex<Integer>> visited, List<Integer> nums){
+  //   if(current==null || visited.contains(current)) return new ArrayList<>();
+  //   visited.add(current);
+
+  //   nums.add(current.data);
+
+  //   for(Vertex<Integer> neighbor: current.neighbors){
+  //     sortedReachable(neighbor, visited, nums);
+  //   }
+
+  //   Collections.sort(nums);
+
+  //   return nums;
+  // }
+
+    // public static List<Integer> sortedReachable(Vertex<Integer> starting){
+    //   if (starting==null) return new ArrayList<Integer>();
+
+    //   Set<Vertex<Integer>> visited = new HashSet<>();
+    //   Deque<Vertex<Integer>> stack = new ArrayDeque<>();
+    //   stack.push(starting);
+
+    //   List<Integer> nums = new ArrayList<>();
+
+    //   while(!stack.isEmpty()){
+    //     Vertex<Integer> current = stack.pop();
+
+    //     if(current==null) continue;
+    //     if(!visited.add(current)) continue;
+
+    //     nums.add(current.data);
+
+    //     for(Vertex<Integer> neighbor : current.neighbors){
+    //       stack.push(neighbor);
+    //     }
+    //   }
+
+    //   Collections.sort(nums);
+
+    //   return nums;
+    // }
+
+    public static List<Integer> sortedReachable(Vertex<Integer> starting){
+      if (starting==null) return new ArrayList<Integer>();
+
+      Set<Vertex<Integer>> visited = new HashSet<>();
+      Queue<Vertex<Integer>> queue = new ArrayDeque<>();
+      queue.add(starting);
+      visited.add(starting);
+
+      List<Integer> nums = new ArrayList<>();
+
+      while(!queue.isEmpty()){
+        Vertex<Integer> current = queue.remove();
+
+        nums.add(current.data);
+
+        for(Vertex<Integer> neighbor : current.neighbors){
+          if(neighbor != null && visited.add(neighbor)){
+            queue.add(neighbor);
+          }
+        }
+      }
+
+      Collections.sort(nums);
+
+      return nums;
+    }
 
   /**
    * Returns a sorted list of all values reachable from the given starting vertex in the provided graph.
@@ -60,8 +202,75 @@ public class Practice {
    * @param starting the starting vertex value
    * @return a sorted list of all reachable vertex values
    */
-  public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
-    return null;
+  // public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
+  //   return sortedReachable(graph, starting, new HashSet<>(), new ArrayList<>());
+  // }
+
+  // private static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int current, Set<Integer> visited, List<Integer> nums){
+  //   if(visited.contains(current) || !graph.containsKey(current)) return new ArrayList<>();
+  //   visited.add(current);
+
+  //   nums.add(current);
+
+  //   for(int neighbor : graph.get(current)){
+  //     sortedReachable(graph, neighbor, visited, nums);
+  //   }
+
+  //   Collections.sort(nums);
+
+  //   return nums;
+  // }
+
+  // public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting){
+  //   if(!graph.containsKey(starting)) return new ArrayList<>();
+    
+  //   Set<Integer> visited = new HashSet<>();
+  //   Deque<Integer> stack = new ArrayDeque<>();
+  //   stack.push(starting);
+
+  //   List<Integer> nums = new ArrayList<>();
+
+  //   while(!stack.isEmpty()){
+  //     int current = stack.pop();
+
+  //     if(!graph.containsKey(current)) continue;
+  //     if(!visited.add(current)) continue;
+
+  //     nums.add(current);
+
+  //     for(int neighbor : graph.get(current)){
+  //       stack.push(neighbor);
+  //     }
+  //   }
+
+  //   Collections.sort(nums);
+  //   return nums;
+  // }
+
+  public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting){
+    if(!graph.containsKey(starting)) return new ArrayList<>();
+    
+    Set<Integer> visited = new HashSet<>();
+    Queue<Integer> queue = new ArrayDeque<>();
+    queue.add(starting);
+    visited.add(starting);
+
+    List<Integer> nums = new ArrayList<>();
+
+    while(!queue.isEmpty()){
+      int current = queue.remove();
+
+      nums.add(current);
+
+      for(int neighbor : graph.get(current)){
+        if(graph.containsKey(neighbor) && visited.add(neighbor)){
+          queue.add(neighbor);
+        }
+      }
+    }
+
+    Collections.sort(nums);
+    return nums;
   }
 
   /**
@@ -78,7 +287,73 @@ public class Practice {
    * @param v2 the target vertex
    * @return true if there is a two-way connection between v1 and v2, false otherwise
    */
-  public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
+  // public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
+  //   return twoWay(v1, v2, new HashSet<>()) && twoWay(v2, v1, new HashSet<>());
+  // }
+
+  // private static <T> boolean twoWay(Vertex<T> current, Vertex<T> target, Set<Vertex<T>> visited){
+  //   if(current==null || target==null || visited.contains(current)) return false;
+  //   visited.add(current);
+
+  //   if(current==target) return true;
+
+  //   for(Vertex<T> neighbor : current.neighbors){
+  //     if(twoWay(neighbor, target, visited)) return true;
+  //   }
+
+  //   return false;
+  // }
+
+  // public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2){
+  //   return twoWayHelper(v1, v2) && twoWayHelper(v2, v1);
+  // }
+
+  // private static <T> boolean twoWayHelper(Vertex<T> starting, Vertex<T> target){
+  //   if(starting==null || target==null) return false;
+
+  //   Set<Vertex<T>> visited = new HashSet<>();
+  //   Deque<Vertex<T>> stack = new ArrayDeque<>();
+  //   stack.push(starting);
+
+  //   while(!stack.isEmpty()){
+  //     Vertex<T> current = stack.pop();
+
+  //     if(current==null) continue;
+  //     if(!visited.add(current)) continue;
+
+  //     if(current==target) return true;
+
+  //     for(Vertex<T> neighbor : current.neighbors){
+  //       stack.push(neighbor);
+  //     }
+  //   }
+
+  //   return false;
+  // }
+
+  public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2){
+    return twoWayHelper(v1, v2) && twoWayHelper(v2, v1);
+  }
+
+  private static <T> boolean twoWayHelper(Vertex<T> starting, Vertex<T> target){
+    if(starting==null || target==null) return false;
+
+    Set<Vertex<T>> visited = new HashSet<>();
+    Queue<Vertex<T>> queue = new ArrayDeque<>();
+    queue.add(starting);
+
+    while(!queue.isEmpty()){
+      Vertex<T> current = queue.remove();
+
+      if(current==target) return true;
+
+      for(Vertex<T> neighbor : current.neighbors){
+        if(neighbor != null && visited.add(neighbor)){
+          queue.add(neighbor);
+        }
+      }
+    }
+
     return false;
   }
 
@@ -94,7 +369,68 @@ public class Practice {
    * @param ending the ending vertex value
    * @return whether there exists a valid positive path from starting to ending
    */
-  public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
+  // public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) { //key is the vertex, values are the neighbors
+  //   return positivePathExists(graph, starting, ending, new HashSet<>());
+  // }
+
+  // private static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int current, int target, Set<Integer> visited){
+  //   if(!graph.containsKey(current) || !graph.containsKey(target) || visited.contains(current)) return false;
+  //   visited.add(current);
+
+  //   if(current <= 0 || target <= 0) return false;
+  //   if(current==target) return true; 
+    
+  //   for(int neighbor : graph.get(current)){
+  //     if(positivePathExists(graph, neighbor, target, visited)) return true;
+  //   }
+
+  //   return false;
+  // }
+
+  // public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int target){
+  //   if(!graph.containsKey(starting)) return false;
+
+  //   Set<Integer> visited = new HashSet<>();
+  //   Deque<Integer> stack = new ArrayDeque<>();
+  //   stack.push(starting);
+
+  //   while(!stack.isEmpty()){
+  //     int current = stack.pop();
+
+  //     if(!graph.containsKey(current) || !visited.add(current)) continue;
+
+  //     if(current <=0 || target <=0) return false;
+  //     if(current==target) return true;
+
+  //     for(int neighbor : graph.get(current)){
+  //       stack.push(neighbor);
+  //     }
+  //   }
+
+  //   return false;
+  // }
+
+  public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int target){
+    if(!graph.containsKey(starting)) return false;
+
+    Set<Integer> visited = new HashSet<>();
+    Queue<Integer> queue = new ArrayDeque<>();
+    queue.add(starting);
+    visited.add(starting);
+
+    while(!queue.isEmpty()){
+      int current = queue.remove();
+
+      if(current <=0) continue;
+      if(current==target) return true;
+
+      for(int neighbor : graph.get(current)){
+        if(graph.containsKey(neighbor) && visited.add(neighbor)){
+          queue.add(neighbor);
+        }
+      }
+    }
+
     return false;
   }
 
@@ -107,7 +443,65 @@ public class Practice {
    * @param companyName the name of the company to check for employment
    * @return true if a person in the extended network works at the specified company, false otherwise
    */
-  public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+  // public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+  //   return hasExtendedConnectionAtCompany(person, companyName, new HashSet<>());
+  // }
+
+  // public static boolean hasExtendedConnectionAtCompany(Professional currentPerson, String targetCompany, Set<Professional> visited){
+  //   if(currentPerson==null || targetCompany==null || visited.contains(currentPerson)) return false;
+  //   visited.add(currentPerson);
+
+  //   if(currentPerson.getCompany()==targetCompany) return true;
+
+  //   for(Professional person : currentPerson.getConnections()){
+  //     if(hasExtendedConnectionAtCompany(person, targetCompany, visited)) return true;
+  //   }
+
+  //   return false;
+  // }
+
+  // public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName){
+  //   if(person==null || companyName==null) return false;
+
+  //   Set<Professional> visited = new HashSet<>();
+  //   Deque<Professional> stack = new ArrayDeque<>();
+  //   stack.push(person);
+
+  //   while(!stack.isEmpty()){
+  //     Professional current = stack.pop();
+
+  //     if(current==null || !visited.add(current)) continue;
+
+  //     if(companyName==current.getCompany()) return true;
+
+  //     for(Professional connection : current.getConnections()){
+  //       stack.push(connection);
+  //     }
+  //   }
+    
+  //   return false;
+  // }
+
+  public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName){
+    if(person==null || companyName==null) return false;
+
+    Set<Professional> visited = new HashSet<>();
+    Queue<Professional> queue = new ArrayDeque<>();
+    queue.add(person);
+    visited.add(person);
+
+    while(!queue.isEmpty()){
+      Professional current = queue.remove();
+
+      if(companyName==current.getCompany()) return true;
+
+      for(Professional connection : current.getConnections()){
+        if(connection!=null && visited.add(connection)){
+          queue.add(connection);
+        }
+      }
+    }
+    
     return false;
   }
 
@@ -179,6 +573,17 @@ public class Practice {
    * @return an unsorted list of next moves
    */
   public static List<int[]> nextMoves(char[][] board, int[] current, int[][] directions) {
-    return null;
+    List<int[]> nextPossibleMoves = new ArrayList<>();
+    
+    for(int[] move : directions){
+      int newR = current[0] + move[0];
+      int newC = current[1] + move[1];
+
+      if(newR >= 0 && newR < board.length &&
+        newC >= 0 && newC < board[0].length &&
+        board[newR][newC] != 'X') nextPossibleMoves.add(new int[]{newR, newC});
+    }
+    
+    return nextPossibleMoves;
   }
 }
