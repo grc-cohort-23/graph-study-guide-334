@@ -387,23 +387,47 @@ public class Practice {
   //   return false;
   // }
 
+  // public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int target){
+  //   if(!graph.containsKey(starting)) return false;
+
+  //   Set<Integer> visited = new HashSet<>();
+  //   Deque<Integer> stack = new ArrayDeque<>();
+  //   stack.push(starting);
+
+  //   while(!stack.isEmpty()){
+  //     int current = stack.pop();
+
+  //     if(!graph.containsKey(current) || !visited.add(current)) continue;
+
+  //     if(current <=0 || target <=0) return false;
+  //     if(current==target) return true;
+
+  //     for(int neighbor : graph.get(current)){
+  //       stack.push(neighbor);
+  //     }
+  //   }
+
+  //   return false;
+  // }
+
   public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int target){
     if(!graph.containsKey(starting)) return false;
 
     Set<Integer> visited = new HashSet<>();
-    Deque<Integer> stack = new ArrayDeque<>();
-    stack.push(starting);
+    Queue<Integer> queue = new ArrayDeque<>();
+    queue.add(starting);
+    visited.add(starting);
 
-    while(!stack.isEmpty()){
-      int current = stack.pop();
+    while(!queue.isEmpty()){
+      int current = queue.remove();
 
-      if(!graph.containsKey(current) || !visited.add(current)) continue;
-
-      if(current <=0 || target <=0) return false;
+      if(current <=0) continue;
       if(current==target) return true;
 
       for(int neighbor : graph.get(current)){
-        stack.push(neighbor);
+        if(graph.containsKey(neighbor) && visited.add(neighbor)){
+          queue.add(neighbor);
+        }
       }
     }
 
