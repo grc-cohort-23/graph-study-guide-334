@@ -1,8 +1,10 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
@@ -57,7 +59,7 @@ public class Practice {
       return count;
   }
 
-  // iterative dfs
+  // iterative dfs stack
   public static int oddVerticesIterative(Vertex<Integer> starting){
     if (starting == null){
       return 0;
@@ -69,7 +71,7 @@ public class Practice {
     while (stack.isEmpty()){
       Vertex<Integer> current = stack.pop();
 
-      if(visted.contains(current)){
+      if(visited.contains(current)){
         continue;
       }
       visited.add(current);
@@ -86,6 +88,39 @@ public class Practice {
     return count;
 
   }
+
+
+  //iterative BFS queue
+  public static int oddVerticesBFS(Vertex<Integer> starting) {
+    if (starting == null) {
+        return 0;
+    }
+
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Queue<Vertex<Integer>> queue = new LinkedList<>();
+
+    int count = 0;
+
+    queue.add(starting);
+    visited.add(starting);
+
+    while (!queue.isEmpty()) {
+      Vertex<Integer> current = queue.remove();
+
+     if(current.data % 2 != 0) {
+        count++;
+      }
+
+    for (Vertex<Integer> neighbor : current.neighbors) {
+        if (neighbor != null && !visited.contains(neighbor)) {
+            visited.add(neighbor);
+            queue.add(neighbor);
+        }
+      }
+    }
+
+    return count;
+    }
 
   /**
    * Returns a *sorted* list of all values reachable from the starting vertex (including the starting vertex itself).
@@ -105,6 +140,7 @@ public class Practice {
    * @param starting the starting vertex (may be null)
    * @return a sorted list of all reachable vertex values by 
    */
+  //recursive dfs
   public static List<Integer> sortedReachable(Vertex<Integer> starting) {
     List<Integer> result = new ArrayList<>();
 
@@ -132,7 +168,40 @@ public class Practice {
       for( Vertex<Integer> neighbor :current.neighbors){
         sortedHelper(neighbor, visited, result);
       }
-}
+  }
+
+  //iterative dfs stack
+  public static List<Integer> sortedReachableIterative(Vertex<Integer> starting) {
+    List<Integer> result = new ArrayList<>();
+
+    if (starting == null) {
+        return result;
+    }
+
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Stack<Vertex<Integer>> stack = new Stack<>();
+
+    stack.push(starting);
+
+    while (!stack.isEmpty()) {
+        Vertex<Integer> current = stack.pop();
+
+        if (visited.contains(current)) {
+            continue;
+        }
+
+        visited.add(current);
+        result.add(current.data);
+
+        for (Vertex<Integer> neighbor : current.neighbors) {
+          if (neighbor != null && !visited.contains(neighbor)) {
+            stack.push(neighbor);
+          }
+       }
+    }
+    Collections.sort(result);
+    return result;
+  }
 
   /**
    * Returns a sorted list of all values reachable from the given starting vertex in the provided graph.
