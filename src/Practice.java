@@ -543,6 +543,81 @@ public class Practice {
   }
 
   /**
+  //  * Returns true if a professional has anyone in their extended network
+  //  * (reachable through any number of links)
+  //  * that works for the given company. The search includes the professional
+  //  * themself.
+  //  * If the professional is null, returns false.
+  //  *
+  //  * @param person      the professional to start the search from (may be null)
+  //  * @param companyName the name of the company to check for employment
+  //  * @return true if a person in the extended network works at the specified
+  //  *         company, false otherwise
+  //  */
+  // public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+
+  //   if (person == null)
+  //     return false;
+  //   HashSet<Professional> visited = new HashSet<>();
+  //   return extendedHelper(companyName, person, visited);
+
+  // }
+
+  // private static boolean extendedHelper(String companyName, Professional current, HashSet<Professional> visited) {
+  //   if (current == null)
+  //     return false;
+  //   if (current.getCompany().equals(companyName))
+  //     return true;
+  //   if (visited.contains(current))
+  //     return false;
+  //   visited.add(current);
+
+  //   for (Professional neighbor : current.getConnections()) {
+  //     if (extendedHelper(companyName, neighbor, visited)) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
+
+  // /** Iterative DFS **
+  //  * Returns true if a professional has anyone in their extended network
+  //  * (reachable through any number of links)
+  //  * that works for the given company. The search includes the professional
+  //  * themself.
+  //  * If the professional is null, returns false.
+  //  *
+  //  * @param person      the professional to start the search from (may be null)
+  //  * @param companyName the name of the company to check for employment
+  //  * @return true if a person in the extended network works at the specified
+  //  *         company, false otherwise
+  //  */
+  // public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+
+  //   if (person == null)
+  //     return false;
+  //   Stack<Professional> stack = new Stack<>();
+  //   HashSet<Professional> visited = new HashSet<>();
+
+  //   stack.push(person);
+
+  //   while(!stack.isEmpty()) {
+  //     Professional current = stack.pop();
+  //   if (current == null) continue;
+
+  //   if (current.getCompany().equals(companyName))
+  //     return true;
+  //   if (visited.contains(current)) continue;
+  //   visited.add(current);
+
+  //   for (Professional neighbor : current.getConnections()) {
+  //       stack.push(neighbor);
+  //     }
+  //   }
+  //   return false;
+  // }
+
+  /** Iterative BFS **
    * Returns true if a professional has anyone in their extended network
    * (reachable through any number of links)
    * that works for the given company. The search includes the professional
@@ -558,27 +633,27 @@ public class Practice {
 
     if (person == null)
       return false;
+    Queue<Professional> queue = new ArrayDeque<>();
     HashSet<Professional> visited = new HashSet<>();
-    return extendedHelper(companyName, person, visited);
+    visited.add(person);
+    queue.offer(person);
 
-  }
+    while(!queue.isEmpty()) {
+      Professional current = queue.poll();
 
-  private static boolean extendedHelper(String companyName, Professional current, HashSet<Professional> visited) {
-    if (current == null)
-      return false;
     if (current.getCompany().equals(companyName))
       return true;
-    if (visited.contains(current))
-      return false;
-    visited.add(current);
 
     for (Professional neighbor : current.getConnections()) {
-      if (extendedHelper(companyName, neighbor, visited)) {
-        return true;
+      if(neighbor == null || visited.contains(neighbor))
+        visited.add(neighbor);
+        queue.offer(neighbor);
       }
     }
     return false;
   }
+
+
 
   /**
    * Returns a list of possible next moves starting from a given position.
