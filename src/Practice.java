@@ -393,6 +393,43 @@ public class Practice {
       return false;
   }
 
+  //dfs stack
+  public static <T> boolean twowayIterativeDFS(Vertex<T> v1, Vertex<T> v2){
+    if(v1 == null || v2 == null){
+      return false;
+    }
+    return canReachDFS(v1,v2) && canReachDFS(v2, v1);
+  }
+
+  private static <T> boolean canReachDFS(Vertex<T> start, Vertex<T> target){
+    Set<Vertex<T>> visited = new HashSet<>();
+    Stack<Vertex<T>> stack = new Stack<>();
+
+    stack.push(start);
+
+    while(!stack.isEmpty()){
+      Vertex<T> current = stack.pop();
+
+      if (current == target){
+        return true;
+    }
+    if(current == null || visited.contains(current)){
+      continue;
+
+    }
+
+    visited.add(current);
+
+    for(Vertex<T> neighbor : current.neighbors){
+      if(neighbor != null && !visited.contains(neighbor)){
+        stack.push(neighbor);
+      }
+    }
+
+  }
+  return false;
+}
+
 
   
   
