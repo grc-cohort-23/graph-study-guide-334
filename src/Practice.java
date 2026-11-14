@@ -669,7 +669,7 @@ public class Practice {
         if (java.util.Objects.equals(current.getCompany(), companyName)) {
           return true;
       }
-      
+
         for (Professional neighbor : current.getConnections()) {
           if (neighbor != null && !visited.contains(neighbor)) {
               stack.push(neighbor);
@@ -680,6 +680,38 @@ public class Practice {
       return false;
     }
 
+
+    //bfs
+    public static boolean hasExtendedConnectionAtCompanyBFS(
+    Professional person, String companyName) {
+
+    if (person == null) {
+        return false;
+    }
+
+    Set<Professional> visited = new HashSet<>();
+    Queue<Professional> queue = new LinkedList<>();
+
+    queue.add(person);
+    visited.add(person);
+
+    while (!queue.isEmpty()) {
+      Professional current = queue.remove();
+
+      if (java.util.Objects.equals(current.getCompany(), companyName)) {
+          return true;
+      }
+
+      for (Professional neighbor : current.getConnections()) {
+        if (neighbor != null && !visited.contains(neighbor)) {
+            visited.add(neighbor);
+            queue.add(neighbor);
+        }
+       }
+    }
+
+        return false;
+    }
 
       
   
