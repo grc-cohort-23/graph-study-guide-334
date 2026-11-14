@@ -1,7 +1,12 @@
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
-
+import java.util.Stack;
+import java.util.ArrayList;
+import java.util.Collections;
 public class Practice {
 
   /**
@@ -24,9 +29,84 @@ public class Practice {
    * @param starting the starting vertex (may be null)
    * @return the number of vertices with odd values reachable from the starting vertex
    */
+  // public static int oddVertices(Vertex<Integer> starting) {
+  //   // start with empty visited set
+  //   return oddVertices(starting, new HashSet<>());
+  // }
+
+  // // counts odd that can reach from current
+  // private static int oddVertices(Vertex<Integer> current, Set<Vertex<Integer>> visited) {
+  //   if (current == null || visited.contains(current)) return 0;
+  //   visited.add(current);
+
+  //   // count this if it odd
+  //   int count = 0;
+  //   if (current.data % 2 != 0) count++;
+
+  //   // then add odd count from every neighbor
+  //   for (Vertex<Integer> neighbor : current.neighbors) {
+  //     count += oddVertices(neighbor, visited);
+  //   }
+  //   return count;
+  // }
+  
+  // iterative DFS
+  //   public static int oddVertices(Vertex<Integer> starting) {
+  //   if (starting == null) return 0;
+
+  //   Set<Vertex<Integer>> visited = new HashSet<>();
+  //   Stack<Vertex<Integer>> stack = new Stack<>();
+  //   stack.push(starting);
+  //   int count = 0;
+
+  //   while (!stack.isEmpty()) {
+  //     Vertex<Integer> current = stack.pop();
+
+  //     // same vertex can be pushed twice, skip if already done
+  //     if (visited.contains(current)) continue;
+  //     visited.add(current);
+
+  //     // count this if it odd
+  //     if (current.data % 2 != 0) count++;
+
+  //     // push every neighbor to check later
+  //     for (Vertex<Integer> neighbor : current.neighbors) {
+  //       stack.push(neighbor);
+  //     }
+  //   }
+  //   return count;
+  // }
+
+  //Iterative BFS
+
   public static int oddVertices(Vertex<Integer> starting) {
-    return 0;
+    if (starting == null) return 0;
+
+    // mark visited when added to queue so nothing gets added twice
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Queue<Vertex<Integer>> queue = new LinkedList<>();
+    queue.add(starting);
+    visited.add(starting);
+    int count = 0;
+
+    while (!queue.isEmpty()) {
+      Vertex<Integer> current = queue.poll();
+
+      // count this if it odd
+      if (current.data % 2 != 0) count++;
+
+      // add every new neighbor to the back of the line
+      for (Vertex<Integer> neighbor : current.neighbors) {
+        if (!visited.contains(neighbor)) {
+          visited.add(neighbor);
+          queue.add(neighbor);
+        }
+      }
+    }
+    return count;
   }
+
+  
 
   /**
    * Returns a *sorted* list of all values reachable from the starting vertex (including the starting vertex itself).
@@ -46,9 +126,76 @@ public class Practice {
    * @param starting the starting vertex (may be null)
    * @return a sorted list of all reachable vertex values by 
    */
+  // public static List<Integer> sortedReachable(Vertex<Integer> starting) {
+  //   List<Integer> result = new ArrayList<>();
+  //   collect(starting, new HashSet<>(), result);
+
+  //   Collections.sort(result);
+  //   return result;
+  //   }
+  // private static void collect(Vertex<Integer> current, Set<Vertex<Integer>> visited,   List<Integer> result) {
+  //   if (current == null || visited.contains(current)) return;
+
+  //   visited.add(current);
+  //   result.add(current.data);
+
+  //   for (Vertex<Integer> neighbor : current.neighbors){
+  //     collect(neighbor, visited, result);
+  //   }
+  // }
+
+    // iterative DFS
+  // public static List<Integer> sortedReachable(Vertex<Integer> starting) {
+  //   List<Integer> result = new ArrayList<>();
+  //   if (starting == null) return result;
+
+  //   Set<Vertex<Integer>> visited = new HashSet<>();
+  //   Stack<Vertex<Integer>> stack = new Stack<>();
+  //   stack.push(starting);
+
+  //   while (!stack.isEmpty()) {
+  //     Vertex<Integer> current = stack.pop();
+  //     if (visited.contains(current)) continue;
+  //     visited.add(current);
+
+  //     // visited is by vertex, not value, so duplicate values still get added
+  //     result.add(current.data);
+
+  //     for (Vertex<Integer> neighbor : current.neighbors) {
+  //       stack.push(neighbor);
+  //     }
+  //   }
+
+  //   Collections.sort(result);
+  //   return result;
+  // }
+
+  // iterative BFS
   public static List<Integer> sortedReachable(Vertex<Integer> starting) {
-    return null;
+    List<Integer> result = new ArrayList<>();
+    if (starting == null) return result;
+
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Queue<Vertex<Integer>> queue = new LinkedList<>();
+    queue.add(starting);
+    visited.add(starting);
+
+    while (!queue.isEmpty()) {
+      Vertex<Integer> current = queue.poll();
+      result.add(current.data);
+
+      for (Vertex<Integer> neighbor : current.neighbors) {
+        if (!visited.contains(neighbor)) {
+          visited.add(neighbor);
+          queue.add(neighbor);
+        }
+      }
+    }
+
+    Collections.sort(result);
+    return result;
   }
+
 
   /**
    * Returns a sorted list of all values reachable from the given starting vertex in the provided graph.
@@ -60,9 +207,81 @@ public class Practice {
    * @param starting the starting vertex value
    * @return a sorted list of all reachable vertex values
    */
+  // public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
+  //   List<Integer> result = new ArrayList<>();
+  //   if(!graph.containsKey(starting)) return result;
+
+  //   collect(graph, starting, new HashSet<>(), result);
+  //   Collections.sort(result);
+  //   return result;
+
+  // }
+  // private static void collect (Map<Integer, Set<Integer>> graph, int current, Set<Integer> visited, List<Integer>result){
+  //   if(visited.contains(current)) return;
+
+  //   visited.add(current);
+  //   result.add(current);
+
+  //   for (int neighbor : graph.getOrDefault(current, Set.of())){
+  //     collect(graph, neighbor, visited, result);
+  //   }
+
+  // }
+
+    // iterative DFS
+  // public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
+  //   List<Integer> result = new ArrayList<>();
+  //   if (!graph.containsKey(starting)) return result;
+
+  //   Set<Integer> visited = new HashSet<>();
+  //   Stack<Integer> stack = new Stack<>();
+  //   stack.push(starting);
+
+  //   while (!stack.isEmpty()) {
+  //     int current = stack.pop();
+  //     if (visited.contains(current)) continue;
+  //     visited.add(current);
+  //     result.add(current);
+
+  //     // getOrDefault in case a neighbor isn't a key in the map
+  //     for (int neighbor : graph.getOrDefault(current, Set.of())) {
+  //       stack.push(neighbor);
+  //     }
+  //   }
+
+  //   Collections.sort(result);
+  //   return result;
+  // }
+
+
+  // iterative BFS
   public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
-    return null;
+    List<Integer> result = new ArrayList<>();
+    if (!graph.containsKey(starting)) return result;
+
+    Set<Integer> visited = new HashSet<>();
+    Queue<Integer> queue = new LinkedList<>();
+    queue.add(starting);
+    visited.add(starting);
+
+    while (!queue.isEmpty()) {
+      int current = queue.poll();
+      result.add(current);
+
+      for (int neighbor : graph.getOrDefault(current, Set.of())) {
+        if (!visited.contains(neighbor)) {
+          visited.add(neighbor);
+          queue.add(neighbor);
+        }
+      }
+    }
+
+    Collections.sort(result);
+
+    return result;
   }
+
+
 
   /**
    * Returns true if and only if it is possible both to reach v2 from v1 and to reach v1 from v2.
@@ -78,7 +297,86 @@ public class Practice {
    * @param v2 the target vertex
    * @return true if there is a two-way connection between v1 and v2, false otherwise
    */
+  // public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
+  //   if (v1 == null || v2 == null) return false;
+
+  //   // must work both ways, each with its own fresh notebook
+  //   return canReach(v1, v2, new HashSet<>()) && canReach(v2, v1, new HashSet<>());
+  // }
+
+  // // true if target can be reach from current
+  // private static <T> boolean canReach(Vertex<T> current, Vertex<T> target, Set<Vertex<T>> visited) {
+  //   if (current == target) return true;
+
+  //   // already checked this vertex
+  //   if (visited.contains(current)) return false;
+  //   visited.add(current);
+
+  //   // try every neighbor here
+  //   for (Vertex<T> neighbor : current.neighbors) {
+  //     // one of them found it -> stop and say true
+  //     if (canReach(neighbor, target, visited)) return true;
+  //   }
+  //   return false;
+  // }
+
+   // iterative BFS
+  // public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
+  //   if (v1 == null || v2 == null) return false;
+
+  //   return canReach(v1, v2) && canReach(v2, v1);
+  // }
+
+
+  // private static <T> boolean canReach(Vertex<T> start, Vertex<T> target) {
+  //   Set<Vertex<T>> visited = new HashSet<>();
+  //   Queue<Vertex<T>> queue = new LinkedList<>();
+  //   queue.add(start);
+  //   visited.add(start);
+
+  //   while (!queue.isEmpty()) {
+  //     Vertex<T> current = queue.poll();
+
+  //     // found it -> stop early
+  //     if (current == target) return true;
+
+  //     for (Vertex<T> neighbor : current.neighbors) {
+  //       if (!visited.contains(neighbor)) {
+  //         visited.add(neighbor);
+  //         queue.add(neighbor);
+  //       }
+  //     }
+  //   }
+  //   return false;
+  // }
+
+  //iterative DFS
   public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
+    if (v1 == null || v2 == null) return false;
+
+    // must work both ways here
+    return canReach(v1, v2) && canReach(v2, v1);
+  }
+
+  // turn true if target can reach from the start
+  private static <T> boolean canReach(Vertex<T> start, Vertex<T> target) {
+    Set<Vertex<T>> visited = new HashSet<>();
+    Stack<Vertex<T>> stack = new Stack<>();
+    stack.push(start);
+
+    while (!stack.isEmpty()) {
+      Vertex<T> current = stack.pop();
+
+      // found it -> stop early here
+      if (current == target) return true;
+
+      if (visited.contains(current)) continue;
+      visited.add(current);
+
+      for (Vertex<T> neighbor : current.neighbors) {
+        stack.push(neighbor);
+      }
+    }
     return false;
   }
 
@@ -94,7 +392,86 @@ public class Practice {
    * @param ending the ending vertex value
    * @return whether there exists a valid positive path from starting to ending
    */
+  // public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
+  //   if (starting <= 0 || ending <= 0) return false;
+
+  //   // start and end must both be in the graph
+  //   if (!graph.containsKey(starting) || !graph.containsKey(ending)) return false;
+
+  //   return positivePath(graph, starting, ending, new HashSet<>());
+  // }
+
+  // // true if ending can reach from current positive
+  // private static boolean positivePath(Map<Integer, Set<Integer>> graph, int current, int ending, Set<Integer> visited) {
+  //   if (current <= 0 || visited.contains(current)) return false;
+
+  //   // found it here
+  //   if (current == ending) return true;
+
+  //   visited.add(current);
+
+  //   // try every neighbor
+  //   for (int neighbor : graph.getOrDefault(current, Set.of())) {
+  //     // one of them found a path -> stop and say true
+  //     if (positivePath(graph, neighbor, ending, visited)) return true;
+  //   }
+  //   return false;
+  // }
+
+    // iterative DFS
+  // public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
+  //   if (starting <= 0 || ending <= 0) return false;
+
+  //   // start and end must both be in the graph
+  //   if (!graph.containsKey(starting) || !graph.containsKey(ending)) return false;
+
+  //   Set<Integer> visited = new HashSet<>();
+  //   Stack<Integer> stack = new Stack<>();
+  //   stack.push(starting);
+
+  //   while (!stack.isEmpty()) {
+  //     int current = stack.pop();
+
+  //     // found it -> stop early
+  //     if (current == ending) return true;
+
+  //     if (visited.contains(current)) continue;
+  //     visited.add(current);
+
+  //     for (int neighbor : graph.getOrDefault(current, Set.of())) {
+  //       // only walk through positive vertices
+  //       if (neighbor > 0) stack.push(neighbor);
+  //     }
+  //   }
+  //   return false;
+  // }
+
+  //  iterative BFS
   public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
+    if (starting <= 0 || ending <= 0) return false;
+
+    // start and end must both be in the graph
+    if (!graph.containsKey(starting) || !graph.containsKey(ending)) return false;
+
+    Set<Integer> visited = new HashSet<>();
+    Queue<Integer> queue = new LinkedList<>();
+    queue.add(starting);
+    visited.add(starting);
+
+    while (!queue.isEmpty()) {
+      int current = queue.poll();
+
+      // found it -> stop early
+      if (current == ending) return true;
+
+      for (int neighbor : graph.getOrDefault(current, Set.of())) {
+        // only walk through positive vertices we haven't seen yet
+        if (neighbor > 0 && !visited.contains(neighbor)) {
+          visited.add(neighbor);
+          queue.add(neighbor);
+        }
+      }
+    }
     return false;
   }
 
@@ -107,7 +484,72 @@ public class Practice {
    * @param companyName the name of the company to check for employment
    * @return true if a person in the extended network works at the specified company, false otherwise
    */
+  // public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+  //   return hasConnection(person, companyName, new HashSet<>());
+  // }
+
+  // // true if current or anyone in their network works at companyName
+  // private static boolean hasConnection(Professional current, String companyName, Set<Professional> visited) {
+  //   // nobody or if alr check the person -> return false
+  //   if (current == null || visited.contains(current)) return false;
+  //   visited.add(current);
+
+  //   if (current.getCompany().equals(companyName)) return true;
+
+  //   for (Professional connection : current.getConnections()) {
+
+  //     if (hasConnection(connection, companyName, visited)) return true;
+  //   }
+  //   return false;
+  // }
+
+
+    // iterative DFS
+  // public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+  //   if (person == null) return false;
+
+  //   Set<Professional> visited = new HashSet<>();
+  //   Stack<Professional> stack = new Stack<>();
+  //   stack.push(person);
+
+  //   while (!stack.isEmpty()) {
+  //     Professional current = stack.pop();
+
+  //     // alr check this person -> skip
+  //     if (visited.contains(current)) continue;
+  //     visited.add(current);
+
+  //     if (current.getCompany().equals(companyName)) return true;
+
+  //     for (Professional connection : current.getConnections()) {
+  //       stack.push(connection);
+  //     }
+  //   }
+  //   return false;
+  // }
+
+  // iterative BFS
   public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+    if (person == null) return false;
+
+    Set<Professional> visited = new HashSet<>();
+    Queue<Professional> queue = new LinkedList<>();
+    queue.add(person);
+    visited.add(person);
+
+    while (!queue.isEmpty()) {
+      Professional current = queue.poll();
+
+      if (current.getCompany().equals(companyName)) return true;
+
+      // closest connections get checked first
+      for (Professional connection : current.getConnections()) {
+        if (!visited.contains(connection)) {
+          visited.add(connection);
+          queue.add(connection);
+        }
+      }
+    }
     return false;
   }
 
@@ -179,6 +621,21 @@ public class Practice {
    * @return an unsorted list of next moves
    */
   public static List<int[]> nextMoves(char[][] board, int[] current, int[][] directions) {
-    return null;
+    List<int[]> moves = new ArrayList<>();
+    int curR = current[0];
+    int curC = current[1];
+
+    for (int[] direction : directions) {
+
+      int newR = curR + direction[0];
+      int newC = curC + direction[1];
+
+      if (newR >= 0 && newR < board.length
+          && newC >= 0 && newC < board[newR].length
+          && board[newR][newC] != 'X') {
+        moves.add(new int[] {newR, newC});
+      }
+    }
+    return moves;
   }
 }
