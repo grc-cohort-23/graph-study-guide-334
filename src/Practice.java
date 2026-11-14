@@ -5,6 +5,7 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 public class Practice {
@@ -32,7 +33,7 @@ public class Practice {
   public static int oddVertices(Vertex<Integer> starting) {
        if (starting == null) {
     return 0;
-//   }
+   }
 //   int count = 0;
 //   Set<Vertex<Integer>> visited = new HashSet<>();
 //   Deque<Vertex<Integer>> stack = new ArrayDeque<>();
@@ -53,19 +54,19 @@ public class Practice {
 // }
 
 // recursive DFS
-  Set<Vertex<Integer>> visited = new HashSet<>(); 
-  visited.add(starting);
-  return oddVerticesHelp(starting, visited); 
-       }
-         private static int oddVerticesHelp(Vertex<Integer> current, Set<Vertex<Integer>> visited) {
-    int count = current.data % 2 != 0 ? 1 : 0;
-    for (Vertex<Integer> neighbor : current.neighbors) {
-      if (visited.add(neighbor)) {
-        count += oddVerticesHelp(neighbor, visited);
-      }
-    }
-    return count;
-  }
+  // Set<Vertex<Integer>> visited = new HashSet<>(); 
+  // visited.add(starting);
+  // return oddVerticesHelp(starting, visited); 
+  //      }
+  //        private static int oddVerticesHelp(Vertex<Integer> current, Set<Vertex<Integer>> visited) {
+  //   int count = current.data % 2 != 0 ? 1 : 0;
+  //   for (Vertex<Integer> neighbor : current.neighbors) {
+  //     if (visited.add(neighbor)) {
+  //       count += oddVerticesHelp(neighbor, visited);
+  //     }
+  //   }
+  //   return count;
+  // }
 
 
   // Deque<Vertex<Integer>> stack = new ArrayDeque<>();
@@ -73,7 +74,24 @@ public class Practice {
   // visited.add(starting);
 
 //Interative BFS
-
+ int count = 0;
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Queue<Vertex<Integer>> queue = new ArrayDeque<>();
+    queue.add(starting);
+    visited.add(starting);
+    while (!queue.isEmpty()) {
+      Vertex<Integer> current = queue.remove();
+      if (current.data % 2 != 0) {
+        count++;
+      }
+      for (Vertex<Integer> neighbor : current.neighbors) {
+        if (visited.add(neighbor)) {
+          queue.add(neighbor);
+        }
+      }
+    }
+    return count;
+  }
 
   /**
    * Returns a *sorted* list of all values reachable from the starting vertex (including the starting vertex itself).
