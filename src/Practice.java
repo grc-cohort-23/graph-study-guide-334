@@ -460,22 +460,45 @@ public class Practice {
   //   return false;
   // }
 
+  // public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName){
+  //   if(person==null || companyName==null) return false;
+
+  //   Set<Professional> visited = new HashSet<>();
+  //   Deque<Professional> stack = new ArrayDeque<>();
+  //   stack.push(person);
+
+  //   while(!stack.isEmpty()){
+  //     Professional current = stack.pop();
+
+  //     if(current==null || !visited.add(current)) continue;
+
+  //     if(companyName==current.getCompany()) return true;
+
+  //     for(Professional connection : current.getConnections()){
+  //       stack.push(connection);
+  //     }
+  //   }
+    
+  //   return false;
+  // }
+
   public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName){
     if(person==null || companyName==null) return false;
 
     Set<Professional> visited = new HashSet<>();
-    Deque<Professional> stack = new ArrayDeque<>();
-    stack.push(person);
+    Queue<Professional> queue = new ArrayDeque<>();
+    queue.add(person);
+    visited.add(person);
 
-    while(!stack.isEmpty()){
-      Professional current = stack.pop();
-
-      if(current==null || !visited.add(current)) continue;
+    while(!queue.isEmpty()){
+      Professional current = queue.remove();
 
       if(companyName==current.getCompany()) return true;
 
       for(Professional connection : current.getConnections()){
-        stack.push(connection);
+        if(connection!=null && visited.add(connection)){
+          queue.add(connection);
+        }
       }
     }
     
