@@ -66,9 +66,10 @@ public class Practice {
     }
     Set<Vertex<Integer>> visited = new HashSet<>();
     Stack<Vertex<Integer>> stack = new Stack<>();
+    int count = 0;
 
     stack.push(starting);
-    while (stack.isEmpty()){
+    while (!stack.isEmpty()){
       Vertex<Integer> current = stack.pop();
 
       if(visited.contains(current)){
@@ -563,6 +564,10 @@ public class Practice {
     }
     return false;
     }
+
+
+
+      
   
 
   /**
