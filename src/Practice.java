@@ -489,24 +489,45 @@ public class Practice {
    * @param companyName the name of the company to check for employment
    * @return true if a person in the extended network works at the specified company, false otherwise
    */
-    public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
-      if (person == null) return false;
+   // Iterative DFS
+   public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+    if (person == null) return false;
 
-      Set<Professional> visited = new HashSet<>();
-      Queue<Professional> queue = new ArrayDeque<>();
-      visited.add(person);
-      queue.add(person);
+    Set<Professional> visited = new HashSet<>();
+    Deque<Professional> stack = new ArrayDeque<>();
+    stack.push(person);
 
-      while (!queue.isEmpty()) {
-        Professional current = queue.poll();
-        if (Objects.equals(current.getCompany(), companyName)) return true;
+    while (!stack.isEmpty()) {
+      Professional current = stack.pop();
+      if (!visited.add(current)) continue;
+      if (Objects.equals(current.getCompany(), companyName)) return true;
 
-        for (Professional connection : current.getConnections()) {
-          if (visited.add(connection)) queue.add(connection);
-        }
+      for (Professional connection : current.getConnections()) {
+        if (!visited.contains(connection)) stack.push(connection);
       }
-      return false;
     }
+    return false;
+  }
+  
+    // Iterative BFS
+    // public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+    //   if (person == null) return false;
+
+    //   Set<Professional> visited = new HashSet<>();
+    //   Queue<Professional> queue = new ArrayDeque<>();
+    //   visited.add(person);
+    //   queue.add(person);
+
+    //   while (!queue.isEmpty()) {
+    //     Professional current = queue.poll();
+    //     if (Objects.equals(current.getCompany(), companyName)) return true;
+
+    //     for (Professional connection : current.getConnections()) {
+    //       if (visited.add(connection)) queue.add(connection);
+    //     }
+    //   }
+    //   return false;
+    // }
     
   // public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
   //   if(person == null) return false;
