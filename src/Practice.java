@@ -657,7 +657,20 @@ public class Practice {
     Set<Professional> visited = new HashSet<>();
     Stack<Professional> stack = new Stack<>();
 
-   
+    stack.push(person);
+
+    while (!stack.isEmpty()) {
+        Professional current = stack.pop();
+
+        if (visited.contains(current)) {
+            continue;
+        }
+
+        visited.add(current);
+
+      }
+    }
+  }
 
 
       
