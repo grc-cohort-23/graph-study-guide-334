@@ -1,9 +1,11 @@
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Collections;
+import java.util.Deque;
 
 public class Practice {
 
@@ -27,25 +29,51 @@ public class Practice {
    * @param starting the starting vertex (may be null)
    * @return the number of vertices with odd values reachable from the starting vertex
    */
-  public static int oddVertices(Vertex<Integer> starting) {
-    Set<Vertex<Integer>> visited = new HashSet<>();
-    return oddVertices(starting, visited);
-  }
+  // public static int oddVertices(Vertex<Integer> starting) {
+  //   Set<Vertex<Integer>> visited = new HashSet<>();
+  //   return oddVertices(starting, visited);
+  // }
 
-  private static int oddVertices(Vertex<Integer> current, Set<Vertex<Integer>> visited){
-    if(current==null) return 0;
-    if(visited.contains(current)) return 0;
-    visited.add(current);
+  // private static int oddVertices(Vertex<Integer> current, Set<Vertex<Integer>> visited){
+  //   if(current==null) return 0;
+  //   if(visited.contains(current)) return 0;
+  //   visited.add(current);
+
+  //   int totalOdd = 0;
+  //   if(current.data %2 != 0) totalOdd++;
+    
+  //   for(Vertex<Integer> neighbor : current.neighbors){
+  //     totalOdd += oddVertices(neighbor, visited);
+  //   }
+
+  //   return totalOdd;
+  // }
+
+  public static int oddVertices(Vertex<Integer> starting){
+    if (starting==null) return 0;
+
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Deque<Vertex<Integer>> stack = new ArrayDeque<>();
+    stack.push(starting);
 
     int totalOdd = 0;
-    if(current.data %2 != 0) totalOdd++;
-    
-    for(Vertex<Integer> neighbor : current.neighbors){
-      totalOdd += oddVertices(neighbor, visited);
+
+    while (!stack.isEmpty()) {
+      Vertex<Integer> current = stack.pop();
+
+      if (current == null) continue;
+      if (!visited.add(current)) continue;
+
+      if (current.data % 2 != 0) totalOdd++;       
+
+      for (Vertex<Integer> neighbor : current.neighbors) {
+        stack.push(neighbor);           
+      }
     }
 
     return totalOdd;
   }
+  
 
   /**
    * Returns a *sorted* list of all values reachable from the starting vertex (including the starting vertex itself).
@@ -65,24 +93,51 @@ public class Practice {
    * @param starting the starting vertex (may be null)
    * @return a sorted list of all reachable vertex values by 
    */
-  public static List<Integer> sortedReachable(Vertex<Integer> starting) {
-    return sortedReachable(starting, new HashSet<>(), new ArrayList<>());
-  }
+  // public static List<Integer> sortedReachable(Vertex<Integer> starting) {
+  //   return sortedReachable(starting, new HashSet<>(), new ArrayList<>());
+  // }
 
-  private static List<Integer> sortedReachable(Vertex<Integer> current, Set<Vertex<Integer>> visited, List<Integer> nums){
-    if(current==null || visited.contains(current)) return new ArrayList<>();
-    visited.add(current);
+  // private static List<Integer> sortedReachable(Vertex<Integer> current, Set<Vertex<Integer>> visited, List<Integer> nums){
+  //   if(current==null || visited.contains(current)) return new ArrayList<>();
+  //   visited.add(current);
 
-    nums.add(current.data);
+  //   nums.add(current.data);
 
-    for(Vertex<Integer> neighbor: current.neighbors){
-      sortedReachable(neighbor, visited, nums);
+  //   for(Vertex<Integer> neighbor: current.neighbors){
+  //     sortedReachable(neighbor, visited, nums);
+  //   }
+
+  //   Collections.sort(nums);
+
+  //   return nums;
+  // }
+
+    public static List<Integer> sortedReachable(Vertex<Integer> starting){
+      if (starting==null) return new ArrayList<Integer>();
+
+      Set<Vertex<Integer>> visited = new HashSet<>();
+      Deque<Vertex<Integer>> stack = new ArrayDeque<>();
+      stack.push(starting);
+
+      List<Integer> nums = new ArrayList<>();
+
+      while(!stack.isEmpty()){
+        Vertex<Integer> current = stack.pop();
+
+        if(current==null) continue;
+        if(!visited.add(current)) continue;
+
+        nums.add(current.data);
+
+        for(Vertex<Integer> neighbor : current.neighbors){
+          stack.push(neighbor);
+        }
+      }
+
+      Collections.sort(nums);
+
+      return nums;
     }
-
-    Collections.sort(nums);
-
-    return nums;
-  }
 
   /**
    * Returns a sorted list of all values reachable from the given starting vertex in the provided graph.
