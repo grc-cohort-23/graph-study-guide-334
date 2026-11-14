@@ -209,6 +209,26 @@ public class Practice {
 
 
 // recursive DFS
+ Set<Integer> visited = new HashSet<>();
+    visited.add(starting);
+    sortedReachableHelper(graph, starting, visited, result);
+    Collections.sort(result);
+    return result;
+  }
+
+  private static void sortedReachableHelper(Map<Integer, Set<Integer>> graph, int current,
+      Set<Integer> visited, List<Integer> result) {
+    result.add(current);
+    Set<Integer> neighbors = graph.get(current);
+    if (neighbors == null) {
+      return;
+    }
+    for (Integer neighbor : neighbors) {
+      if (visited.add(neighbor)) {
+        sortedReachableHelper(graph, neighbor, visited, result);
+      }
+    }
+  }
 
 //Interative BFS
 
