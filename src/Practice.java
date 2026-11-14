@@ -431,8 +431,41 @@ public class Practice {
 }
 
 
-  
-  
+  //bfs
+  public static <T> boolean twoWayIterativeBFS(Vertex<T> v1, Vertex<T> v2) {
+      if (v1 == null || v2 == null) {
+          return false;
+      }
+
+      return canReachBFS(v1, v2) && canReachBFS(v2, v1);
+  }
+
+  private static <T> boolean canReachBFS(Vertex<T> start, Vertex<T> target) {
+    Set<Vertex<T>> visited = new HashSet<>();
+    Queue<Vertex<T>> queue = new LinkedList<>();
+
+    queue.add(start);
+    visited.add(start);
+
+    while (!queue.isEmpty()) {
+        Vertex<T> current = queue.remove();
+
+        if (current == target) {
+            return true;
+        }
+
+        for (Vertex<T> neighbor : current.neighbors) {
+            if (neighbor != null && !visited.contains(neighbor)) {
+                visited.add(neighbor);
+                queue.add(neighbor);
+          }
+      }
+  }
+      return false;
+  }
+
+    
+    
 
 
 
