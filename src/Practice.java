@@ -2,6 +2,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -54,34 +55,50 @@ public class Practice {
   //     return count;
   //   }
 
-  public static int oddVertices(Vertex<Integer> starting) {
-    if(starting == null) return 0; 
+  // public static int oddVertices(Vertex<Integer> starting) {
+  //   if(starting == null) return 0; 
 
-    Set<Vertex<Integer>> visited = new HashSet<>();
-    Queue<Vertex<Integer>> queue = new ArrayDeque();
+  //   Set<Vertex<Integer>> visited = new HashSet<>();
+  //   Queue<Vertex<Integer>> queue = new ArrayDeque();
     
-    visited.add(starting);
-    queue.add(starting);
+  //   visited.add(starting);
+  //   queue.add(starting);
 
-    int count = 0;
+  //   int count = 0;
 
-    while(!queue.isEmpty()){
-      Vertex<Integer> current = queue.poll();
+  //   while(!queue.isEmpty()){
+  //     Vertex<Integer> current = queue.poll();
 
-      if(current.data % 2 != 0) count++;
+  //     if(current.data % 2 != 0) count++;
 
-      for(Vertex<Integer> n : current.neighbors){
-        if(visited.add(n)) {
-          queue.add(n);
+  //     for(Vertex<Integer> n : current.neighbors){
+  //       if(visited.add(n)) {
+  //         queue.add(n);
+  //       }
+  //     }
+  //   }
+  //   return count; 
+  // }
+
+    public static int oddVertices(Vertex<Integer> starting) {
+      if (starting == null) return 0;
+      Set<Vertex<Integer>> visited = new HashSet<>();
+      Deque<Vertex<Integer>> stack = new ArrayDeque<>();
+      stack.push(starting);
+      int count = 0;
+
+      while (!stack.isEmpty()) {
+        Vertex<Integer> current = stack.pop();
+        if (!visited.add(current)) continue;
+        if (current.data % 2 != 0) count++;
+
+        for (Vertex<Integer> neighbor : current.neighbors) {
+          if (!visited.contains(neighbor)) stack.push(neighbor);
         }
       }
+      return count;
     }
-    return count; 
-  }
   
-  
-
-
   /**
    * Returns a *sorted* list of all values reachable from the starting vertex (including the starting vertex itself).
    * If duplicate vertex data exists, duplicates should appear in the output.
@@ -100,29 +117,51 @@ public class Practice {
    * @param starting the starting vertex (may be null)
    * @return a sorted list of all reachable vertex values by 
    */
-  public static List<Integer> sortedReachable(Vertex<Integer> starting){
+    public static List<Integer> sortedReachable(Vertex<Integer> starting) {
       List<Integer> values = new ArrayList<>();
       if (starting == null) return values;
 
       Set<Vertex<Integer>> visited = new HashSet<>();
-      Queue<Vertex<Integer>> queue = new ArrayDeque<>();
-      visited.add(starting);
-      queue.add(starting);
+      Deque<Vertex<Integer>> stack = new ArrayDeque<>();
+      stack.push(starting);
 
-      while (!queue.isEmpty()) {
-        Vertex<Integer> current = queue.poll();
+      while (!stack.isEmpty()) {
+        Vertex<Integer> current = stack.pop();
+        if (!visited.add(current)) continue;
         values.add(current.data);
-        
-        for (Vertex<Integer> n : current.neighbors) {
-            if (visited.add(n)) queue.add(n);
-          }
+
+        for (Vertex<Integer> neighbor : current.neighbors) {
+          if (!visited.contains(neighbor)) stack.push(neighbor);
         }
-        Collections.sort(values);
-        return values;
       }
+      Collections.sort(values);
+      return values;
+    }
+    
+  // Iterative BFS
+  // public static List<Integer> sortedReachable(Vertex<Integer> starting){
+  //     List<Integer> values = new ArrayList<>();
+  //     if (starting == null) return values;
+
+  //     Set<Vertex<Integer>> visited = new HashSet<>();
+  //     Queue<Vertex<Integer>> queue = new ArrayDeque<>();
+  //     visited.add(starting);
+  //     queue.add(starting);
+
+  //     while (!queue.isEmpty()) {
+  //       Vertex<Integer> current = queue.poll();
+  //       values.add(current.data);
+        
+  //       for (Vertex<Integer> n : current.neighbors) {
+  //           if (visited.add(n)) queue.add(n);
+  //         }
+  //       }
+  //       Collections.sort(values);
+  //       return values;
+  //     }
 
 
-
+  //Recursive DFS 
   // public static List<Integer> sortedReachable(Vertex<Integer> starting) {
   //   List<Integer> values = new ArrayList<>();
 
