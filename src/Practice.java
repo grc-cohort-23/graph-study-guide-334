@@ -208,18 +208,45 @@ public class Practice {
    * @param v2 the target vertex
    * @return true if there is a two-way connection between v1 and v2, false otherwise
    */
-  public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
-    return twoWay(v1, v2, new HashSet<>()) && twoWay(v2, v1, new HashSet<>());
+  // public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
+  //   return twoWay(v1, v2, new HashSet<>()) && twoWay(v2, v1, new HashSet<>());
+  // }
+
+  // private static <T> boolean twoWay(Vertex<T> current, Vertex<T> target, Set<Vertex<T>> visited){
+  //   if(current==null || target==null || visited.contains(current)) return false;
+  //   visited.add(current);
+
+  //   if(current==target) return true;
+
+  //   for(Vertex<T> neighbor : current.neighbors){
+  //     if(twoWay(neighbor, target, visited)) return true;
+  //   }
+
+  //   return false;
+  // }
+
+  public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2){
+    return twoWayHelper(v1, v2) && twoWayHelper(v2, v1);
   }
 
-  private static <T> boolean twoWay(Vertex<T> current, Vertex<T> target, Set<Vertex<T>> visited){
-    if(current==null || target==null || visited.contains(current)) return false;
-    visited.add(current);
+  private static <T> boolean twoWayHelper(Vertex<T> starting, Vertex<T> target){
+    if(starting==null || target==null) return false;
 
-    if(current==target) return true;
+    Set<Vertex<T>> visited = new HashSet<>();
+    Deque<Vertex<T>> stack = new ArrayDeque<>();
+    stack.push(starting);
 
-    for(Vertex<T> neighbor : current.neighbors){
-      if(twoWay(neighbor, target, visited)) return true;
+    while(!stack.isEmpty()){
+      Vertex<T> current = stack.pop();
+
+      if(current==null) continue;
+      if(!visited.add(current)) continue;
+
+      if(current==target) return true;
+
+      for(Vertex<T> neighbor : current.neighbors){
+        stack.push(neighbor);
+      }
     }
 
     return false;
