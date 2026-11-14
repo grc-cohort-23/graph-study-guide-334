@@ -1,3 +1,5 @@
+import static org.junit.jupiter.api.DynamicTest.stream;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -321,7 +323,93 @@ public class Practice {
     }
   }
 
-  /**
+  // /**
+  //  * Returns true if and only if it is possible both to reach v2 from v1 and to
+  //  * reach v1 from v2.
+  //  * A vertex is always considered reachable from itself.
+  //  * If either v1 or v2 is null or if one cannot reach the other, returns false.
+  //  *
+  //  * Example:
+  //  * If v1 and v2 are connected in a cycle, the method should return true.
+  //  * If v1 equals v2, the method should also return true.
+  //  *
+  //  * @param <T> the type of data stored in the vertex
+  //  * @param v1  the starting vertex
+  //  * @param v2  the target vertex
+  //  * @return true if there is a two-way connection between v1 and v2, false
+  //  *         otherwise
+  //  */
+  // public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
+  //   if (v1 == null || v2 == null)
+  //     return false;
+  //   HashSet<Vertex<T>> visited1 = new HashSet<>();
+  //   HashSet<Vertex<T>> visited2 = new HashSet<>();
+  //   return twoWayHelper(visited1, v1, v2) && twoWayHelper(visited2, v2, v1);
+  // }
+
+  // private static <T> boolean twoWayHelper(HashSet<Vertex<T>> visited, Vertex<T> current, Vertex<T> target) {
+  //   if (current == null)
+  //     return false;
+  //   if (current == target)
+  //     return true;
+  //   if (visited.contains(current))
+  //     return false;
+
+  //   visited.add(current);
+
+  //   for (Vertex<T> neighbor : current.neighbors) {
+  //     if (twoWayHelper(visited, neighbor, target)) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
+
+
+//   /** Iterative DFS **
+//    * Returns true if and only if it is possible both to reach v2 from v1 and to
+//    * reach v1 from v2.
+//    * A vertex is always considered reachable from itself.
+//    * If either v1 or v2 is null or if one cannot reach the other, returns false.
+//    *
+//    * Example:
+//    * If v1 and v2 are connected in a cycle, the method should return true.
+//    * If v1 equals v2, the method should also return true.
+//    *
+//    * @param <T> the type of data stored in the vertex
+//    * @param v1  the starting vertex
+//    * @param v2  the target vertex
+//    * @return true if there is a two-way connection between v1 and v2, false
+//    *         otherwise
+//    */
+//   public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
+//     if (v1 == null || v2 == null)
+//       return false;
+//     HashSet<Vertex<T>> visited1 = new HashSet<>();
+//     HashSet<Vertex<T>> visited2 = new HashSet<>();
+//     return itrativeHelper(v1, v2) && itrativeHelper(v2, v1);
+//   }
+
+//   private static <T> boolean itrativeHelper(Vertex<T> start, Vertex<T> target) {
+//     HashSet<Vertex<T>> visited = new HashSet<>();
+//     Stack<Vertex<T>> stack = new Stack<>();
+//     stack.push(start);
+
+//     while(!stack.isEmpty()) {
+//       Vertex<T> current = stack.pop();
+//       if(current == target) {
+//         return true;
+//       }
+//       if(current == null || visited.contains(current)) continue;
+//       visited.add(current);
+//     for (Vertex<T> neighbor : current.neighbors) {
+//           stack.push(neighbor);
+//     }
+//   }
+//   return false;
+// }
+
+/** Iterative BFS **
    * Returns true if and only if it is possible both to reach v2 from v1 and to
    * reach v1 from v2.
    * A vertex is always considered reachable from itself.
@@ -342,26 +430,29 @@ public class Practice {
       return false;
     HashSet<Vertex<T>> visited1 = new HashSet<>();
     HashSet<Vertex<T>> visited2 = new HashSet<>();
-    return twoWayHelper(visited1, v1, v2) && twoWayHelper(visited2, v2, v1);
+    return itrativeHelper(v1, v2) && itrativeHelper(v2, v1);
   }
 
-  private static <T> boolean twoWayHelper(HashSet<Vertex<T>> visited, Vertex<T> current, Vertex<T> target) {
-    if (current == null)
-      return false;
-    if (current == target)
-      return true;
-    if (visited.contains(current))
-      return false;
+  private static <T> boolean itrativeHelper(Vertex<T> start, Vertex<T> target) {
+    HashSet<Vertex<T>> visited = new HashSet<>();
+    Queue<Vertex<T>> queue = new ArrayDeque<>();
+    visited.add(start);
+    queue.offer(start);
 
-    visited.add(current);
-
-    for (Vertex<T> neighbor : current.neighbors) {
-      if (twoWayHelper(visited, neighbor, target)) {
+    while(!queue.isEmpty()) {
+      Vertex<T> current = queue.poll();
+      if(current == target) {
         return true;
       }
+      
+    for (Vertex<T> neighbor : current.neighbors) {
+      if(neighbor == null || visited.contains(neighbor)) continue;
+      visited.add(neighbor);
+      queue.offer(neighbor);
     }
-    return false;
   }
+  return false;
+}
 
   /**
    * Returns whether there exists a path from the starting to ending vertex that
