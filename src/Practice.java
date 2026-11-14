@@ -52,6 +52,10 @@ public class Practice {
   return count;
 }
 
+// recursive DFS
+//Iterative DFS
+//Interative BFS
+
 
   /**
    * Returns a *sorted* list of all values reachable from the starting vertex (including the starting vertex itself).
@@ -94,6 +98,10 @@ public class Practice {
   }
   
 
+// recursive DFS
+//Iterative DFS
+//Interative BFS
+
   /**
    * Returns a sorted list of all values reachable from the given starting vertex in the provided graph.
    * The graph is represented as a map where each key is a vertex and its corresponding value is a set of neighbors.
@@ -130,6 +138,10 @@ public class Practice {
     return result;
   }
 
+
+// recursive DFS
+//Iterative DFS
+//Interative BFS
 
   /**
    * Returns true if and only if it is possible both to reach v2 from v1 and to reach v1 from v2.
@@ -186,6 +198,12 @@ public class Practice {
     return false;
   }
 
+
+
+// recursive DFS
+//Iterative DFS
+//Interative BFS
+
   /**
    * Returns whether there exists a path from the starting to ending vertex that includes only positive values.
    * 
@@ -230,6 +248,12 @@ public class Practice {
     return false;
   }
 
+
+
+// recursive DFS
+//Iterative DFS
+//Interative BFS
+
   /**
    * Returns true if a professional has anyone in their extended network (reachable through any number of links)
    * that works for the given company. The search includes the professional themself.
@@ -263,6 +287,12 @@ public class Practice {
     }
     return false;
   }
+
+
+
+// recursive DFS
+//Iterative DFS
+//Interative BFS
 
   /**
    * Returns a list of possible next moves starting from a given position.
@@ -345,3 +375,10 @@ public class Practice {
     return moves;
   }
 }
+
+
+
+// recursive DFS
+//Iterative DFS
+//Interative BFS
+
