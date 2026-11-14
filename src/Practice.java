@@ -454,7 +454,51 @@ public class Practice {
   return false;
 }
 
-  /**
+  // /** Itertive DFS **
+  //  * Returns whether there exists a path from the starting to ending vertex that
+  //  * includes only positive values.
+  //  * 
+  //  * The graph is represented as a map where each key is a vertex and each value
+  //  * is a set of directly reachable neighbor vertices. A vertex is always
+  //  * considered reachable from itself.
+  //  * If the starting or ending vertex is not positive or is not present in the
+  //  * keys of the map, or if no valid path exists,
+  //  * returns false.
+  //  *
+  //  * @param graph    a map representing the graph
+  //  * @param starting the starting vertex value
+  //  * @param ending   the ending vertex value
+  //  * @return whether there exists a valid positive path from starting to ending
+  //  */
+  // public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
+
+  //   if (starting <= 0 || ending <= 0 || !graph.containsKey(starting) || !graph.containsKey(ending))
+  //     return false;
+
+  //   Stack<Integer> stack = new Stack<>();
+  //   HashSet<Integer> visited = new HashSet<>();
+  //   stack.push(starting);
+
+  //   while(!stack.isEmpty()) {
+
+  //   int current = stack.pop();
+  //   if (current == ending)
+  //     return true;
+  //   if (current <= 0 || visited.contains(current)) continue;
+
+  //   visited.add(current);
+
+  //   if (graph.containsKey(current)) {
+  //     for (Integer neighbor : graph.get(current)) {
+  //       stack.push(neighbor);
+  //     }
+  //   }
+  // }
+  //   return false;
+  // }
+
+
+  /** Itertive BFS **
    * Returns whether there exists a path from the starting to ending vertex that
    * includes only positive values.
    * 
@@ -475,28 +519,26 @@ public class Practice {
     if (starting <= 0 || ending <= 0 || !graph.containsKey(starting) || !graph.containsKey(ending))
       return false;
 
+    Queue<Integer> queue = new ArrayDeque<>();
     HashSet<Integer> visited = new HashSet<>();
-    return pathHelper(graph, visited, starting, ending);
-  }
+    visited.add(starting); 
+    queue.offer(starting);
 
-  private static boolean pathHelper(Map<Integer, Set<Integer>> graph, HashSet<Integer> visited, int current,
-      int target) {
-    if (current <= 0)
-      return false;
-    if (current == target)
+    while(!queue.isEmpty()) {
+
+    int current = queue.poll();
+    if (current == ending)
       return true;
-    if (visited.contains(current))
-      return false;
-
-    visited.add(current);
+    
 
     if (graph.containsKey(current)) {
       for (Integer neighbor : graph.get(current)) {
-        if (pathHelper(graph, visited, neighbor, target))
-          return true;
+        if (neighbor == null || neighbor <= 0 || visited.contains(neighbor)) continue;
+        visited.add(neighbor);
+        queue.offer(neighbor);
       }
     }
-
+  }
     return false;
   }
 
