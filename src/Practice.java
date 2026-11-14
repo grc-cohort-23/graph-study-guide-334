@@ -314,20 +314,42 @@ public class Practice {
    * @param companyName the name of the company to check for employment
    * @return true if a person in the extended network works at the specified company, false otherwise
    */
-  public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
-    return hasExtendedConnectionAtCompany(person, companyName, new HashSet<>());
-  }
+  // public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+  //   return hasExtendedConnectionAtCompany(person, companyName, new HashSet<>());
+  // }
 
-  public static boolean hasExtendedConnectionAtCompany(Professional currentPerson, String targetCompany, Set<Professional> visited){
-    if(currentPerson==null || targetCompany==null || visited.contains(currentPerson)) return false;
-    visited.add(currentPerson);
+  // public static boolean hasExtendedConnectionAtCompany(Professional currentPerson, String targetCompany, Set<Professional> visited){
+  //   if(currentPerson==null || targetCompany==null || visited.contains(currentPerson)) return false;
+  //   visited.add(currentPerson);
 
-    if(currentPerson.getCompany()==targetCompany) return true;
+  //   if(currentPerson.getCompany()==targetCompany) return true;
 
-    for(Professional person : currentPerson.getConnections()){
-      if(hasExtendedConnectionAtCompany(person, targetCompany, visited)) return true;
+  //   for(Professional person : currentPerson.getConnections()){
+  //     if(hasExtendedConnectionAtCompany(person, targetCompany, visited)) return true;
+  //   }
+
+  //   return false;
+  // }
+
+  public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName){
+    if(person==null || companyName==null) return false;
+
+    Set<Professional> visited = new HashSet<>();
+    Deque<Professional> stack = new ArrayDeque<>();
+    stack.push(person);
+
+    while(!stack.isEmpty()){
+      Professional current = stack.pop();
+
+      if(current==null || !visited.add(current)) continue;
+
+      if(companyName==current.getCompany()) return true;
+
+      for(Professional connection : current.getConnections()){
+        stack.push(connection);
+      }
     }
-
+    
     return false;
   }
 
