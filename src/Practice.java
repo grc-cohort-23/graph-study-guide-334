@@ -206,6 +206,37 @@ public class Practice {
     }
 
 
+    //bfs queue
+    public static List<Integer> sortedReachableBFS(Vertex<Integer> starting) {
+    List<Integer> result = new ArrayList<>();
+
+    if (starting == null) {
+        return result;
+    }
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Queue<Vertex<Integer>> queue = new LinkedList<>();
+
+    queue.add(starting);
+    visited.add(starting);
+
+    while (!queue.isEmpty()) {
+      Vertex<Integer> current = queue.remove();
+
+      result.add(current.data);
+
+      for (Vertex<Integer> neighbor : current.neighbors) {
+        if (neighbor != null && !visited.contains(neighbor)) {
+            visited.add(neighbor);
+            queue.add(neighbor);
+        }
+    }
+  }
+    Collections.sort(result);
+
+    return result;
+  }
+
+
 
   /**
    * Returns a sorted list of all values reachable from the given starting vertex in the provided graph.
@@ -244,6 +275,40 @@ public class Practice {
     for (int neighbor : graph.get(current)) {
         sortedMapHelper(graph, neighbor, visited, result);
     }
+  }
+
+      //iterative dfs stack 
+    public static List<Integer> sortedReachableIterative(
+    Map<Integer, Set<Integer>> graph, int starting) {
+         List<Integer> result = new ArrayList<>();
+
+    if (!graph.containsKey(starting)) {
+        return result;
+    }
+
+    Set<Integer> visited = new HashSet<>();
+    Stack<Integer> stack = new Stack<>();
+  
+    stack.push(starting);
+
+    while (!stack.isEmpty()) {
+      int current = stack.pop();
+
+      if (visited.contains(current) || !graph.containsKey(current)) {
+        continue;
+       }
+        visited.add(current);
+        result.add(current);
+
+      for (int neighbor : graph.get(current)) {
+          if (!visited.contains(neighbor)) {
+              stack.push(neighbor);
+        }
+    }
+  }
+
+    Collections.sort(result);
+    return result;
   }
 
   /**
@@ -292,6 +357,17 @@ public class Practice {
 
       return false;
   }
+
+  //dfs stack 
+  
+  
+
+
+
+
+
+
+
 
   /**
    * Returns whether there exists a path from the starting to ending vertex that includes only positive values.
