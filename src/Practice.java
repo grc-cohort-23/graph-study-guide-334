@@ -344,18 +344,64 @@ public class Practice {
     if (starting <= 0 || ending <= 0  || !graph.containsKey(starting) || !graph.containsKey(ending)) {
       return false;
     }
-    Set<Integer> visited = new HashSet<>();
-    Deque<Integer> stack = new ArrayDeque<>();
+    // Set<Integer> visited = new HashSet<>();
+    // Deque<Integer> stack = new ArrayDeque<>();
 
     //stack push start
     //visited add starting
 
     //while stack isnt empty -> int current = stack.pop
     // if current == ending -> return true
-    stack.push(starting); 
+  //   stack.push(starting); 
+  //   visited.add(starting);
+  //   while (!stack.isEmpty()) {
+  //     int current = stack.pop();
+  //     if (current == ending) {
+  //       return true;
+  //     }
+  //     Set<Integer> neighbors = graph.get(current);
+  //     if (neighbors == null) {
+  //       continue;
+  //     }
+  //     for (Integer neighbor : neighbors) {
+  //       if (neighbor > 0 && visited.add(neighbor)) {
+  //         stack.push(neighbor);
+  //       }
+  //     }
+  //   }
+  //   return false;
+  // }
+
+
+//Iterative DFS
+  //     Set<Integer> visited = new HashSet<>();
+  //   Queue<Integer> queue = new ArrayDeque<>();
+  //   queue.add(starting);
+  //   visited.add(starting);
+  //   while (!queue.isEmpty()) {
+  //     int current = queue.remove();
+  //     if (current == ending) {
+  //       return true;
+  //     }
+  //     Set<Integer> neighbors = graph.get(current);
+  //     if (neighbors == null) {
+  //       continue;
+  //     }
+  //     for (Integer neighbor : neighbors) {
+  //       if (neighbor > 0 && visited.add(neighbor)) {
+  //         queue.add(neighbor);
+  //       }
+  //     }
+  //   }
+  //   return false;
+  // }
+//Interative BFS
+Set<Integer> visited = new HashSet<>();
+    Queue<Integer> queue = new ArrayDeque<>();
+    queue.add(starting);
     visited.add(starting);
-    while (!stack.isEmpty()) {
-      int current = stack.pop();
+    while (!queue.isEmpty()) {
+      int current = queue.remove();
       if (current == ending) {
         return true;
       }
@@ -365,19 +411,12 @@ public class Practice {
       }
       for (Integer neighbor : neighbors) {
         if (neighbor > 0 && visited.add(neighbor)) {
-          stack.push(neighbor);
+          queue.add(neighbor);
         }
       }
     }
     return false;
   }
-
-
-
-// recursive DFS
-//Iterative DFS
-//Interative BFS
-
   /**
    * Returns true if a professional has anyone in their extended network (reachable through any number of links)
    * that works for the given company. The search includes the professional themself.
@@ -391,31 +430,31 @@ public class Practice {
      if (person == null) {
       return false;
     }
-    Set<Professional> visited = new HashSet<>();
-    Deque<Professional> stack = new ArrayDeque<>();
-    stack.push(person);
-    visited.add(person);
-    while (!stack.isEmpty()) {
-      Professional current = stack.pop();
-      if (companyName != null && companyName.equals(current.getCompany())) {
-        return true;
-      }
-      if (current.getConnections() == null) {
-        continue;
-      }
-      for (Professional next : current.getConnections()) {
-        if (next != null && visited.add(next)) {
-          stack.push(next);
-        }
-      }
-    }
-    return false;
-  }
+  //   Set<Professional> visited = new HashSet<>();
+  //   Deque<Professional> stack = new ArrayDeque<>();
+  //   stack.push(person);
+  //   visited.add(person);
+  //   while (!stack.isEmpty()) {
+  //     Professional current = stack.pop();
+  //     if (companyName != null && companyName.equals(current.getCompany())) {
+  //       return true;
+  //     }
+  //     if (current.getConnections() == null) {
+  //       continue;
+  //     }
+  //     for (Professional next : current.getConnections()) {
+  //       if (next != null && visited.add(next)) {
+  //         stack.push(next);
+  //       }
+  //     }
+  //   }
+  //   return false;
+  // }
 
 
 
 // recursive DFS
-//Iterative DFS
+
 //Interative BFS
 
   /**
