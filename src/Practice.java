@@ -455,7 +455,51 @@ Set<Integer> visited = new HashSet<>();
 
 // recursive DFS
 
+// Set<Integer> visited = new HashSet<>();
+//     Queue<Integer> queue = new ArrayDeque<>();
+//     queue.add(starting);
+//     visited.add(starting);
+//     while (!queue.isEmpty()) {
+//       int current = queue.remove();
+//       if (current == ending) {
+//         return true;
+//       }
+//       Set<Integer> neighbors = graph.get(current);
+//       if (neighbors == null) {
+//         continue;
+//       }
+//       for (Integer neighbor : neighbors) {
+//         if (neighbor > 0 && visited.add(neighbor)) {
+//           queue.add(neighbor);
+//         }
+//       }
+//     }
+//     return false;
+//   }
+
 //Interative BFS
+
+Set<Integer> visited = new HashSet<>();
+    Queue<Integer> queue = new ArrayDeque<>();
+    queue.add(starting);
+    visited.add(starting);
+    while (!queue.isEmpty()) {
+      int current = queue.remove();
+      if (current == ending) {
+        return true;
+      }
+      Set<Integer> neighbors = graph.get(current);
+      if (neighbors == null) {
+        continue;
+      }
+      for (Integer neighbor : neighbors) {
+        if (neighbor > 0 && visited.add(neighbor)) {
+          queue.add(neighbor);
+        }
+      }
+    }
+    return false;
+  }
 
   /**
    * Returns a list of possible next moves starting from a given position.
