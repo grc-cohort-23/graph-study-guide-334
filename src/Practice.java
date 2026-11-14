@@ -60,68 +60,68 @@ public class Practice {
   }
 
   // iterative dfs stack
-  public static int oddVerticesIterative(Vertex<Integer> starting){
-    if (starting == null){
-      return 0;
-    }
-    Set<Vertex<Integer>> visited = new HashSet<>();
-    Stack<Vertex<Integer>> stack = new Stack<>();
-    int count = 0;
+  // public static int oddVerticesIterative(Vertex<Integer> starting){
+  //   if (starting == null){
+  //     return 0;
+  //   }
+  //   Set<Vertex<Integer>> visited = new HashSet<>();
+  //   Stack<Vertex<Integer>> stack = new Stack<>();
+  //   int count = 0;
 
-    stack.push(starting);
-    while (!stack.isEmpty()){
-      Vertex<Integer> current = stack.pop();
+  //   stack.push(starting);
+  //   while (!stack.isEmpty()){
+  //     Vertex<Integer> current = stack.pop();
 
-      if(visited.contains(current)){
-        continue;
-      }
-      visited.add(current);
+  //     if(visited.contains(current)){
+  //       continue;
+  //     }
+  //     visited.add(current);
 
-      if(current.data %2 !=0){
-        count++;
-      }
-      for(Vertex<Integer> neighbor : current.neighbors){
-        if(neighbor != null && !visited.contains(neighbor)){
-          stack.push(neighbor);
-        }
-      }
-    }
-    return count;
+  //     if(current.data %2 !=0){
+  //       count++;
+  //     }
+  //     for(Vertex<Integer> neighbor : current.neighbors){
+  //       if(neighbor != null && !visited.contains(neighbor)){
+  //         stack.push(neighbor);
+  //       }
+  //     }
+  //   }
+  //   return count;
 
-  }
+  // }
 
 
   //iterative BFS queue
-  public static int oddVerticesBFS(Vertex<Integer> starting) {
-    if (starting == null) {
-        return 0;
-    }
+  // public static int oddVerticesBFS(Vertex<Integer> starting) {
+  //   if (starting == null) {
+  //       return 0;
+  //   }
 
-    Set<Vertex<Integer>> visited = new HashSet<>();
-    Queue<Vertex<Integer>> queue = new LinkedList<>();
+  //   Set<Vertex<Integer>> visited = new HashSet<>();
+  //   Queue<Vertex<Integer>> queue = new LinkedList<>();
 
-    int count = 0;
+  //   int count = 0;
 
-    queue.add(starting);
-    visited.add(starting);
+  //   queue.add(starting);
+  //   visited.add(starting);
 
-    while (!queue.isEmpty()) {
-      Vertex<Integer> current = queue.remove();
+  //   while (!queue.isEmpty()) {
+  //     Vertex<Integer> current = queue.remove();
 
-     if(current.data % 2 != 0) {
-        count++;
-      }
+  //    if(current.data % 2 != 0) {
+  //       count++;
+  //     }
 
-    for (Vertex<Integer> neighbor : current.neighbors) {
-        if (neighbor != null && !visited.contains(neighbor)) {
-            visited.add(neighbor);
-            queue.add(neighbor);
-        }
-      }
-    }
+  //   for (Vertex<Integer> neighbor : current.neighbors) {
+  //       if (neighbor != null && !visited.contains(neighbor)) {
+  //           visited.add(neighbor);
+  //           queue.add(neighbor);
+  //       }
+  //     }
+  //   }
 
-    return count;
-    }
+  //   return count;
+  //   }
 
   /**
    * Returns a *sorted* list of all values reachable from the starting vertex (including the starting vertex itself).
@@ -172,70 +172,70 @@ public class Practice {
   }
 
   //iterative dfs stack
-  public static List<Integer> sortedReachableIterative(Vertex<Integer> starting) {
-    List<Integer> result = new ArrayList<>();
+  // public static List<Integer> sortedReachableIterative(Vertex<Integer> starting) {
+  //   List<Integer> result = new ArrayList<>();
 
-    if (starting == null) {
-        return result;
-    }
+  //   if (starting == null) {
+  //       return result;
+  //   }
 
-    Set<Vertex<Integer>> visited = new HashSet<>();
-    Stack<Vertex<Integer>> stack = new Stack<>();
+  //   Set<Vertex<Integer>> visited = new HashSet<>();
+  //   Stack<Vertex<Integer>> stack = new Stack<>();
 
-    stack.push(starting);
+  //   stack.push(starting);
 
-    while (!stack.isEmpty()) {
-      Vertex<Integer> current = stack.pop();
+  //   while (!stack.isEmpty()) {
+  //     Vertex<Integer> current = stack.pop();
 
-      if (visited.contains(current)) {
-         continue;
-        }
+  //     if (visited.contains(current)) {
+  //        continue;
+  //       }
 
-      visited.add(current);
-      result.add(current.data);
+  //     visited.add(current);
+  //     result.add(current.data);
 
-      for (Vertex<Integer> neighbor : current.neighbors) {
-        if (neighbor != null && !visited.contains(neighbor)) {
-          stack.push(neighbor);
-        }
-      }
-    }
+  //     for (Vertex<Integer> neighbor : current.neighbors) {
+  //       if (neighbor != null && !visited.contains(neighbor)) {
+  //         stack.push(neighbor);
+  //       }
+  //     }
+  //   }
 
-    Collections.sort(result);
+  //   Collections.sort(result);
 
-    return result;
-    }
+  //   return result;
+  //   }
 
 
     //bfs queue
-    public static List<Integer> sortedReachableBFS(Vertex<Integer> starting) {
-    List<Integer> result = new ArrayList<>();
+  //   public static List<Integer> sortedReachableBFS(Vertex<Integer> starting) {
+  //   List<Integer> result = new ArrayList<>();
 
-    if (starting == null) {
-        return result;
-    }
-    Set<Vertex<Integer>> visited = new HashSet<>();
-    Queue<Vertex<Integer>> queue = new LinkedList<>();
+  //   if (starting == null) {
+  //       return result;
+  //   }
+  //   Set<Vertex<Integer>> visited = new HashSet<>();
+  //   Queue<Vertex<Integer>> queue = new LinkedList<>();
 
-    queue.add(starting);
-    visited.add(starting);
+  //   queue.add(starting);
+  //   visited.add(starting);
 
-    while (!queue.isEmpty()) {
-      Vertex<Integer> current = queue.remove();
+  //   while (!queue.isEmpty()) {
+  //     Vertex<Integer> current = queue.remove();
 
-      result.add(current.data);
+  //     result.add(current.data);
 
-      for (Vertex<Integer> neighbor : current.neighbors) {
-        if (neighbor != null && !visited.contains(neighbor)) {
-            visited.add(neighbor);
-            queue.add(neighbor);
-        }
-    }
-  }
-    Collections.sort(result);
+  //     for (Vertex<Integer> neighbor : current.neighbors) {
+  //       if (neighbor != null && !visited.contains(neighbor)) {
+  //           visited.add(neighbor);
+  //           queue.add(neighbor);
+  //       }
+  //   }
+  // }
+  //   Collections.sort(result);
 
-    return result;
-  }
+  //   return result;
+  // }
 
 
 
@@ -279,71 +279,71 @@ public class Practice {
   }
 
       //iterative dfs stack 
-    public static List<Integer> sortedReachableIterative(
-    Map<Integer, Set<Integer>> graph, int starting) {
-         List<Integer> result = new ArrayList<>();
+  //   public static List<Integer> sortedReachableIterative(
+  //   Map<Integer, Set<Integer>> graph, int starting) {
+  //        List<Integer> result = new ArrayList<>();
 
-    if (!graph.containsKey(starting)) {
-        return result;
-    }
+  //   if (!graph.containsKey(starting)) {
+  //       return result;
+  //   }
 
-    Set<Integer> visited = new HashSet<>();
-    Stack<Integer> stack = new Stack<>();
+  //   Set<Integer> visited = new HashSet<>();
+  //   Stack<Integer> stack = new Stack<>();
   
-    stack.push(starting);
+  //   stack.push(starting);
 
-    while (!stack.isEmpty()) {
-      int current = stack.pop();
+  //   while (!stack.isEmpty()) {
+  //     int current = stack.pop();
 
-      if (visited.contains(current) || !graph.containsKey(current)) {
-        continue;
-       }
-        visited.add(current);
-        result.add(current);
+  //     if (visited.contains(current) || !graph.containsKey(current)) {
+  //       continue;
+  //      }
+  //       visited.add(current);
+  //       result.add(current);
 
-      for (int neighbor : graph.get(current)) {
-          if (!visited.contains(neighbor)) {
-              stack.push(neighbor);
-        }
-    }
-  }
+  //     for (int neighbor : graph.get(current)) {
+  //         if (!visited.contains(neighbor)) {
+  //             stack.push(neighbor);
+  //       }
+  //   }
+  // }
 
-    Collections.sort(result);
-    return result;
-  }
+  //   Collections.sort(result);
+  //   return result;
+  // }
 
   // bfs queue
-  public static List<Integer> sortedReachableBFS(
-    Map<Integer, Set<Integer>> graph, int starting) {
+//   public static List<Integer> sortedReachableBFS(
+//     Map<Integer, Set<Integer>> graph, int starting) {
 
-    List<Integer> result = new ArrayList<>();
+//     List<Integer> result = new ArrayList<>();
 
-    if (!graph.containsKey(starting)) {
-        return result;
-    }
+//     if (!graph.containsKey(starting)) {
+//         return result;
+//     }
 
-    Set<Integer> visited = new HashSet<>();
-    Queue<Integer> queue = new LinkedList<>();
+//     Set<Integer> visited = new HashSet<>();
+//     Queue<Integer> queue = new LinkedList<>();
 
-    queue.add(starting);
-    visited.add(starting);
+//     queue.add(starting);
+//     visited.add(starting);
 
-    while (!queue.isEmpty()) {
-        int current = queue.remove();
+//     while (!queue.isEmpty()) {
+//         int current = queue.remove();
 
-        result.add(current);
+//         result.add(current);
 
-        for (int neighbor : graph.get(current)) {
-            if (graph.containsKey(neighbor) && !visited.contains(neighbor)) {
-                visited.add(neighbor);
-                queue.add(neighbor);
-            }
-        }
-    }
+//         for (int neighbor : graph.get(current)) {
+//             if (graph.containsKey(neighbor) && !visited.contains(neighbor)) {
+//                 visited.add(neighbor);
+//                 queue.add(neighbor);
+//             }
+//         }
+//     }
 
-    Collections.sort(result);
-    return result;
-}
+//     Collections.sort(result);
+//     return result;
+// }
 
   
 
@@ -395,75 +395,75 @@ public class Practice {
   }
 
   //dfs stack
-  public static <T> boolean twowayIterativeDFS(Vertex<T> v1, Vertex<T> v2){
-    if(v1 == null || v2 == null){
-      return false;
-    }
-    return canReachDFS(v1,v2) && canReachDFS(v2, v1);
-  }
+//   public static <T> boolean twowayIterativeDFS(Vertex<T> v1, Vertex<T> v2){
+//     if(v1 == null || v2 == null){
+//       return false;
+//     }
+//     return canReachDFS(v1,v2) && canReachDFS(v2, v1);
+//   }
 
-  private static <T> boolean canReachDFS(Vertex<T> start, Vertex<T> target){
-    Set<Vertex<T>> visited = new HashSet<>();
-    Stack<Vertex<T>> stack = new Stack<>();
+//   private static <T> boolean canReachDFS(Vertex<T> start, Vertex<T> target){
+//     Set<Vertex<T>> visited = new HashSet<>();
+//     Stack<Vertex<T>> stack = new Stack<>();
 
-    stack.push(start);
+//     stack.push(start);
 
-    while(!stack.isEmpty()){
-      Vertex<T> current = stack.pop();
+//     while(!stack.isEmpty()){
+//       Vertex<T> current = stack.pop();
 
-      if (current == target){
-        return true;
-    }
-    if(current == null || visited.contains(current)){
-      continue;
+//       if (current == target){
+//         return true;
+//     }
+//     if(current == null || visited.contains(current)){
+//       continue;
 
-    }
+//     }
 
-    visited.add(current);
+//     visited.add(current);
 
-    for(Vertex<T> neighbor : current.neighbors){
-      if(neighbor != null && !visited.contains(neighbor)){
-        stack.push(neighbor);
-      }
-    }
+//     for(Vertex<T> neighbor : current.neighbors){
+//       if(neighbor != null && !visited.contains(neighbor)){
+//         stack.push(neighbor);
+//       }
+//     }
 
-  }
-  return false;
-}
+//   }
+//   return false;
+// }
 
 
   //bfs
-  public static <T> boolean twoWayIterativeBFS(Vertex<T> v1, Vertex<T> v2) {
-      if (v1 == null || v2 == null) {
-          return false;
-      }
+  // public static <T> boolean twoWayIterativeBFS(Vertex<T> v1, Vertex<T> v2) {
+  //     if (v1 == null || v2 == null) {
+  //         return false;
+  //     }
 
-      return canReachBFS(v1, v2) && canReachBFS(v2, v1);
-  }
+  //     return canReachBFS(v1, v2) && canReachBFS(v2, v1);
+  // }
 
-  private static <T> boolean canReachBFS(Vertex<T> start, Vertex<T> target) {
-    Set<Vertex<T>> visited = new HashSet<>();
-    Queue<Vertex<T>> queue = new LinkedList<>();
+  // private static <T> boolean canReachBFS(Vertex<T> start, Vertex<T> target) {
+  //   Set<Vertex<T>> visited = new HashSet<>();
+  //   Queue<Vertex<T>> queue = new LinkedList<>();
 
-    queue.add(start);
-    visited.add(start);
+  //   queue.add(start);
+  //   visited.add(start);
 
-    while (!queue.isEmpty()) {
-        Vertex<T> current = queue.remove();
+  //   while (!queue.isEmpty()) {
+  //       Vertex<T> current = queue.remove();
 
-        if (current == target) {
-            return true;
-        }
+  //       if (current == target) {
+  //           return true;
+  //       }
 
-        for (Vertex<T> neighbor : current.neighbors) {
-            if (neighbor != null && !visited.contains(neighbor)) {
-                visited.add(neighbor);
-                queue.add(neighbor);
-          }
-      }
-  }
-      return false;
-  }
+  //       for (Vertex<T> neighbor : current.neighbors) {
+  //           if (neighbor != null && !visited.contains(neighbor)) {
+  //               visited.add(neighbor);
+  //               queue.add(neighbor);
+  //         }
+  //     }
+  // }
+  //     return false;
+  // }
 
     
     
@@ -528,82 +528,82 @@ public class Practice {
 
 
     //stack
-    public static boolean positivePathExistsDFS(
-    Map<Integer, Set<Integer>> graph, int starting, int ending) {
+  //   public static boolean positivePathExistsDFS(
+  //   Map<Integer, Set<Integer>> graph, int starting, int ending) {
 
-    if (starting <= 0 || ending <= 0 ||
-        !graph.containsKey(starting) ||
-        !graph.containsKey(ending)) {
-        return false;
-    }
+  //   if (starting <= 0 || ending <= 0 ||
+  //       !graph.containsKey(starting) ||
+  //       !graph.containsKey(ending)) {
+  //       return false;
+  //   }
 
-    Set<Integer> visited = new HashSet<>();
-    Stack<Integer> stack = new Stack<>();
+  //   Set<Integer> visited = new HashSet<>();
+  //   Stack<Integer> stack = new Stack<>();
 
-    stack.push(starting);
+  //   stack.push(starting);
 
-    while (!stack.isEmpty()) {
-        int current = stack.pop();
+  //   while (!stack.isEmpty()) {
+  //       int current = stack.pop();
 
-        if (current <= 0 ||
-            !graph.containsKey(current) ||
-            visited.contains(current)) {
-            continue;
-        }
+  //       if (current <= 0 ||
+  //           !graph.containsKey(current) ||
+  //           visited.contains(current)) {
+  //           continue;
+  //       }
 
-        if (current == ending) {
-            return true;
-        }
+  //       if (current == ending) {
+  //           return true;
+  //       }
 
-        visited.add(current);
+  //       visited.add(current);
 
-        for (int neighbor : graph.get(current)) {
-            if (neighbor > 0 && !visited.contains(neighbor)) {
-                stack.push(neighbor);
-            }
-        }
-    }
+  //       for (int neighbor : graph.get(current)) {
+  //           if (neighbor > 0 && !visited.contains(neighbor)) {
+  //               stack.push(neighbor);
+  //           }
+  //       }
+  //   }
 
-    return false;
-  }
+  //   return false;
+  // }
 
 
  //bfs
- public static boolean positivePathExistsBFS(
-    Map<Integer, Set<Integer>> graph, int starting, int ending) {
+//  public static boolean positivePathExistsBFS(
+//     Map<Integer, Set<Integer>> graph, int starting, int ending) {
 
-    if (starting <= 0 || ending <= 0 ||
-        !graph.containsKey(starting) ||
-        !graph.containsKey(ending)) {
-        return false;
-    }
+//     if (starting <= 0 || ending <= 0 ||
+//         !graph.containsKey(starting) ||
+//         !graph.containsKey(ending)) {
+//         return false;
+//     }
 
-    Set<Integer> visited = new HashSet<>();
-    Queue<Integer> queue = new LinkedList<>();
+//     Set<Integer> visited = new HashSet<>();
+//     Queue<Integer> queue = new LinkedList<>();
 
-    queue.add(starting);
-    visited.add(starting);
+//     queue.add(starting);
+//     visited.add(starting);
 
-    while (!queue.isEmpty()) {
-      int current = queue.remove();
+//     while (!queue.isEmpty()) {
+//       int current = queue.remove();
 
-      if (current == ending) {
-          return true;
-      }
+//       if (current == ending) {
+//           return true;
+//       }
 
-      for (int neighbor : graph.get(current)) {
-        if (neighbor > 0 &&
-          graph.containsKey(neighbor) &&
-          !visited.contains(neighbor)) {
+//       for (int neighbor : graph.get(current)) {
+//         if (neighbor > 0 &&
+//           graph.containsKey(neighbor) &&
+//           !visited.contains(neighbor)) {
 
-          visited.add(neighbor);
-          queue.add(neighbor);
-        }
-      }
-    }
+//           visited.add(neighbor);
+//           queue.add(neighbor);
+//         }
+//       }
+//     }
 
-    return false;
-  }
+//     return false;
+//   }
 
 
   /**
@@ -647,71 +647,71 @@ public class Practice {
 
 
     //dfs stack 
-    public static boolean hasExtendedConnectionAtCompanyDFS(
-    Professional person, String companyName) {
+    // public static boolean hasExtendedConnectionAtCompanyDFS(
+    // Professional person, String companyName) {
 
-    if (person == null) {
-        return false;
-    }
-    Set<Professional> visited = new HashSet<>();
-    Stack<Professional> stack = new Stack<>();
+    // if (person == null) {
+    //     return false;
+    // }
+    // Set<Professional> visited = new HashSet<>();
+    // Stack<Professional> stack = new Stack<>();
 
-    stack.push(person);
+    // stack.push(person);
 
-    while (!stack.isEmpty()) {
-      Professional current = stack.pop();
+    // while (!stack.isEmpty()) {
+    //   Professional current = stack.pop();
 
-      if (visited.contains(current)) {
-          continue;
-      }
+    //   if (visited.contains(current)) {
+    //       continue;
+    //   }
 
-      visited.add(current);
-        if (java.util.Objects.equals(current.getCompany(), companyName)) {
-          return true;
-      }
+    //   visited.add(current);
+    //     if (java.util.Objects.equals(current.getCompany(), companyName)) {
+    //       return true;
+    //   }
 
-        for (Professional neighbor : current.getConnections()) {
-          if (neighbor != null && !visited.contains(neighbor)) {
-              stack.push(neighbor);
+    //     for (Professional neighbor : current.getConnections()) {
+    //       if (neighbor != null && !visited.contains(neighbor)) {
+    //           stack.push(neighbor);
 
-          }
-        }
-      }
-      return false;
-    }
+    //       }
+    //     }
+    //   }
+    //   return false;
+    // }
 
 
     //bfs
-    public static boolean hasExtendedConnectionAtCompanyBFS(
-    Professional person, String companyName) {
+    // public static boolean hasExtendedConnectionAtCompanyBFS(
+    // Professional person, String companyName) {
 
-    if (person == null) {
-        return false;
-    }
+    // if (person == null) {
+    //     return false;
+    // }
 
-    Set<Professional> visited = new HashSet<>();
-    Queue<Professional> queue = new LinkedList<>();
+    // Set<Professional> visited = new HashSet<>();
+    // Queue<Professional> queue = new LinkedList<>();
 
-    queue.add(person);
-    visited.add(person);
+    // queue.add(person);
+    // visited.add(person);
 
-    while (!queue.isEmpty()) {
-      Professional current = queue.remove();
+    // while (!queue.isEmpty()) {
+    //   Professional current = queue.remove();
 
-      if (java.util.Objects.equals(current.getCompany(), companyName)) {
-          return true;
-      }
+    //   if (java.util.Objects.equals(current.getCompany(), companyName)) {
+    //       return true;
+    //   }
 
-      for (Professional neighbor : current.getConnections()) {
-        if (neighbor != null && !visited.contains(neighbor)) {
-            visited.add(neighbor);
-            queue.add(neighbor);
-        }
-       }
-    }
+    //   for (Professional neighbor : current.getConnections()) {
+    //     if (neighbor != null && !visited.contains(neighbor)) {
+    //         visited.add(neighbor);
+    //         queue.add(neighbor);
+    //     }
+    //    }
+    // }
 
-        return false;
-    }
+    //     return false;
+    // }
 
       
   
@@ -801,4 +801,60 @@ public class Practice {
 
     return result;
 }
+
+//bfs
+// public static List<int[]> nextMoves(
+//     char[][] board, int[] current, int[][] directions) {
+
+//     List<int[]> result = new ArrayList<>();
+//     Queue<int[]> queue = new LinkedList<>();
+
+//     queue.add(current);
+
+//     while (!queue.isEmpty()) {
+//         int[] position = queue.remove();
+
+//         for (int[] direction : directions) {
+//             int newRow = position[0] + direction[0];
+//             int newCol = position[1] + direction[1];
+
+//             if (newRow >= 0 && newRow < board.length &&
+//                 newCol >= 0 && newCol < board[0].length &&
+//                 board[newRow][newCol] != 'X') {
+
+//                 result.add(new int[]{newRow, newCol});
+//             }
+//         }
+//     }
+
+//     return result;
+// }
+
+//dfs stack 
+// public static List<int[]> nextMoves(
+//     char[][] board, int[] current, int[][] directions) {
+
+//     List<int[]> result = new ArrayList<>();
+//     Stack<int[]> stack = new Stack<>();
+
+//     stack.push(current);
+
+//     while (!stack.isEmpty()) {
+//         int[] position = stack.pop();
+
+//         for (int[] direction : directions) {
+//             int newRow = position[0] + direction[0];
+//             int newCol = position[1] + direction[1];
+
+//             if (newRow >= 0 && newRow < board.length &&
+//                 newCol >= 0 && newCol < board[0].length &&
+//                 board[newRow][newCol] != 'X') {
+
+//                 result.add(new int[]{newRow, newCol});
+//             }
+//         }
+//     }
+
+//     return result;
+// }
 }

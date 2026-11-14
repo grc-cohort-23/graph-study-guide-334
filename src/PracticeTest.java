@@ -997,4 +997,25 @@ public class PracticeTest {
     Set<String> actual = toSet(result);
     assertEquals(Collections.singleton("1,1"), actual);
   }
+
+  @Test
+  public void testPathIncludesZero() {
+    Map<Integer, Set<Integer>> graph = new HashMap<>();
+
+    graph.put(1, Set.of(0));
+    graph.put(0, Set.of(3));
+    graph.put(3, Set.of());
+
+    assertFalse(Practice.positivePathExists(graph, 1, 3));
+}
+
+  @Test
+  public void testMissingStartingVertex() {
+    Map<Integer, Set<Integer>> graph = new HashMap<>();
+
+    graph.put(2, Set.of(3));
+    graph.put(3, Set.of());
+
+    assertFalse(Practice.positivePathExists(graph, 1, 3));
+}
 }
