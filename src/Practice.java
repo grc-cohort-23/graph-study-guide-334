@@ -73,6 +73,8 @@ private static <T> Set<Vertex<T>> reachableVertices(Vertex<T> starting) {
 
 */
 
+
+/* 
 // Version 2: Recursive DFS
 private static <T> Set<Vertex<T>> reachableVertices(Vertex<T> starting) {
   Set<Vertex<T>> visited = new HashSet<>();
@@ -91,7 +93,32 @@ private static <T> void visitRecursive(
     visitRecursive(neighbor, visited);
   }
 }
+  */
 
+// Version 3: Iterative BFS
+private static <T> Set<Vertex<T>> reachableVertices(Vertex<T> starting) {
+  Set<Vertex<T>> visited = new HashSet<>();
+
+  if (starting == null) {
+    return visited;
+  }
+
+  Deque<Vertex<T>> queue = new ArrayDeque<>();
+  visited.add(starting);
+  queue.addLast(starting);
+
+  while (!queue.isEmpty()) {
+    Vertex<T> current = queue.removeFirst();
+
+    for (Vertex<T> neighbor : current.neighbors) {
+      if (visited.add(neighbor)) {
+        queue.addLast(neighbor);
+      }
+    }
+  }
+
+  return visited;
+}
 
   /**
    * Returns a *sorted* list of all values reachable from the starting vertex
