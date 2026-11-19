@@ -45,30 +45,51 @@ public class Practice {
     return count;
   }
 
-  private static <T> Set<Vertex<T>> reachableVertices(Vertex<T> starting) {
-    Set<Vertex<T>> visited = new HashSet<>();
+ // Version 1: Iterative DFS 
+private static <T> Set<Vertex<T>> reachableVertices(Vertex<T> starting) {
+  Set<Vertex<T>> visited = new HashSet<>();
 
-    if (starting == null) {
-      return visited;
-    }
+  if (starting == null) {
+    return visited;
+  }
 
-    Deque<Vertex<T>> stack = new ArrayDeque<>();
-    visited.add(starting);
-    stack.push(starting);
+  Deque<Vertex<T>> stack = new ArrayDeque<>();
+  visited.add(starting);
+  stack.push(starting);
 
-    while (!stack.isEmpty()) {
-      Vertex<T> current = stack.pop();
+  while (!stack.isEmpty()) {
+    Vertex<T> current = stack.pop();
 
-      for (Vertex<T> neighbor : current.neighbors) {
-        if (visited.add(neighbor)) {
-          stack.push(neighbor);
-        }
+    for (Vertex<T> neighbor : current.neighbors) {
+      if (visited.add(neighbor)) {
+        stack.push(neighbor);
       }
     }
-
-    return visited;
-
   }
+
+  return visited;
+}
+
+/*
+// Version 2: Recursive DFS
+private static <T> Set<Vertex<T>> reachableVertices(Vertex<T> starting) {
+  Set<Vertex<T>> visited = new HashSet<>();
+  visitRecursive(starting, visited);
+  return visited;
+}
+
+private static <T> void visitRecursive(
+    Vertex<T> current, Set<Vertex<T>> visited) {
+
+  if (current == null || !visited.add(current)) {
+    return;
+  }
+
+  for (Vertex<T> neighbor : current.neighbors) {
+    visitRecursive(neighbor, visited);
+  }
+}
+*/
 
   /**
    * Returns a *sorted* list of all values reachable from the starting vertex
