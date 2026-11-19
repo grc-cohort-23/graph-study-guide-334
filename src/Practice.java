@@ -44,6 +44,7 @@ public class Practice {
 
     return count;
   }
+/*
 
  // Version 1: Iterative DFS 
 private static <T> Set<Vertex<T>> reachableVertices(Vertex<T> starting) {
@@ -70,7 +71,8 @@ private static <T> Set<Vertex<T>> reachableVertices(Vertex<T> starting) {
   return visited;
 }
 
-/*
+*/
+
 // Version 2: Recursive DFS
 private static <T> Set<Vertex<T>> reachableVertices(Vertex<T> starting) {
   Set<Vertex<T>> visited = new HashSet<>();
@@ -89,7 +91,7 @@ private static <T> void visitRecursive(
     visitRecursive(neighbor, visited);
   }
 }
-*/
+
 
   /**
    * Returns a *sorted* list of all values reachable from the starting vertex
