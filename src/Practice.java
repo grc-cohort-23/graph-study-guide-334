@@ -182,7 +182,41 @@ public class Practice {
    * }
    */
 
-  // Version 2: Recursive DFS (active)
+  /*
+   * // Version 2: Recursive DFS
+   * public static List<Integer> sortedReachable(
+   * Map<Integer, Set<Integer>> graph, int starting) {
+   * 
+   * List<Integer> values = new ArrayList<>();
+   * 
+   * if (!graph.containsKey(starting)) {
+   * return values;
+   * }
+   * 
+   * collectReachable(graph, starting, new HashSet<>(), values);
+   * Collections.sort(values);
+   * return values;
+   * }
+   * 
+   * private static void collectReachable(
+   * Map<Integer, Set<Integer>> graph,
+   * int current,
+   * Set<Integer> visited,
+   * List<Integer> values) {
+   * 
+   * if (!visited.add(current)) {
+   * return;
+   * }
+   * 
+   * values.add(current);
+   * 
+   * for (int neighbor : graph.getOrDefault(current, Set.of())) {
+   * collectReachable(graph, neighbor, visited, values);
+   * }
+   * }
+   */
+
+  // Version 3: Iterative BFS (active)
   public static List<Integer> sortedReachable(
       Map<Integer, Set<Integer>> graph, int starting) {
 
@@ -192,26 +226,24 @@ public class Practice {
       return values;
     }
 
-    collectReachable(graph, starting, new HashSet<>(), values);
+    Set<Integer> visited = new HashSet<>();
+    Deque<Integer> queue = new ArrayDeque<>();
+    visited.add(starting);
+    queue.addLast(starting);
+
+    while (!queue.isEmpty()) {
+      int current = queue.removeFirst();
+      values.add(current);
+
+      for (int neighbor : graph.getOrDefault(current, Set.of())) {
+        if (visited.add(neighbor)) {
+          queue.addLast(neighbor);
+        }
+      }
+    }
+
     Collections.sort(values);
     return values;
-  }
-
-  private static void collectReachable(
-      Map<Integer, Set<Integer>> graph,
-      int current,
-      Set<Integer> visited,
-      List<Integer> values) {
-
-    if (!visited.add(current)) {
-      return;
-    }
-
-    values.add(current);
-
-    for (int neighbor : graph.getOrDefault(current, Set.of())) {
-      collectReachable(graph, neighbor, visited, values);
-    }
   }
 
   /**
