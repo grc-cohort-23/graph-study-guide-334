@@ -340,7 +340,7 @@ public static boolean positivePathExists(
   return false;
 }
 */
-
+/* 
 // Version 2: Recursive DFS (active)
 public static boolean positivePathExists(
   Map<Integer, Set<Integer>> graph, int starting, int ending) {
@@ -370,6 +370,39 @@ if (current == ending) {
 for (int neighbor : graph.getOrDefault(current, Set.of())) {
   if (findPositivePath(graph, neighbor, ending, visited)) {
     return true;
+  }
+}
+
+return false;
+}
+ */
+
+
+// Version 3: Iterative BFS 
+public static boolean positivePathExists(
+  Map<Integer, Set<Integer>> graph, int starting, int ending) {
+
+if (starting <= 0 || ending <= 0
+    || !graph.containsKey(starting) || !graph.containsKey(ending)) {
+  return false;
+}
+
+Set<Integer> visited = new HashSet<>();
+Deque<Integer> queue = new ArrayDeque<>();
+visited.add(starting);
+queue.addLast(starting);
+
+while (!queue.isEmpty()) {
+  int current = queue.removeFirst();
+
+  if (current == ending) {
+    return true;
+  }
+
+  for (int neighbor : graph.getOrDefault(current, Set.of())) {
+    if (neighbor > 0 && visited.add(neighbor)) {
+      queue.addLast(neighbor);
+    }
   }
 }
 
