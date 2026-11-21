@@ -44,81 +44,80 @@ public class Practice {
 
     return count;
   }
-/*
+  /*
+   * 
+   * // Version 1: Iterative DFS
+   * private static <T> Set<Vertex<T>> reachableVertices(Vertex<T> starting) {
+   * Set<Vertex<T>> visited = new HashSet<>();
+   * 
+   * if (starting == null) {
+   * return visited;
+   * }
+   * 
+   * Deque<Vertex<T>> stack = new ArrayDeque<>();
+   * visited.add(starting);
+   * stack.push(starting);
+   * 
+   * while (!stack.isEmpty()) {
+   * Vertex<T> current = stack.pop();
+   * 
+   * for (Vertex<T> neighbor : current.neighbors) {
+   * if (visited.add(neighbor)) {
+   * stack.push(neighbor);
+   * }
+   * }
+   * }
+   * 
+   * return visited;
+   * }
+   * 
+   */
 
- // Version 1: Iterative DFS 
-private static <T> Set<Vertex<T>> reachableVertices(Vertex<T> starting) {
-  Set<Vertex<T>> visited = new HashSet<>();
+  /*
+   * // Version 2: Recursive DFS
+   * private static <T> Set<Vertex<T>> reachableVertices(Vertex<T> starting) {
+   * Set<Vertex<T>> visited = new HashSet<>();
+   * visitRecursive(starting, visited);
+   * return visited;
+   * }
+   * 
+   * private static <T> void visitRecursive(
+   * Vertex<T> current, Set<Vertex<T>> visited) {
+   * 
+   * if (current == null || !visited.add(current)) {
+   * return;
+   * }
+   * 
+   * for (Vertex<T> neighbor : current.neighbors) {
+   * visitRecursive(neighbor, visited);
+   * }
+   * }
+   */
 
-  if (starting == null) {
-    return visited;
-  }
+  // Version 3: Iterative BFS
+  private static <T> Set<Vertex<T>> reachableVertices(Vertex<T> starting) {
+    Set<Vertex<T>> visited = new HashSet<>();
 
-  Deque<Vertex<T>> stack = new ArrayDeque<>();
-  visited.add(starting);
-  stack.push(starting);
+    if (starting == null) {
+      return visited;
+    }
 
-  while (!stack.isEmpty()) {
-    Vertex<T> current = stack.pop();
+    Deque<Vertex<T>> queue = new ArrayDeque<>();
+    visited.add(starting);
+    queue.addLast(starting);
 
-    for (Vertex<T> neighbor : current.neighbors) {
-      if (visited.add(neighbor)) {
-        stack.push(neighbor);
+    while (!queue.isEmpty()) {
+      Vertex<T> current = queue.removeFirst();
+
+      for (Vertex<T> neighbor : current.neighbors) {
+        if (visited.add(neighbor)) {
+          queue.addLast(neighbor);
+        }
       }
     }
-  }
 
-  return visited;
-}
-
-*/
-
-
-/* 
-// Version 2: Recursive DFS
-private static <T> Set<Vertex<T>> reachableVertices(Vertex<T> starting) {
-  Set<Vertex<T>> visited = new HashSet<>();
-  visitRecursive(starting, visited);
-  return visited;
-}
-
-private static <T> void visitRecursive(
-    Vertex<T> current, Set<Vertex<T>> visited) {
-
-  if (current == null || !visited.add(current)) {
-    return;
-  }
-
-  for (Vertex<T> neighbor : current.neighbors) {
-    visitRecursive(neighbor, visited);
-  }
-}
-  */
-
-// Version 3: Iterative BFS
-private static <T> Set<Vertex<T>> reachableVertices(Vertex<T> starting) {
-  Set<Vertex<T>> visited = new HashSet<>();
-
-  if (starting == null) {
     return visited;
   }
-
-  Deque<Vertex<T>> queue = new ArrayDeque<>();
-  visited.add(starting);
-  queue.addLast(starting);
-
-  while (!queue.isEmpty()) {
-    Vertex<T> current = queue.removeFirst();
-
-    for (Vertex<T> neighbor : current.neighbors) {
-      if (visited.add(neighbor)) {
-        queue.addLast(neighbor);
-      }
-    }
-  }
-
-  return visited;
-}
 
   /**
    * Returns a *sorted* list of all values reachable from the starting vertex
@@ -139,6 +138,7 @@ private static <T> Set<Vertex<T>> reachableVertices(Vertex<T> starting) {
    * @param starting the starting vertex (may be null)
    * @return a sorted list of all reachable vertex values by
    */
+
   public static List<Integer> sortedReachable(Vertex<Integer> starting) {
     List<Integer> values = new ArrayList<>();
 
@@ -148,6 +148,70 @@ private static <T> Set<Vertex<T>> reachableVertices(Vertex<T> starting) {
 
     Collections.sort(values);
     return values;
+  }
+
+  /*
+   * // Version 1: Iterative DFS
+   * public static List<Integer> sortedReachable(
+   * Map<Integer, Set<Integer>> graph, int starting) {
+   * 
+   * List<Integer> values = new ArrayList<>();
+   * 
+   * if (!graph.containsKey(starting)) {
+   * return values;
+   * }
+   * 
+   * Set<Integer> visited = new HashSet<>();
+   * Deque<Integer> stack = new ArrayDeque<>();
+   * visited.add(starting);
+   * stack.push(starting);
+   * 
+   * while (!stack.isEmpty()) {
+   * int current = stack.pop();
+   * values.add(current);
+   * 
+   * for (int neighbor : graph.getOrDefault(current, Set.of())) {
+   * if (visited.add(neighbor)) {
+   * stack.push(neighbor);
+   * }
+   * }
+   * }
+   * 
+   * Collections.sort(values);
+   * return values;
+   * }
+   */
+
+  // Version 2: Recursive DFS (active)
+  public static List<Integer> sortedReachable(
+      Map<Integer, Set<Integer>> graph, int starting) {
+
+    List<Integer> values = new ArrayList<>();
+
+    if (!graph.containsKey(starting)) {
+      return values;
+    }
+
+    collectReachable(graph, starting, new HashSet<>(), values);
+    Collections.sort(values);
+    return values;
+  }
+
+  private static void collectReachable(
+      Map<Integer, Set<Integer>> graph,
+      int current,
+      Set<Integer> visited,
+      List<Integer> values) {
+
+    if (!visited.add(current)) {
+      return;
+    }
+
+    values.add(current);
+
+    for (int neighbor : graph.getOrDefault(current, Set.of())) {
+      collectReachable(graph, neighbor, visited, values);
+    }
   }
 
   /**
@@ -163,32 +227,6 @@ private static <T> Set<Vertex<T>> reachableVertices(Vertex<T> starting) {
    * @param starting the starting vertex value
    * @return a sorted list of all reachable vertex values
    */
-  public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
-    List<Integer> values = new ArrayList<>();
-
-    if (!graph.containsKey(starting)) {
-      return values;
-    }
-
-    Set<Integer> visited = new HashSet<>();
-    Deque<Integer> stack = new ArrayDeque<>();
-    visited.add(starting);
-    stack.push(starting);
-
-    while (!stack.isEmpty()) {
-      int current = stack.pop();
-      values.add(current);
-
-      for (int neighbor : graph.getOrDefault(current, Set.of())) {
-        if (visited.add(neighbor)) {
-          stack.push(neighbor);
-        }
-      }
-    }
-
-    Collections.sort(values);
-    return values;
-  }
 
   /**
    * Returns true if and only if it is possible both to reach v2 from v1 and to
@@ -381,14 +419,14 @@ private static <T> Set<Vertex<T>> reachableVertices(Vertex<T> starting) {
     for (int[] direction : directions) {
       int row = current[0] + direction[0];
       int column = current[1] + direction[1];
-  
+
       if (row >= 0 && row < board.length
           && column >= 0 && column < board[row].length
           && board[row][column] != 'X') {
-        moves.add(new int[] {row, column});
+        moves.add(new int[] { row, column });
       }
     }
-  
+
     return moves;
   }
 }
