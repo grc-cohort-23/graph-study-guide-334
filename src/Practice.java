@@ -216,7 +216,7 @@ public class Practice {
    * }
    */
 
-  // Version 3: Iterative BFS (active)
+  // Version 3: Iterative BFS
   public static List<Integer> sortedReachable(
       Map<Integer, Set<Integer>> graph, int starting) {
 
@@ -339,7 +339,7 @@ public class Practice {
    * }
    */
   /*
-   * // Version 2: Recursive DFS (active)
+   * // Version 2: Recursive DFS
    * public static boolean positivePathExists(
    * Map<Integer, Set<Integer>> graph, int starting, int ending) {
    * 
@@ -451,7 +451,7 @@ public class Practice {
    */
 
   /*
-   * // Version 2: Recursive DFS (active)
+   * // Version 2: Recursive DFS
    * public static boolean hasExtendedConnectionAtCompany(
    * Professional person, String companyName) {
    * 
@@ -482,7 +482,7 @@ public class Practice {
    * 
    */
 
-  // Version 3: Iterative BFS 
+  // Version 3: Iterative BFS
   public static boolean hasExtendedConnectionAtCompany(
       Professional person, String companyName) {
 
