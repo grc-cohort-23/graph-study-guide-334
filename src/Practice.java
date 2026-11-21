@@ -306,108 +306,105 @@ public class Practice {
    * @return whether there exists a valid positive path from starting to ending
    */
 
-
-
   /*
-// Version 1: Iterative DFS
-public static boolean positivePathExists(
-    Map<Integer, Set<Integer>> graph, int starting, int ending) {
+   * // Version 1: Iterative DFS
+   * public static boolean positivePathExists(
+   * Map<Integer, Set<Integer>> graph, int starting, int ending) {
+   * 
+   * if (starting <= 0 || ending <= 0
+   * || !graph.containsKey(starting) || !graph.containsKey(ending)) {
+   * return false;
+   * }
+   * 
+   * Set<Integer> visited = new HashSet<>();
+   * Deque<Integer> stack = new ArrayDeque<>();
+   * visited.add(starting);
+   * stack.push(starting);
+   * 
+   * while (!stack.isEmpty()) {
+   * int current = stack.pop();
+   * 
+   * if (current == ending) {
+   * return true;
+   * }
+   * 
+   * for (int neighbor : graph.getOrDefault(current, Set.of())) {
+   * if (neighbor > 0 && visited.add(neighbor)) {
+   * stack.push(neighbor);
+   * }
+   * }
+   * }
+   * 
+   * return false;
+   * }
+   */
+  /*
+   * // Version 2: Recursive DFS (active)
+   * public static boolean positivePathExists(
+   * Map<Integer, Set<Integer>> graph, int starting, int ending) {
+   * 
+   * if (starting <= 0 || ending <= 0
+   * || !graph.containsKey(starting) || !graph.containsKey(ending)) {
+   * return false;
+   * }
+   * 
+   * return findPositivePath(graph, starting, ending, new HashSet<>());
+   * }
+   * 
+   * private static boolean findPositivePath(
+   * Map<Integer, Set<Integer>> graph,
+   * int current,
+   * int ending,
+   * Set<Integer> visited) {
+   * 
+   * if (current <= 0 || !visited.add(current)) {
+   * return false;
+   * }
+   * 
+   * if (current == ending) {
+   * return true;
+   * }
+   * 
+   * for (int neighbor : graph.getOrDefault(current, Set.of())) {
+   * if (findPositivePath(graph, neighbor, ending, visited)) {
+   * return true;
+   * }
+   * }
+   * 
+   * return false;
+   * }
+   */
 
-  if (starting <= 0 || ending <= 0
-      || !graph.containsKey(starting) || !graph.containsKey(ending)) {
-    return false;
-  }
+  // Version 3: Iterative BFS
+  public static boolean positivePathExists(
+      Map<Integer, Set<Integer>> graph, int starting, int ending) {
 
-  Set<Integer> visited = new HashSet<>();
-  Deque<Integer> stack = new ArrayDeque<>();
-  visited.add(starting);
-  stack.push(starting);
-
-  while (!stack.isEmpty()) {
-    int current = stack.pop();
-
-    if (current == ending) {
-      return true;
+    if (starting <= 0 || ending <= 0
+        || !graph.containsKey(starting) || !graph.containsKey(ending)) {
+      return false;
     }
 
-    for (int neighbor : graph.getOrDefault(current, Set.of())) {
-      if (neighbor > 0 && visited.add(neighbor)) {
-        stack.push(neighbor);
+    Set<Integer> visited = new HashSet<>();
+    Deque<Integer> queue = new ArrayDeque<>();
+    visited.add(starting);
+    queue.addLast(starting);
+
+    while (!queue.isEmpty()) {
+      int current = queue.removeFirst();
+
+      if (current == ending) {
+        return true;
+      }
+
+      for (int neighbor : graph.getOrDefault(current, Set.of())) {
+        if (neighbor > 0 && visited.add(neighbor)) {
+          queue.addLast(neighbor);
+        }
       }
     }
+
+    return false;
   }
-
-  return false;
-}
-*/
-/* 
-// Version 2: Recursive DFS (active)
-public static boolean positivePathExists(
-  Map<Integer, Set<Integer>> graph, int starting, int ending) {
-
-if (starting <= 0 || ending <= 0
-    || !graph.containsKey(starting) || !graph.containsKey(ending)) {
-  return false;
-}
-
-return findPositivePath(graph, starting, ending, new HashSet<>());
-}
-
-private static boolean findPositivePath(
-  Map<Integer, Set<Integer>> graph,
-  int current,
-  int ending,
-  Set<Integer> visited) {
-
-if (current <= 0 || !visited.add(current)) {
-  return false;
-}
-
-if (current == ending) {
-  return true;
-}
-
-for (int neighbor : graph.getOrDefault(current, Set.of())) {
-  if (findPositivePath(graph, neighbor, ending, visited)) {
-    return true;
-  }
-}
-
-return false;
-}
- */
-
-
-// Version 3: Iterative BFS 
-public static boolean positivePathExists(
-  Map<Integer, Set<Integer>> graph, int starting, int ending) {
-
-if (starting <= 0 || ending <= 0
-    || !graph.containsKey(starting) || !graph.containsKey(ending)) {
-  return false;
-}
-
-Set<Integer> visited = new HashSet<>();
-Deque<Integer> queue = new ArrayDeque<>();
-visited.add(starting);
-queue.addLast(starting);
-
-while (!queue.isEmpty()) {
-  int current = queue.removeFirst();
-
-  if (current == ending) {
-    return true;
-  }
-
-  for (int neighbor : graph.getOrDefault(current, Set.of())) {
-    if (neighbor > 0 && visited.add(neighbor)) {
-      queue.addLast(neighbor);
-    }
-  }
-}
-
-return false;
-}
 
   /**
    * Returns true if a professional has anyone in their extended network
@@ -421,28 +418,60 @@ return false;
    * @return true if a person in the extended network works at the specified
    *         company, false otherwise
    */
-  public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+  /*
+   * public static boolean hasExtendedConnectionAtCompany(Professional person,
+   * String companyName) {
+   * 
+   * if (person == null) {
+   * return false;
+   * }
+   * 
+   * Set<Professional> visited = new HashSet<>();
+   * Deque<Professional> stack = new ArrayDeque<>();
+   * visited.add(person);
+   * stack.push(person);
+   * 
+   * while (!stack.isEmpty()) {
+   * Professional current = stack.pop();
+   * 
+   * if (Objects.equals(current.getCompany(), companyName)) {
+   * return true;
+   * }
+   * 
+   * for (Professional connection : current.getConnections()) {
+   * if (visited.add(connection)) {
+   * stack.push(connection);
+   * }
+   * }
+   * }
+   * 
+   * return false;
+   * }
+   * 
+   */
+  // Version 2: Recursive DFS (active)
+  public static boolean hasExtendedConnectionAtCompany(
+      Professional person, String companyName) {
 
-    if (person == null) {
+    return findCompany(person, companyName, new HashSet<>());
+  }
+
+  private static boolean findCompany(
+      Professional person,
+      String companyName,
+      Set<Professional> visited) {
+
+    if (person == null || !visited.add(person)) {
       return false;
     }
 
-    Set<Professional> visited = new HashSet<>();
-    Deque<Professional> stack = new ArrayDeque<>();
-    visited.add(person);
-    stack.push(person);
+    if (Objects.equals(person.getCompany(), companyName)) {
+      return true;
+    }
 
-    while (!stack.isEmpty()) {
-      Professional current = stack.pop();
-
-      if (Objects.equals(current.getCompany(), companyName)) {
+    for (Professional connection : person.getConnections()) {
+      if (findCompany(connection, companyName, visited)) {
         return true;
-      }
-
-      for (Professional connection : current.getConnections()) {
-        if (visited.add(connection)) {
-          stack.push(connection);
-        }
       }
     }
 
