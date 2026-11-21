@@ -305,33 +305,76 @@ public class Practice {
    * @param ending   the ending vertex value
    * @return whether there exists a valid positive path from starting to ending
    */
-  public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
-    if (starting <= 0 || ending <= 0
-        || !graph.containsKey(starting) || !graph.containsKey(ending)) {
-      return false;
-    }
 
-    Set<Integer> visited = new HashSet<>();
-    Deque<Integer> stack = new ArrayDeque<>();
-    visited.add(starting);
-    stack.push(starting);
 
-    while (!stack.isEmpty()) {
-      int current = stack.pop();
 
-      if (current == ending) {
-        return true;
-      }
+  /*
+// Version 1: Iterative DFS
+public static boolean positivePathExists(
+    Map<Integer, Set<Integer>> graph, int starting, int ending) {
 
-      for (int neighbor : graph.getOrDefault(current, Set.of())) {
-        if (neighbor > 0 && visited.add(neighbor)) {
-          stack.push(neighbor);
-        }
-      }
-    }
-
+  if (starting <= 0 || ending <= 0
+      || !graph.containsKey(starting) || !graph.containsKey(ending)) {
     return false;
   }
+
+  Set<Integer> visited = new HashSet<>();
+  Deque<Integer> stack = new ArrayDeque<>();
+  visited.add(starting);
+  stack.push(starting);
+
+  while (!stack.isEmpty()) {
+    int current = stack.pop();
+
+    if (current == ending) {
+      return true;
+    }
+
+    for (int neighbor : graph.getOrDefault(current, Set.of())) {
+      if (neighbor > 0 && visited.add(neighbor)) {
+        stack.push(neighbor);
+      }
+    }
+  }
+
+  return false;
+}
+*/
+
+// Version 2: Recursive DFS (active)
+public static boolean positivePathExists(
+  Map<Integer, Set<Integer>> graph, int starting, int ending) {
+
+if (starting <= 0 || ending <= 0
+    || !graph.containsKey(starting) || !graph.containsKey(ending)) {
+  return false;
+}
+
+return findPositivePath(graph, starting, ending, new HashSet<>());
+}
+
+private static boolean findPositivePath(
+  Map<Integer, Set<Integer>> graph,
+  int current,
+  int ending,
+  Set<Integer> visited) {
+
+if (current <= 0 || !visited.add(current)) {
+  return false;
+}
+
+if (current == ending) {
+  return true;
+}
+
+for (int neighbor : graph.getOrDefault(current, Set.of())) {
+  if (findPositivePath(graph, neighbor, ending, visited)) {
+    return true;
+  }
+}
+
+return false;
+}
 
   /**
    * Returns true if a professional has anyone in their extended network
