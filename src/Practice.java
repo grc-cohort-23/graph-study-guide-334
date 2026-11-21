@@ -449,29 +449,63 @@ public class Practice {
    * }
    * 
    */
-  // Version 2: Recursive DFS (active)
+
+  /*
+   * // Version 2: Recursive DFS (active)
+   * public static boolean hasExtendedConnectionAtCompany(
+   * Professional person, String companyName) {
+   * 
+   * return findCompany(person, companyName, new HashSet<>());
+   * }
+   * 
+   * private static boolean findCompany(
+   * Professional person,
+   * String companyName,
+   * Set<Professional> visited) {
+   * 
+   * if (person == null || !visited.add(person)) {
+   * return false;
+   * }
+   * 
+   * if (Objects.equals(person.getCompany(), companyName)) {
+   * return true;
+   * }
+   * 
+   * for (Professional connection : person.getConnections()) {
+   * if (findCompany(connection, companyName, visited)) {
+   * return true;
+   * }
+   * }
+   * 
+   * return false;
+   * }
+   * 
+   */
+
+  // Version 3: Iterative BFS 
   public static boolean hasExtendedConnectionAtCompany(
       Professional person, String companyName) {
 
-    return findCompany(person, companyName, new HashSet<>());
-  }
-
-  private static boolean findCompany(
-      Professional person,
-      String companyName,
-      Set<Professional> visited) {
-
-    if (person == null || !visited.add(person)) {
+    if (person == null) {
       return false;
     }
 
-    if (Objects.equals(person.getCompany(), companyName)) {
-      return true;
-    }
+    Set<Professional> visited = new HashSet<>();
+    Deque<Professional> queue = new ArrayDeque<>();
+    visited.add(person);
+    queue.addLast(person);
 
-    for (Professional connection : person.getConnections()) {
-      if (findCompany(connection, companyName, visited)) {
+    while (!queue.isEmpty()) {
+      Professional current = queue.removeFirst();
+
+      if (Objects.equals(current.getCompany(), companyName)) {
         return true;
+      }
+
+      for (Professional connection : current.getConnections()) {
+        if (visited.add(connection)) {
+          queue.addLast(connection);
+        }
       }
     }
 
