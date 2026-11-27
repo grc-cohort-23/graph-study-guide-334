@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+// for iterative dfs solution
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class Practice {
 
@@ -29,29 +32,66 @@ public class Practice {
    * @return the number of vertices with odd values reachable from the starting vertex
    */
 
-  public static int oddVertices(Vertex<Integer> starting) {  
-    Set<Vertex<Integer>> visited = new HashSet<>();
-    return countOdd(starting, visited);
-  }
+  // // Recursive DFS
+  // public static int oddVertices(Vertex<Integer> starting) {  
+  //   Set<Vertex<Integer>> visited = new HashSet<>();
+  //   return countOdd(starting, visited);
+  // }
 
-  private static int countOdd(Vertex<Integer> vertex, Set<Vertex<Integer>> visited) {
-    if (vertex == null || visited.contains(vertex)) {
-      return 0;
-    }
+  // private static int countOdd(Vertex<Integer> vertex, Set<Vertex<Integer>> visited) {
+  //   if (vertex == null || visited.contains(vertex)) {
+  //     return 0;
+  //   }
 
-    visited.add(vertex);
+  //   visited.add(vertex);
 
-    int count = 0;
+  //   int count = 0;
 
-    if (vertex.data % 2 != 0) {
-      count++;
-    }
+  //   if (vertex.data % 2 != 0) {
+  //     count++;
+  //   }
 
-    for (Vertex<Integer> neighbor : vertex.neighbors) {
-      count += countOdd(neighbor, visited);
-    }
+  //   for (Vertex<Integer> neighbor : vertex.neighbors) {
+  //     count += countOdd(neighbor, visited);
+  //   }
 
-    return count;
+  //   return count;
+  // }
+
+
+  // Iterative DFS
+  public static int oddVertices(Vertex<Integer> starting) {
+      if (starting == null) {
+          return 0;
+      }
+
+      Set<Vertex<Integer>> visited = new HashSet<>();
+      Deque<Vertex<Integer>> stack = new ArrayDeque<>();
+
+      stack.push(starting);
+      int count = 0;
+
+      while (!stack.isEmpty()) {
+          Vertex<Integer> current = stack.pop();
+
+          if (visited.contains(current)) {
+              continue;
+          }
+
+          visited.add(current);
+
+          if (current.data % 2 != 0) {
+              count++;
+          }
+
+          for (Vertex<Integer> neighbor : current.neighbors) {
+              if (!visited.contains(neighbor)) {
+                  stack.push(neighbor);
+              }
+          }
+      }
+
+      return count;
   }
 
   /**
@@ -72,31 +112,71 @@ public class Practice {
    * @param starting the starting vertex (may be null)
    * @return a sorted list of all reachable vertex values by 
    */
-  public static List<Integer> sortedReachable(Vertex<Integer> starting) {
-    List<Integer> result = new ArrayList<>();
-    Set<Vertex<Integer>> visited = new HashSet<>();
 
-    collectValues(starting, visited, result);
-    Collections.sort(result);
+  // // Recursive DFS
+  // public static List<Integer> sortedReachable(Vertex<Integer> starting) {
+  //   List<Integer> result = new ArrayList<>();
+  //   Set<Vertex<Integer>> visited = new HashSet<>();
 
-    return result;
-  }
+  //   collectValues(starting, visited, result);
+  //   Collections.sort(result);
 
-  private static void collectValues(Vertex<Integer> vertex,
-                                    Set<Vertex<Integer>> visited,
-                                    List<Integer> result) {
-    if (vertex == null || visited.contains(vertex)) {
-      return;
-    }
+  //   return result;
+  // }
 
-    visited.add(vertex);
-    result.add(vertex.data);
+  // private static void collectValues(Vertex<Integer> vertex,
+  //                                   Set<Vertex<Integer>> visited,
+  //                                   List<Integer> result) {
+  //   if (vertex == null || visited.contains(vertex)) {
+  //     return;
+  //   }
 
-    for (Vertex<Integer> neighbor : vertex.neighbors) {
-      collectValues(neighbor, visited, result);
-    }
+  //   visited.add(vertex);
+  //   result.add(vertex.data);
+
+  //   for (Vertex<Integer> neighbor : vertex.neighbors) {
+  //     collectValues(neighbor, visited, result);
+  //   }
   
+  // }
+
+
+  // Iterative DFS
+  public static List<Integer> sortedReachable(Vertex<Integer> starting) {
+      List<Integer> result = new ArrayList<>();
+
+      if (starting == null) {
+          return result;
+      }
+
+      Set<Vertex<Integer>> visited = new HashSet<>();
+      Deque<Vertex<Integer>> stack = new ArrayDeque<>();
+
+      stack.push(starting);
+
+      while (!stack.isEmpty()) {
+          Vertex<Integer> current = stack.pop();
+
+          if (visited.contains(current)) {
+              continue;
+          }
+
+          visited.add(current);
+          result.add(current.data);
+
+          for (Vertex<Integer> neighbor : current.neighbors) {
+              if (!visited.contains(neighbor)) {
+                  stack.push(neighbor);
+              }
+          }
+      }
+
+      Collections.sort(result);
+      return result;
   }
+
+
+
 
   /**
    * Returns a sorted list of all values reachable from the given starting vertex in the provided graph.
@@ -109,37 +189,79 @@ public class Practice {
    * @return a sorted list of all reachable vertex values
    */
   
-   public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
+  //  // Recursive DFS
+  //  public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
 
-    List<Integer> result = new ArrayList<>();
+  //   List<Integer> result = new ArrayList<>();
 
-    if (!graph.containsKey(starting)) {
+  //   if (!graph.containsKey(starting)) {
+  //     return result;
+  //   }
+
+  //   Set<Integer> visited = new HashSet<>();
+
+  //   collectMapValues(graph, starting, visited, result);
+  //   Collections.sort(result);
+  //   return result;
+  // }
+
+  // private static void collectMapValues(Map<Integer, Set<Integer>> graph,
+  //                                      int current,
+  //                                      Set<Integer> visited,
+  //                                      List<Integer> result) {
+  //   if (visited.contains(current)) {
+  //     return;
+  //   }
+
+  //   visited.add(current);
+  //   result.add(current);
+
+  //   for (int neighbor : graph.getOrDefault(current, Collections.emptySet())) {
+  //     collectMapValues(graph, neighbor, visited, result);
+  //   }
+
+  // }
+
+
+  // Iterative DFS
+  public static List<Integer> sortedReachable(
+          Map<Integer, Set<Integer>> graph, int starting) {
+
+      List<Integer> result = new ArrayList<>();
+
+      if (!graph.containsKey(starting)) {
+          return result;
+      }
+
+      Set<Integer> visited = new HashSet<>();
+      Deque<Integer> stack = new ArrayDeque<>();
+
+      stack.push(starting);
+
+      while (!stack.isEmpty()) {
+          int current = stack.pop();
+
+          if (visited.contains(current)) {
+              continue;
+          }
+
+          visited.add(current);
+          result.add(current);
+
+          for (int neighbor : graph.getOrDefault(
+                  current, Collections.emptySet())) {
+
+              if (!visited.contains(neighbor)) {
+                  stack.push(neighbor);
+              }
+          }
+      }
+
+      Collections.sort(result);
       return result;
-    }
-
-    Set<Integer> visited = new HashSet<>();
-
-    collectMapValues(graph, starting, visited, result);
-    Collections.sort(result);
-    return result;
   }
 
-  private static void collectMapValues(Map<Integer, Set<Integer>> graph,
-                                       int current,
-                                       Set<Integer> visited,
-                                       List<Integer> result) {
-    if (visited.contains(current)) {
-      return;
-    }
 
-    visited.add(current);
-    result.add(current);
-
-    for (int neighbor : graph.getOrDefault(current, Collections.emptySet())) {
-      collectMapValues(graph, neighbor, visited, result);
-    }
-
-  }
 
   /**
    * Returns true if and only if it is possible both to reach v2 from v1 and to reach v1 from v2.
@@ -156,42 +278,87 @@ public class Practice {
    * @return true if there is a two-way connection between v1 and v2, false otherwise
    */
 
+  // // Recursive DFS
+  // public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
 
+  //   if (v1 == null || v2 == null) {
+  //       return false;
+  //   }
+
+  //   Set<Vertex<T>> visited1 = new HashSet<>();
+  //   Set<Vertex<T>> visited2 = new HashSet<>();
+
+  //   return canReach(v1, v2, visited1)
+  //       && canReach(v2, v1, visited2);
+  // }
+
+  // private static <T> boolean canReach(Vertex<T> current,
+  //                                     Vertex<T> target,
+  //                                     Set<Vertex<T>> visited) {                                
+  //   if (current == null || visited.contains(current)) {
+  //     return false;
+  //   }
+
+  //   if (current == target) {
+  //     return true;
+  //   }
+
+  //   visited.add(current);
+
+  //   for (Vertex<T> neighbor : current.neighbors) {
+  //     if (canReach(neighbor, target, visited)) {
+  //       return true;
+  //     }
+  //   }
+
+  //   return false;
+
+  // }
+
+
+
+  // Iterative DFS
   public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
-
-    if (v1 == null || v2 == null) {
-        return false;
-    }
-
-    Set<Vertex<T>> visited1 = new HashSet<>();
-    Set<Vertex<T>> visited2 = new HashSet<>();
-
-    return canReach(v1, v2, visited1)
-        && canReach(v2, v1, visited2);
-  }
-
-  private static <T> boolean canReach(Vertex<T> current,
-                                      Vertex<T> target,
-                                      Set<Vertex<T>> visited) {                                
-    if (current == null || visited.contains(current)) {
-      return false;
-    }
-
-    if (current == target) {
-      return true;
-    }
-
-    visited.add(current);
-
-    for (Vertex<T> neighbor : current.neighbors) {
-      if (canReach(neighbor, target, visited)) {
-        return true;
+      if (v1 == null || v2 == null) {
+          return false;
       }
-    }
 
-    return false;
-
+      return canReachIterative(v1, v2)
+          && canReachIterative(v2, v1);
   }
+
+  private static <T> boolean canReachIterative(
+          Vertex<T> starting, Vertex<T> target) {
+
+      Set<Vertex<T>> visited = new HashSet<>();
+      Deque<Vertex<T>> stack = new ArrayDeque<>();
+
+      stack.push(starting);
+
+      while (!stack.isEmpty()) {
+          Vertex<T> current = stack.pop();
+
+          if (current == target) {
+              return true;
+          }
+
+          if (visited.contains(current)) {
+              continue;
+          }
+
+          visited.add(current);
+
+          for (Vertex<T> neighbor : current.neighbors) {
+              if (!visited.contains(neighbor)) {
+                  stack.push(neighbor);
+              }
+          }
+      }
+
+      return false;
+  }
+
+
 
 
   /**
@@ -207,41 +374,86 @@ public class Practice {
    * @return whether there exists a valid positive path from starting to ending
    */
 
+  // // Recursive DFS
+  // public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
 
-  public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
+  //   if (starting <= 0 || ending <= 0 ||
+  //       !graph.containsKey(starting) || !graph.containsKey(ending)) {
+  //     return false;
+  //   }
 
-    if (starting <= 0 || ending <= 0 ||
-        !graph.containsKey(starting) || !graph.containsKey(ending)) {
-      return false;
-    }
+  //   Set<Integer> visited = new HashSet<>();
+  //   return positiveDFS(graph, starting, ending, visited);
+  // }
 
-    Set<Integer> visited = new HashSet<>();
-    return positiveDFS(graph, starting, ending, visited);
-  }
+  // private static boolean positiveDFS(Map<Integer, Set<Integer>> graph,
+  //                                    int current,
+  //                                    int ending,
+  //                                    Set<Integer> visited) {
+  //   if (current <= 0 || visited.contains(current)) {
+  //     return false;
+  //   }
 
-  private static boolean positiveDFS(Map<Integer, Set<Integer>> graph,
-                                     int current,
-                                     int ending,
-                                     Set<Integer> visited) {
-    if (current <= 0 || visited.contains(current)) {
-      return false;
-    }
+  //   if (current == ending) {
+  //     return true;
+  //   }
 
-    if (current == ending) {
-      return true;
-    }
+  //   visited.add(current);
 
-    visited.add(current);
+  //   for (int neighbor : graph.getOrDefault(current, Collections.emptySet())) {
+  //     if (positiveDFS(graph, neighbor, ending, visited)) {
+  //       return true;
+  //     }
+  //   }
 
-    for (int neighbor : graph.getOrDefault(current, Collections.emptySet())) {
-      if (positiveDFS(graph, neighbor, ending, visited)) {
-        return true;
+  //   return false;
+
+  // }
+
+
+  // Iterative DFS
+  public static boolean positivePathExists(
+          Map<Integer, Set<Integer>> graph,
+          int starting, int ending) {
+
+      if (starting <= 0 || ending <= 0 ||
+          !graph.containsKey(starting) ||
+          !graph.containsKey(ending)) {
+          return false;
       }
-    }
 
-    return false;
+      Set<Integer> visited = new HashSet<>();
+      Deque<Integer> stack = new ArrayDeque<>();
 
+      stack.push(starting);
+
+      while (!stack.isEmpty()) {
+          int current = stack.pop();
+
+          if (current <= 0 || visited.contains(current)) {
+              continue;
+          }
+
+          if (current == ending) {
+              return true;
+          }
+
+          visited.add(current);
+
+          for (int neighbor : graph.getOrDefault(
+                  current, Collections.emptySet())) {
+
+              if (neighbor > 0 && !visited.contains(neighbor)) {
+                  stack.push(neighbor);
+              }
+          }
+      }
+
+      return false;
   }
+
+
+
 
   /**
    * Returns true if a professional has anyone in their extended network (reachable through any number of links)
@@ -253,35 +465,75 @@ public class Practice {
    * @return true if a person in the extended network works at the specified company, false otherwise
    */
 
+  // // Recursive DFS
+  // public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
 
-  public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+  //   Set<Professional> visited = new HashSet<>();
+  //   return companyDFS(person, companyName, visited);
+  // }
 
-    Set<Professional> visited = new HashSet<>();
-    return companyDFS(person, companyName, visited);
-  }
+  // private static boolean companyDFS(Professional person,
+  //                                   String companyName,
+  //                                   Set<Professional> visited) {
+  //   if (person == null || visited.contains(person)) {
+  //     return false;
+  //   }
 
-  private static boolean companyDFS(Professional person,
-                                    String companyName,
-                                    Set<Professional> visited) {
-    if (person == null || visited.contains(person)) {
-      return false;
-    }
+  //   if (Objects.equals(person.getCompany(), companyName)) {
+  //     return true;
+  //   }
 
-    if (Objects.equals(person.getCompany(), companyName)) {
-      return true;
-    }
+  //   visited.add(person);
 
-    visited.add(person);
+  //   for (Professional connection : person.getConnections()) {
+  //     if (companyDFS(connection, companyName, visited)) {
+  //       return true;
+  //     }
+  //   }
 
-    for (Professional connection : person.getConnections()) {
-      if (companyDFS(connection, companyName, visited)) {
-        return true;
+  //   return false;
+  // }
+
+
+  // Iterative DFS
+  public static boolean hasExtendedConnectionAtCompany(
+          Professional person, String companyName) {
+
+      if (person == null) {
+          return false;
       }
-    }
 
-    return false;
+      Set<Professional> visited = new HashSet<>();
+      Deque<Professional> stack = new ArrayDeque<>();
 
+      stack.push(person);
+
+      while (!stack.isEmpty()) {
+          Professional current = stack.pop();
+
+          if (visited.contains(current)) {
+              continue;
+          }
+
+          if (Objects.equals(current.getCompany(), companyName)) {
+              return true;
+          }
+
+          visited.add(current);
+
+          for (Professional connection : current.getConnections()) {
+              if (!visited.contains(connection)) {
+                  stack.push(connection);
+              }
+          }
+      }
+
+      return false;
   }
+
+
+
+
 
   /**
    * Returns a list of possible next moves starting from a given position.
@@ -351,34 +603,67 @@ public class Practice {
    * @return an unsorted list of next moves
    */
   
-public static List<int[]> nextMoves(char[][] board, int[] current, int[][] directions) {
-    List<int[]> moves = new ArrayList<>();
+  // // Recursive DFS
+  // public static List<int[]> nextMoves(char[][] board, int[] current, int[][] directions) {
+  //     List<int[]> moves = new ArrayList<>();
 
-    findMoves(board, current, directions, 0, moves);
+  //     findMoves(board, current, directions, 0, moves);
 
-    return moves;
-}
+  //     return moves;
+  // }
 
-private static void findMoves(char[][] board, int[] current,
-                              int[][] directions, int index,
-                              List<int[]> moves) {
+  // private static void findMoves(char[][] board, int[] current,
+  //                               int[][] directions, int index,
+  //                               List<int[]> moves) {
 
-    if (index >= directions.length) {
-        return;
-    }
+  //     if (index >= directions.length) {
+  //         return;
+  //     }
 
-    int row = current[0] + directions[index][0];
-    int col = current[1] + directions[index][1];
+  //     int row = current[0] + directions[index][0];
+  //     int col = current[1] + directions[index][1];
 
-    if (row >= 0 && row < board.length &&
-        col >= 0 && col < board[0].length &&
-        board[row][col] != 'X') {
+  //     if (row >= 0 && row < board.length &&
+  //         col >= 0 && col < board[0].length &&
+  //         board[row][col] != 'X') {
 
-        moves.add(new int[]{row, col});
-    }
+  //         moves.add(new int[]{row, col});
+  //     }
 
-    findMoves(board, current, directions, index + 1, moves);
-}
+  //     findMoves(board, current, directions, index + 1, moves);
+  // }
+
+
+  // Iterative DFS
+  public static List<int[]> nextMoves(
+          char[][] board, int[] current, int[][] directions) {
+
+      List<int[]> moves = new ArrayList<>();
+      Deque<int[]> stack = new ArrayDeque<>();
+
+      for (int[] direction : directions) {
+          stack.push(direction);
+      }
+
+      while (!stack.isEmpty()) {
+          int[] direction = stack.pop();
+
+          int row = current[0] + direction[0];
+          int col = current[1] + direction[1];
+
+          if (row >= 0 && row < board.length &&
+              col >= 0 && col < board[0].length &&
+              board[row][col] != 'X') {
+
+              moves.add(new int[]{row, col});
+          }
+      }
+
+      return moves;
+  }
+
+
+
 
 
 
@@ -394,37 +679,76 @@ private static void findMoves(char[][] board, int[] current,
 
    */
 
+  // // Recursive DFS
+  // public static int minWordLength(Vertex<String> starting) {
 
+  //   if (starting == null) {
+  //       return 0;
+  //   }
+
+  //   Set<Vertex<String>> visited = new HashSet<>();
+  //   return findMinLength(starting, visited);
+  // }
+
+  // private static int findMinLength(Vertex<String> current,
+  //                                 Set<Vertex<String>> visited) {
+  //     if (visited.contains(current)) {
+  //         return Integer.MAX_VALUE;
+  //     }
+
+  //     visited.add(current);
+
+  //     int min = current.data.length();
+
+  //     for (Vertex<String> neighbor : current.neighbors) {
+  //         int length = findMinLength(neighbor, visited);
+  //         min = Math.min(min, length);
+  //     }
+
+  //     return min;
+
+  // }
+
+
+
+  // Iterative DFS
   public static int minWordLength(Vertex<String> starting) {
-
-    if (starting == null) {
-        return 0;
-    }
-
-    Set<Vertex<String>> visited = new HashSet<>();
-    return findMinLength(starting, visited);
-  }
-
-  private static int findMinLength(Vertex<String> current,
-                                  Set<Vertex<String>> visited) {
-      if (visited.contains(current)) {
-          return Integer.MAX_VALUE;
+      if (starting == null) {
+          return 0;
       }
 
-      visited.add(current);
+      Set<Vertex<String>> visited = new HashSet<>();
+      Deque<Vertex<String>> stack = new ArrayDeque<>();
 
-      int min = current.data.length();
+      stack.push(starting);
+      int min = Integer.MAX_VALUE;
 
-      for (Vertex<String> neighbor : current.neighbors) {
-          int length = findMinLength(neighbor, visited);
-          min = Math.min(min, length);
+      while (!stack.isEmpty()) {
+          Vertex<String> current = stack.pop();
+
+          if (visited.contains(current)) {
+              continue;
+          }
+
+          visited.add(current);
+
+          min = Math.min(min, current.data.length());
+
+          for (Vertex<String> neighbor : current.neighbors) {
+              if (!visited.contains(neighbor)) {
+                  stack.push(neighbor);
+              }
+          }
       }
 
       return min;
-
   }
 
-  
+
+
+
+
+
 }
 
 
