@@ -3,6 +3,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class Practice {
@@ -27,7 +28,8 @@ public class Practice {
    * @param starting the starting vertex (may be null)
    * @return the number of vertices with odd values reachable from the starting vertex
    */
-  public static int oddVertices(Vertex<Integer> starting) {
+
+  public static int oddVertices(Vertex<Integer> starting) {  
     Set<Vertex<Integer>> visited = new HashSet<>();
     return countOdd(starting, visited);
   }
@@ -50,7 +52,6 @@ public class Practice {
     }
 
     return count;
-  
   }
 
   /**
@@ -107,7 +108,9 @@ public class Practice {
    * @param starting the starting vertex value
    * @return a sorted list of all reachable vertex values
    */
-  public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
+  
+   public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
+
     List<Integer> result = new ArrayList<>();
 
     if (!graph.containsKey(starting)) {
@@ -115,8 +118,8 @@ public class Practice {
     }
 
     Set<Integer> visited = new HashSet<>();
-    collectMapValues(graph, starting, visited, result);
 
+    collectMapValues(graph, starting, visited, result);
     Collections.sort(result);
     return result;
   }
@@ -135,6 +138,7 @@ public class Practice {
     for (int neighbor : graph.getOrDefault(current, Collections.emptySet())) {
       collectMapValues(graph, neighbor, visited, result);
     }
+
   }
 
   /**
@@ -151,18 +155,24 @@ public class Practice {
    * @param v2 the target vertex
    * @return true if there is a two-way connection between v1 and v2, false otherwise
    */
+
+
   public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
+
     if (v1 == null || v2 == null) {
-      return false;
+        return false;
     }
 
-    return canReach(v1, v2, new HashSet<>())
-        && canReach(v2, v1, new HashSet<>());
+    Set<Vertex<T>> visited1 = new HashSet<>();
+    Set<Vertex<T>> visited2 = new HashSet<>();
+
+    return canReach(v1, v2, visited1)
+        && canReach(v2, v1, visited2);
   }
 
   private static <T> boolean canReach(Vertex<T> current,
                                       Vertex<T> target,
-                                      Set<Vertex<T>> visited) {
+                                      Set<Vertex<T>> visited) {                                
     if (current == null || visited.contains(current)) {
       return false;
     }
@@ -180,7 +190,9 @@ public class Practice {
     }
 
     return false;
+
   }
+
 
   /**
    * Returns whether there exists a path from the starting to ending vertex that includes only positive values.
@@ -194,7 +206,10 @@ public class Practice {
    * @param ending the ending vertex value
    * @return whether there exists a valid positive path from starting to ending
    */
+
+
   public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
+
     if (starting <= 0 || ending <= 0 ||
         !graph.containsKey(starting) || !graph.containsKey(ending)) {
       return false;
@@ -225,6 +240,7 @@ public class Practice {
     }
 
     return false;
+
   }
 
   /**
@@ -236,7 +252,10 @@ public class Practice {
    * @param companyName the name of the company to check for employment
    * @return true if a person in the extended network works at the specified company, false otherwise
    */
+
+
   public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+
     Set<Professional> visited = new HashSet<>();
     return companyDFS(person, companyName, visited);
   }
@@ -248,11 +267,11 @@ public class Practice {
       return false;
     }
 
-    visited.add(person);
-
-    if (java.util.Objects.equals(person.getCompany(), companyName)) {
+    if (Objects.equals(person.getCompany(), companyName)) {
       return true;
     }
+
+    visited.add(person);
 
     for (Professional connection : person.getConnections()) {
       if (companyDFS(connection, companyName, visited)) {
@@ -261,6 +280,7 @@ public class Practice {
     }
 
     return false;
+
   }
 
   /**
@@ -330,22 +350,83 @@ public class Practice {
    * @param directions an array of [row, column] possible directions
    * @return an unsorted list of next moves
    */
-  public static List<int[]> nextMoves(char[][] board, int[] current, int[][] directions) {
+  
+public static List<int[]> nextMoves(char[][] board, int[] current, int[][] directions) {
     List<int[]> moves = new ArrayList<>();
 
-    for (int[] direction : directions) {
-      int row = current[0] + direction[0];
-      int col = current[1] + direction[1];
-
-      if (row >= 0 && row < board.length &&
-          col >= 0 && col < board[0].length &&
-          board[row][col] != 'X') {
-
-        moves.add(new int[]{row, col});
-      }
-    }
+    findMoves(board, current, directions, 0, moves);
 
     return moves;
-  
-  }
 }
+
+private static void findMoves(char[][] board, int[] current,
+                              int[][] directions, int index,
+                              List<int[]> moves) {
+
+    if (index >= directions.length) {
+        return;
+    }
+
+    int row = current[0] + directions[index][0];
+    int col = current[1] + directions[index][1];
+
+    if (row >= 0 && row < board.length &&
+        col >= 0 && col < board[0].length &&
+        board[row][col] != 'X') {
+
+        moves.add(new int[]{row, col});
+    }
+
+    findMoves(board, current, directions, index + 1, moves);
+}
+
+
+
+/**
+   * Returns the minimum length of word  from the given starting vertex.
+   * The starting vertex is included 
+   * If the starting vertex is null, returns 0.
+   *
+   * Example:
+   * Consider a graph where:
+   *   banana --> apple --> cucumber --> lime
+   
+
+   */
+
+
+  public static int minWordLength(Vertex<String> starting) {
+
+    if (starting == null) {
+        return 0;
+    }
+
+    Set<Vertex<String>> visited = new HashSet<>();
+    return findMinLength(starting, visited);
+  }
+
+  private static int findMinLength(Vertex<String> current,
+                                  Set<Vertex<String>> visited) {
+      if (visited.contains(current)) {
+          return Integer.MAX_VALUE;
+      }
+
+      visited.add(current);
+
+      int min = current.data.length();
+
+      for (Vertex<String> neighbor : current.neighbors) {
+          int length = findMinLength(neighbor, visited);
+          min = Math.min(min, length);
+      }
+
+      return min;
+
+  }
+
+  
+}
+
+
+
+
